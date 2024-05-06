@@ -7,6 +7,7 @@ import { ScrollShadow } from "@nextui-org/react";
 import clsx from "clsx";
 import Background from "@/components/background";
 import NavbarComponent from "@/components/navbar";
+import { UserProvider } from "@auth0/nextjs-auth0/client";
 
 export const metadata: Metadata = {
   title: {
@@ -25,7 +26,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="es" suppressHydrationWarning>
+    <html lang="es" suppressHydrationWarning className="scroll-smooth">
       <head />
       <body
         className={clsx(
@@ -33,17 +34,19 @@ export default function RootLayout({
           fontSans.variable
         )}
       >
-        <Providers>
-          <div className="relative flex flex-col h-screen overflow-y-auto">
-            <ScrollShadow>
-              <NavbarComponent />
-              <main className="container flex-grow px-6 pt-16 mx-auto max-w-7xl">
-                {children}
-              </main>
-            </ScrollShadow>
-          </div>
-          <Background />
-        </Providers>
+        <UserProvider>
+          <Providers>
+            <div className="relative flex flex-col h-screen overflow-y-auto">
+              <ScrollShadow>
+                <NavbarComponent />
+                <main className="container flex-grow px-6 pt-16 mx-auto max-w-7xl">
+                  {children}
+                </main>
+              </ScrollShadow>
+            </div>
+            <Background />
+          </Providers>
+        </UserProvider>
       </body>
     </html>
   );

@@ -42,7 +42,7 @@ export default function Categories() {
     },
   ];
   return (
-    <div className="flex flex-col w-full">
+    <div id="categories" className="flex flex-col w-full">
       <h1 className="py-1 text-3xl font-bold text-transparent lg:text-6xl bg-clip-text bg-gradient-to-t from-blue-600 to-sky-500">
         Categorías
       </h1>

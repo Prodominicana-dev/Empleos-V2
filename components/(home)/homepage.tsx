@@ -1,6 +1,7 @@
 "use client";
 import { Button } from "@nextui-org/button";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -35,6 +36,8 @@ export default function Home() {
           <Button
             variant={"flat"}
             size="lg"
+            as={Link}
+            href="#categories"
             radius="md"
             className="bg-gradient-to-tr from-blue-600 to-sky-500"
           >
