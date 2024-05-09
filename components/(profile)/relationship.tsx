@@ -48,7 +48,6 @@ export default function RelationshipData({
   const [relationship, setRelationship] = useState<any>([]);
 
   useEffect(() => {
-    console.log(user);
     setRelationship(user.relationship);
   }, [user]);
 
@@ -58,8 +57,6 @@ export default function RelationshipData({
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
   const currentPosts = relationship.slice(indexOfFirstPost, indexOfLastPost);
-
-  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
   // Cantidad de paginas
   const pageNumbers = relationship.length / postsPerPage;

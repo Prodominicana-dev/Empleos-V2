@@ -9,6 +9,7 @@ import {
   Chip,
   Tooltip,
   ChipProps,
+  useDisclosure,
 } from "@nextui-org/react";
 import { Icon } from "@iconify/react";
 import countries from "./countries";
@@ -21,65 +22,28 @@ import { DeleteIcon } from "@/components/icons/delete";
 import test from "node:test";
 import Education from "../icons/education";
 import EducationCard from "./education/card";
+import EducationDialog from "./education/dialog";
+import { useEducation } from "@/service/education/service";
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
   Si: "success",
   No: "danger",
 };
 
-export default function EducationData({ id }: { id: string }) {
-  const { data, isLoading, refetch } = useUser(id);
-  const [refresh, setRefresh] = useState(false);
-  const [user, setUser] = useState<any>({});
+export default function EducationData({
+  user,
+  update,
+}: {
+  user: any;
+  update: () => void;
+}) {
+  const [education, setEducation] = useState<any>([]);
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
-  const handleRefresh = () => {
-    setRefresh((prev) => !prev);
-  };
-
-  const handleSubmit = async () => {
-    await editUser(data.id, user, refetch, refetch);
-  };
-
-  const testData = [
-    {
-      id: "1",
-      title: "Ingeniería en Sistemas y Computación",
-      institution: "PUCMM",
-      degree: "Grado",
-      startDate: "2019-09-01",
-      endDate: "2024-04-12",
-    },
-    {
-      id: "2",
-      title: "Bachiller",
-      institution: "Colegio Padre Fortín",
-      degree: "Secundaria",
-      startDate: "2015-08-14",
-      endDate: "2019-06-02",
-    },
-    {
-      id: "3",
-      title: "Bachiller",
-      institution: "Colegio Padre Fortín",
-      degree: "Secundaria",
-      startDate: "2015-08-14",
-      endDate: "2019-06-02",
-    },
-  ];
-
-  // Pagination with testData
-  const [currentPage, setCurrentPage] = useState(1);
-  const [postsPerPage] = useState(5);
-  const indexOfLastPost = currentPage * postsPerPage;
-  const indexOfFirstPost = indexOfLastPost - postsPerPage;
-  const currentPosts = testData.slice(indexOfFirstPost, indexOfLastPost);
-
-  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
-
-  // Cantidad de paginas
-  const pageNumbers = testData.length / postsPerPage;
-
-  if (isLoading) return <UserDataSkeleton />;
+  useEffect(() => {
+    console.log(user);
+    setEducation(user.education);
+  }, [user]);
 
   return (
     <div className="flex flex-col gap-5">
@@ -102,19 +66,33 @@ export default function EducationData({ id }: { id: string }) {
               }
             />
             <Tooltip content="Agregar">
-              <span className="text-lg cursor-pointer text-default-400 active:opacity-50">
+              <span
+                onClick={onOpen}
+                className="text-lg cursor-pointer text-default-400 active:opacity-50"
+              >
                 <Icon
                   icon="solar:add-circle-bold"
                   className="text-5xl text-blue-500 bg-clip-text bg-gradient-to-r from-blue-500 to-sky-500"
                 />
               </span>
             </Tooltip>
+            <EducationDialog
+              key={user.id}
+              id={user.id}
+              update={update}
+              isOpen={isOpen}
+              onOpenChange={onOpenChange}
+            />
           </div>
         </CardHeader>
       </Card>
       <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
-        {testData.map((education) => (
-          <EducationCard education={education} key={education.id} />
+        {education.map((education: any) => (
+          <EducationCard
+            education={education}
+            key={education.id}
+            update={update}
+          />
         ))}
       </div>
     </div>
