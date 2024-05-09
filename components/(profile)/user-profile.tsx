@@ -23,68 +23,52 @@ import countries from "./countries";
 import { editUser, useUser } from "@/service/user/service";
 import UserDataSkeleton from "./skeleton/user-profile";
 
-export default function UserData({ id }: { id: string }) {
-  const { data, isLoading, refetch } = useUser(id);
+export default function UserData({
+  user,
+  update,
+}: {
+  user: any;
+  update: () => void;
+}) {
+  const [users, setUser] = useState<any>({});
   const [refresh, setRefresh] = useState(false);
-  const [user, setUser] = useState<any>({});
 
   useEffect(() => {
-    if (!isLoading && data) {
-      console.log(data);
-      setUser({
-        name: data.name,
-        username: data.username,
-        email: data.email,
-        telephone: data.telephone,
-        phone: data.phone,
-        country: data.country,
-        birthdate: data.birthdate,
-        documentType: data.documentType,
-        documentNumber: data.documentNumber,
-        civilStatus: data.civilStatus,
-        hasLicense: data.hasLicense,
-        hasVehicule: data.hasVehicule,
-        gender: data.gender,
-        nationality: data.nationality,
-        province: data.province,
-      });
-    }
-  }, [data, isLoading]);
-
-  useEffect(() => {
-    refetch().then((e: any) => {
-      // Asignar data a user
-      setUser({
-        name: e.data.name,
-        username: e.data.username,
-        email: e.data.email,
-        telephone: e.data.telephone,
-        phone: e.data.phone,
-        country: e.data.country,
-        birthdate: e.data.birthdate,
-        documentType: e.data.documentType,
-        documentNumber: e.data.documentNumber,
-        civilStatus: e.data.civilStatus,
-        hasLicense: e.data.hasLicense,
-        hasVehicule: e.data.hasVehicule,
-      });
-    });
-  }, [refresh]);
-
-  const handleRefresh = () => {
-    setRefresh((prev) => !prev);
-  };
+    setUser(user);
+  }, [user]);
 
   const handleSubmit = async () => {
-    await editUser(data.id, user, refetch, refetch);
+    await editUser(
+      user.id,
+      {
+        username: users.username,
+        email: users.email,
+        name: users.name,
+        image: users.image,
+        telephone: users.telephone,
+        phone: users.phone,
+        country: users.country,
+        nationality: users.nationality,
+        province: users.province,
+        gender: users.gender,
+        birthdate: users.birthdate,
+        documentType: users.documentType,
+        documentNumber: users.documentNumber,
+        civilStatus: users.civilStatus,
+        hasLicense: users.hasLicense,
+        hasVehicule: users.hasVehicule,
+      },
+      update,
+      () => {}
+    );
   };
 
-  if (isLoading) return <UserDataSkeleton />;
+  // if (isLoading) return <UserDataSkeleton />;
 
   return (
     <Card className="w-full p-2">
       <CardHeader className="flex flex-col items-start px-4 pt-4 pb-0">
-        <p className="text-large">Detalles de la cuenta</p>
+        <p className="font-bold text-large">Detalles de la cuenta</p>
         <div className="flex gap-4 py-4">
           <Badge
             disableOutline
@@ -106,11 +90,13 @@ export default function UserData({ id }: { id: string }) {
             placement="bottom-right"
             shape="circle"
           >
-            <Avatar className="h-14 w-14" src={data?.image} />
+            <Avatar className="h-14 w-14" src={users?.image} />
           </Badge>
           <div className="flex flex-col items-start justify-center">
-            <p className="font-medium">{user.name}</p>
-            <span className="text-small text-default-500">{user.username}</span>
+            <p className="font-medium">{users.name}</p>
+            <span className="text-small text-default-500">
+              {users.username}
+            </span>
           </div>
         </div>
         <p className="text-small text-default-400">
@@ -123,18 +109,18 @@ export default function UserData({ id }: { id: string }) {
           <Input
             label="Nombre completo"
             labelPlacement="outside"
-            value={user.name}
-            onChange={(e) => setUser({ ...user, name: e.target.value })}
+            value={users.name}
+            onChange={(e) => setUser({ ...users, name: e.target.value })}
             placeholder="Ingrese su nombre completo"
           />
           {/* Username */}
           <Input
             label="Usuario"
             labelPlacement="outside"
-            value={user.username}
-            onChange={(e) => setUser({ ...user, username: e.target.value })}
+            value={users.username}
+            onChange={(e) => setUser({ ...users, username: e.target.value })}
             isDisabled={
-              user.username !== user.email && user.username && user.email
+              users.username !== users.email && users.username && users.email
                 ? true
                 : false
             }
@@ -144,8 +130,8 @@ export default function UserData({ id }: { id: string }) {
           <Input
             label="Correo electrónico"
             labelPlacement="outside"
-            value={user.email}
-            onChange={(e) => setUser({ ...user, email: e.target.value })}
+            value={users.email}
+            onChange={(e) => setUser({ ...users, email: e.target.value })}
             isDisabled
             placeholder="Ingrese el correo electrónico"
           />
@@ -154,16 +140,16 @@ export default function UserData({ id }: { id: string }) {
           <Input
             label="Número de teléfono residencial"
             labelPlacement="outside"
-            value={user.telephone}
-            onChange={(e) => setUser({ ...user, telephone: e.target.value })}
+            value={users.telephone}
+            onChange={(e) => setUser({ ...users, telephone: e.target.value })}
             placeholder="Ingrese su número de teléfono"
           />
           {/* Celular */}
           <Input
             label="Número de teléfono celular"
             labelPlacement="outside"
-            value={user.phone}
-            onChange={(e) => setUser({ ...user, phone: e.target.value })}
+            value={users.phone}
+            onChange={(e) => setUser({ ...users, phone: e.target.value })}
             placeholder="Ingrese su número de teléfono celular"
           />
           {/* Country */}
@@ -172,8 +158,8 @@ export default function UserData({ id }: { id: string }) {
             label="País de nacimiento"
             labelPlacement="outside"
             placeholder="Seleccione su país de nacimiento"
-            selectedKey={user.country}
-            onSelectionChange={(e) => setUser({ ...user, country: e })}
+            selectedKey={users.country}
+            onSelectionChange={(e) => setUser({ ...users, country: e })}
             showScrollIndicators={false}
           >
             {(item: any) => (
@@ -198,8 +184,8 @@ export default function UserData({ id }: { id: string }) {
             label="Nacionalidad"
             labelPlacement="outside"
             placeholder="Seleccione su nacionalidad"
-            selectedKey={user.nationality}
-            onSelectionChange={(e) => setUser({ ...user, nationality: e })}
+            selectedKey={users.nationality}
+            onSelectionChange={(e) => setUser({ ...users, nationality: e })}
             showScrollIndicators={false}
           >
             {(item: any) => (
@@ -223,8 +209,8 @@ export default function UserData({ id }: { id: string }) {
           <Input
             label="Provincia"
             labelPlacement="outside"
-            value={user.province}
-            onChange={(e) => setUser({ ...user, province: e.target.value })}
+            value={users.province}
+            onChange={(e) => setUser({ ...users, province: e.target.value })}
             placeholder="Ingrese la provincia de residencia"
           />
           {/* Document type */}
@@ -236,8 +222,8 @@ export default function UserData({ id }: { id: string }) {
             label="Tipo de documento"
             labelPlacement="outside"
             placeholder="Seleccione su nacionalidad"
-            selectedKey={user.documentType}
-            onSelectionChange={(e) => setUser({ ...user, documentType: e })}
+            selectedKey={users.documentType}
+            onSelectionChange={(e) => setUser({ ...users, documentType: e })}
             showScrollIndicators={false}
             isClearable={false}
           >
@@ -254,7 +240,7 @@ export default function UserData({ id }: { id: string }) {
             labelPlacement="outside"
             value={user.documentNumber}
             onChange={(e) =>
-              setUser({ ...user, documentNumber: e.target.value })
+              setUser({ ...users, documentNumbers: e.target.value })
             }
             placeholder="Ingrese el número de documento"
           />
@@ -268,8 +254,8 @@ export default function UserData({ id }: { id: string }) {
             label="Estado civil"
             labelPlacement="outside"
             placeholder="Seleccione su estado civil"
-            selectedKey={user.civilStatus}
-            onSelectionChange={(e) => setUser({ ...user, civilStatus: e })}
+            selectedKey={users.civilStatus}
+            onSelectionChange={(e) => setUser({ ...users, civilStatus: e })}
             showScrollIndicators={false}
             isClearable={false}
           >
@@ -285,20 +271,28 @@ export default function UserData({ id }: { id: string }) {
         <Divider />
         <div className="flex flex-col gap-5 lg:flex-row">
           <Checkbox
-            onChange={(e) => setUser({ ...user, hasLicense: e.target.checked })}
-            isSelected={user.hasLicense}
+            onChange={(e) =>
+              setUser({ ...users, hasLicense: e.target.checked })
+            }
+            isSelected={users.hasLicense}
             size="md"
+            classNames={{
+              label: "text-small",
+            }}
           >
-            Tiene licencia de conducir?
+            ¿Tiene licencia de conducir?
           </Checkbox>
           <Checkbox
             onChange={(e) =>
-              setUser({ ...user, hasVehicule: e.target.checked })
+              setUser({ ...users, hasVehicule: e.target.checked })
             }
-            isSelected={user.hasVehicule}
+            isSelected={users.hasVehicule}
             size="md"
+            classNames={{
+              label: "text-small",
+            }}
           >
-            Tiene vehiculo?
+            ¿Tiene vehiculo?
           </Checkbox>
         </div>
       </CardBody>
@@ -308,18 +302,18 @@ export default function UserData({ id }: { id: string }) {
       <CardFooter className="justify-end gap-2 mt-4">
         <Button
           isDisabled={
-            user.name !== data.name ||
-            user.username !== data.username ||
-            user.email !== data.email ||
-            user.telephone !== data.telephone ||
-            user.phone !== data.phone ||
-            user.country !== data.country ||
-            user.birthdate !== data.birthdate ||
-            user.documentType !== data.documentType ||
-            user.documentNumber !== data.documentNumber ||
-            user.civilStatus !== data.civilStatus ||
-            user.hasLicense !== data.hasLicense ||
-            user.hasVehicule !== data.hasVehicule
+            users.name !== user.name ||
+            users.username !== user.username ||
+            users.email !== user.email ||
+            users.telephone !== user.telephone ||
+            users.phone !== user.phone ||
+            users.country !== user.country ||
+            users.birthdate !== user.birthdate ||
+            users.documentType !== user.documentType ||
+            users.documentNumber !== user.documentNumber ||
+            users.civilStatus !== user.civilStatus ||
+            users.hasLicense !== user.hasLicense ||
+            users.hasVehicule !== user.hasVehicule
               ? false
               : true
           }

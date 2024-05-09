@@ -1,17 +1,41 @@
 "use client";
 import { useUser } from "@/service/user/service";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Tabs, Tab } from "@nextui-org/react";
 import UserData from "@/components/(profile)/user-profile";
 import UserDataSkeleton from "@/components/(profile)/skeleton/user-profile";
+import RelationshipData from "@/components/(profile)/relationship";
+import QuestionData from "@/components/(profile)/questions";
+import EducationData from "@/components/(profile)/education";
+import ExperienceData from "@/components/(profile)/experience";
+import LanguageData from "@/components/(profile)/language";
+import PersonalRefData from "@/components/(profile)/personal-reference";
+import ProfessionalRefData from "@/components/(profile)/professional-reference";
 
 export default function Page({ params: { id } }: any) {
-  const { data, isLoading } = useUser(id);
+  const { data, isLoading, refetch } = useUser(id);
+  const [user, setUser] = useState<any>({});
+  const [refresh, setRefresh] = useState(false);
+
   useEffect(() => {
-    console.log(data);
+    if (!isLoading && data) setUser(data);
   }, [isLoading, data]);
+
+  const handleRefresh = () => {
+    setRefresh((prev) => !prev);
+  };
+
+  useEffect(() => {
+    if (refresh) {
+      refetch().then((e) => {
+        if (e.data) setUser(e.data);
+      });
+      setRefresh(false);
+    }
+  }, [refresh]);
+
   return (
-    <div className="w-full min-h-[84vh] text-black flex flex-col gap-5">
+    <div className="w-full min-h-[80vh] text-black flex flex-col gap-5">
       <div className="flex flex-col gap-2">
         <h1 className="text-4xl font-bold text-black">Configuración</h1>
         <p className="text-sm">Configura el perfíl a tu medida</p>
@@ -30,15 +54,41 @@ export default function Page({ params: { id } }: any) {
           }}
         >
           <Tab key="profile" title="Perfíl">
-            <UserData id={id} key={"profile-data"} />
+            {isLoading ? (
+              <UserDataSkeleton />
+            ) : (
+              <UserData
+                user={user}
+                update={handleRefresh}
+                key={"profile-data"}
+              />
+            )}
           </Tab>
-          <Tab key="relationship" title="Parentesco" />
-          <Tab key="questions" title="Preguntas" />
-          <Tab key="education" title="Educación" />
-          <Tab key="experience" title="Experiencia Laboral" />
-          <Tab key="language" title="Idiomas" />
-          <Tab key="rper" title="Referencia Personal" />
-          <Tab key="rpro" title="Referencia Profesional" />
+          <Tab key="relationship" title="Parentesco">
+            <RelationshipData
+              user={user}
+              update={handleRefresh}
+              key={"relationship-data"}
+            />
+          </Tab>
+          <Tab key="questions" title="Preguntas">
+            <QuestionData id={id} key={"question-data"} />
+          </Tab>
+          <Tab key="education" title="Educación">
+            <EducationData id={id} key={"education-data"} />
+          </Tab>
+          <Tab key="experience" title="Experiencia">
+            <ExperienceData id={id} key={"experience-data"} />
+          </Tab>
+          <Tab key="language" title="Idiomas">
+            <LanguageData id={id} key={"language-data"} />
+          </Tab>
+          <Tab key="rper" title="Referencia Personal">
+            <PersonalRefData id={id} key={"rper-data"} />
+          </Tab>
+          <Tab key="rpro" title="Referencia Profesional">
+            <ProfessionalRefData id={id} key={"rpro-data"} />
+          </Tab>
         </Tabs>
       </div>
     </div>

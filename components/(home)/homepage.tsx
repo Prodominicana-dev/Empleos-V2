@@ -39,7 +39,7 @@ export default function Home() {
             as={Link}
             href="#categories"
             radius="md"
-            className="bg-gradient-to-tr from-blue-600 to-sky-500"
+            className="text-white bg-gradient-to-tr from-blue-600 to-sky-500"
           >
             Categorías
           </Button>

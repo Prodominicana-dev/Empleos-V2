@@ -22,7 +22,7 @@ export default function RootLayout({
       // Refetch user data y validar si existe
       refetch().then(async (e) => {
         if (e.data === null) {
-          await createUser({
+          return await createUser({
             auth0Id: user.sub,
             username: user.nickname,
             email: user.email,
@@ -30,6 +30,7 @@ export default function RootLayout({
             image: user.picture,
           });
         }
+        return;
       });
     }
   };
