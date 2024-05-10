@@ -25,7 +25,7 @@ export const createLanguageAction = async (
   const data = {
     userId: id,
     name,
-    level,
+    level: parseInt(level as string),
   };
   console.log(data);
 
@@ -51,7 +51,7 @@ export const updateLanguageAction = async (
   const { name, level } = Object.fromEntries(formData);
   const data = {
     name,
-    level,
+    level: parseInt(level as string),
   };
   console.log(data);
 

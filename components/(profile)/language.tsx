@@ -60,8 +60,6 @@ export default function LanguageData({
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
   const currentPosts = languages.slice(indexOfFirstPost, indexOfLastPost);
 
-  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
-
   // Cantidad de paginas
   const pageNumbers = languages.length / postsPerPage;
 
@@ -106,25 +104,27 @@ export default function LanguageData({
           <div>Acciones</div>
         </div>
         {currentPosts.map((item: any, index: number) => (
-          <LanguageCard key={item.id} language={item} />
+          <LanguageCard key={item.id} update={update} language={item} />
         ))}
       </CardBody>
 
       {/* Validar si algo del cuerpo user cambio con relacion a la data, en caso de cambiar mostrar el Button de Save Changes */}
 
-      <CardFooter className="justify-end gap-2 mt-4">
-        <Pagination
-          loop
-          showControls
-          total={pageNumbers}
-          initialPage={1}
-          classNames={{
-            cursor:
-              "bg-gradient-to-r from-blue-600 to-sky-500 text-white font-semibold",
-          }}
-          onChange={(page) => setCurrentPage(page)}
-        />
-      </CardFooter>
+      {pageNumbers > 1 && (
+        <CardFooter className="justify-end gap-2 mt-4">
+          <Pagination
+            loop
+            showControls
+            total={pageNumbers}
+            initialPage={1}
+            classNames={{
+              cursor:
+                "bg-gradient-to-r from-blue-600 to-sky-500 text-white font-semibold",
+            }}
+            onChange={(page) => setCurrentPage(page)}
+          />
+        </CardFooter>
+      )}
     </Card>
   );
 }

@@ -66,7 +66,13 @@ export default function Delete({
       >
         <ModalContent>
           {(onClose) => (
-            <form action={deleteAction}>
+            <form
+              action={() => {
+                if (isConfirmed) {
+                  deleteAction(id);
+                }
+              }}
+            >
               <ModalHeader className="flex flex-col gap-1">
                 <h1>
                   ¿Estás seguro de que deseas eliminar{" "}

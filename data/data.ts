@@ -18,7 +18,7 @@ export const Languages = [
 ];
 
 export const LanguageLevels = [
-  { value: "beginner", label: "Básico" },
-  { value: "intermediate", label: "Intermedio" },
-  { value: "advanced", label: "Avanzado" },
+  { value: 1, label: "Básico" },
+  { value: 2, label: "Intermedio" },
+  { value: 3, label: "Avanzado" },
 ];

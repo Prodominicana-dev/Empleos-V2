@@ -62,6 +62,7 @@ export default function LanguageDialog({
                   label="Compañía"
                   placeholder="Ingrese el nombre de la compañía"
                   name="level"
+                  type="number"
                   errorMessage="Por favor, ingrese el nombre de la compañía"
                   variant="bordered"
                   value={level}
@@ -70,7 +71,6 @@ export default function LanguageDialog({
 
                 <Input
                   isRequired
-                  autoFocus
                   label="Posición"
                   placeholder="Ingrese el nombre de la posición"
                   name="name"
@@ -81,6 +81,7 @@ export default function LanguageDialog({
                 />
 
                 <Autocomplete
+                  isRequired
                   isClearable={false}
                   variant="bordered"
                   defaultItems={Languages}
@@ -97,6 +98,7 @@ export default function LanguageDialog({
                 </Autocomplete>
 
                 <Autocomplete
+                  isRequired
                   isClearable={false}
                   variant="bordered"
                   defaultItems={LanguageLevels}
