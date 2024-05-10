@@ -4,31 +4,14 @@ import React, { useEffect, useState } from "react";
 import {
   Card,
   CardHeader,
-  CardBody,
   Input,
-  Chip,
   Tooltip,
-  ChipProps,
   useDisclosure,
 } from "@nextui-org/react";
 import { Icon } from "@iconify/react";
-import countries from "./countries";
-import { editUser, useUser } from "@/service/user/service";
-import UserDataSkeleton from "./skeleton/user-profile";
-
-import { EyeIcon } from "@/components/icons/eye-icon";
-import { EditIcon } from "@/components/icons/edit";
-import { DeleteIcon } from "@/components/icons/delete";
-import test from "node:test";
-import Education from "../icons/education";
 import EducationCard from "./education/card";
 import EducationDialog from "./education/dialog";
-import { useEducation } from "@/service/education/service";
-
-const statusColorMap: Record<string, ChipProps["color"]> = {
-  Si: "success",
-  No: "danger",
-};
+import { useDegree } from "@/service/education/service";
 
 export default function EducationData({
   user,
@@ -39,6 +22,16 @@ export default function EducationData({
 }) {
   const [education, setEducation] = useState<any>([]);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const { data, isLoading } = useDegree();
+  const [degrees, setDegrees] = useState<any>([]);
+
+  useEffect(() => {
+    if (!isLoading && data) {
+      setDegrees(
+        data.map((degree: any) => ({ label: degree.name, value: degree.id }))
+      );
+    }
+  }, [data, isLoading]);
 
   useEffect(() => {
     console.log(user);
@@ -79,6 +72,7 @@ export default function EducationData({
             <EducationDialog
               key={user.id}
               id={user.id}
+              degrees={degrees}
               update={update}
               isOpen={isOpen}
               onOpenChange={onOpenChange}

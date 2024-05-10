@@ -13,6 +13,17 @@ export function useEducation(id: string) {
   });
 }
 
+export function useDegree() {
+  return useQuery({
+    queryKey: ["degrees"],
+    queryFn: async () => {
+      const url = `${process.env.NEXT_PUBLIC_API_URL}/degree/`;
+      const { data } = await axios.get(url);
+      return data;
+    },
+  });
+}
+
 export async function createEducation(education: any) {
   try {
     const url = `${process.env.NEXT_PUBLIC_API_URL}/education/`;

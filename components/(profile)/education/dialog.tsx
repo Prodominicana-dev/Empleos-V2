@@ -32,11 +32,13 @@ const SubmitButton = () => {
 
 export default function EducationDialog({
   id,
+  degrees,
   update,
   isOpen,
   onOpenChange,
 }: {
   id: string;
+  degrees: { label: string; value: string }[];
   update: () => void;
   isOpen: any;
   onOpenChange: any;
@@ -50,12 +52,6 @@ export default function EducationDialog({
     update,
     onOpenChange
   );
-
-  const degrees = [
-    { label: "Secundaria", value: "aaa" },
-    { label: "Basico", value: "bbb" },
-    { label: "Universitario", value: "clvzeuwgy00009yfhhaytgvn4" },
-  ];
 
   return (
     <>
