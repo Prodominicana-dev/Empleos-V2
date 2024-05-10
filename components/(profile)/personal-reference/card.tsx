@@ -63,10 +63,21 @@ export default function PersonalReferenceCard({
           key={"update-personalReference"}
         />
         <Tooltip color="danger" content="Eliminar">
-          <span className="text-lg cursor-pointer text-danger active:opacity-50">
+          <span
+            onClick={onDeleteOpen}
+            className="text-lg cursor-pointer text-danger active:opacity-50"
+          >
             <DeleteIcon />
           </span>
         </Tooltip>
+        <Delete
+          deleteAction={deletePersonalReferenceWithArgs}
+          id={personalReference.id}
+          name={personalReference.name}
+          isOpen={isDeleteOpen}
+          onOpenChange={onDeleteOpenChange}
+          key={"delete-personalReference"}
+        />
       </div>
     </div>
   );
