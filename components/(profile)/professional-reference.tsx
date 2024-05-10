@@ -19,6 +19,7 @@ import {
   Tooltip,
   ChipProps,
   Pagination,
+  useDisclosure,
 } from "@nextui-org/react";
 import { Icon } from "@iconify/react";
 import countries from "./countries";
@@ -29,24 +30,28 @@ import { EyeIcon } from "@/components/icons/eye-icon";
 import { EditIcon } from "@/components/icons/edit";
 import { DeleteIcon } from "@/components/icons/delete";
 import test from "node:test";
+import ProfessionalReferenceDialog from "./professional-reference/dialog";
+import ProfessionalReferenceCard from "./professional-reference/card";
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
   Si: "success",
   No: "danger",
 };
 
-export default function ProfessionalRefData({ id }: { id: string }) {
-  const { data, isLoading, refetch } = useUser(id);
-  const [refresh, setRefresh] = useState(false);
-  const [user, setUser] = useState<any>({});
+export default function ProfessionalRefData({
+  user,
+  update,
+}: {
+  user: any;
+  update: () => void;
+}) {
+  const [professionalRef, setProfessionalRef] = useState<any>([]);
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
-  const handleRefresh = () => {
-    setRefresh((prev) => !prev);
-  };
-
-  const handleSubmit = async () => {
-    await editUser(data.id, user, refetch, refetch);
-  };
+  useEffect(() => {
+    console.log(user);
+    setProfessionalRef(user.professionalReference);
+  }, [user]);
 
   const testData = [
     {
@@ -68,14 +73,10 @@ export default function ProfessionalRefData({ id }: { id: string }) {
   const [postsPerPage] = useState(5);
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
-  const currentPosts = testData.slice(indexOfFirstPost, indexOfLastPost);
-
-  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
+  const currentPosts = professionalRef.slice(indexOfFirstPost, indexOfLastPost);
 
   // Cantidad de paginas
-  const pageNumbers = testData.length / postsPerPage;
-
-  if (isLoading) return <UserDataSkeleton />;
+  const pageNumbers = professionalRef.length / postsPerPage;
 
   return (
     <Card className="w-full p-2">
@@ -92,13 +93,23 @@ export default function ProfessionalRefData({ id }: { id: string }) {
             }
           />
           <Tooltip content="Agregar">
-            <span className="text-lg cursor-pointer text-default-400 active:opacity-50">
+            <span
+              onClick={onOpen}
+              className="text-lg cursor-pointer text-default-400 active:opacity-50"
+            >
               <Icon
                 icon="solar:add-circle-bold"
                 className="text-5xl text-blue-500 bg-clip-text bg-gradient-to-r from-blue-500 to-sky-500"
               />
             </span>
           </Tooltip>
+          <ProfessionalReferenceDialog
+            id={user.id}
+            isOpen={isOpen}
+            onOpenChange={onOpenChange}
+            update={update}
+            key={"create-professionalReference"}
+          />
         </div>
       </CardHeader>
       <CardBody className="flex flex-col gap-2">
@@ -109,36 +120,12 @@ export default function ProfessionalRefData({ id }: { id: string }) {
           <div>Telefóno</div>
           <div>Acciones</div>
         </div>
-        {currentPosts.map((item, index) => (
-          <div
-            key={index}
-            className="grid w-full grid-cols-2 py-3 text-sm text-center rounded-lg bg-gray-50 md:grid-cols-3 lg:grid-cols-5"
-          >
-            <div className="flex items-center justify-center w-full">
-              {item.name}
-            </div>
-            <div className="flex items-center justify-center w-full">
-              {item.company}
-            </div>
-            <div className="flex items-center justify-center w-full">
-              {item.position}
-            </div>
-            <div className="flex items-center justify-center w-full">
-              {item.phone}
-            </div>
-            <div className="relative flex items-center justify-center gap-2">
-              <Tooltip content="Editar">
-                <span className="text-lg cursor-pointer text-default-400 active:opacity-50">
-                  <EditIcon />
-                </span>
-              </Tooltip>
-              <Tooltip color="danger" content="Eliminar">
-                <span className="text-lg cursor-pointer text-danger active:opacity-50">
-                  <DeleteIcon />
-                </span>
-              </Tooltip>
-            </div>
-          </div>
+        {currentPosts.map((item: any, index: number) => (
+          <ProfessionalReferenceCard
+            professionalReference={item}
+            update={update}
+            key={item.id}
+          />
         ))}
       </CardBody>
 

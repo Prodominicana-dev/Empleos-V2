@@ -103,7 +103,11 @@ export default function Page({ params: { id } }: any) {
             />
           </Tab>
           <Tab key="rpro" title="Referencia Profesional">
-            <ProfessionalRefData id={id} key={"rpro-data"} />
+            <ProfessionalRefData
+              user={user}
+              update={handleRefresh}
+              key={"rpro-data"}
+            />
           </Tab>
         </Tabs>
       </div>
