@@ -1,26 +1,27 @@
 import {
-  createLanguage,
-  deleteLanguage,
-  editLanguage,
-} from "@/service/language/service";
+  createPersonalReference,
+  deletePersonalReference,
+  editPersonalReference,
+} from "@/service/personalReference/service";
 
-export const createLanguageAction = async (
+export const createPersonalReferenceAction = async (
   id: string,
   handler: () => void,
   update: () => void,
   formData: FormData
 ) => {
   // Organizar la data
-  const { name, level } = Object.fromEntries(formData);
+  const { name, relationship, phone } = Object.fromEntries(formData);
   const data = {
     userId: id,
     name,
-    level: parseInt(level as string),
+    relationship,
+    phone,
   };
   console.log(data);
 
   try {
-    const response = await createLanguage(data);
+    const response = await createPersonalReference(data);
     update();
     handler();
     console.log(response);
@@ -31,22 +32,23 @@ export const createLanguageAction = async (
   }
 };
 
-export const updateLanguageAction = async (
+export const updatePersonalReferenceAction = async (
   id: string,
   handler: () => void,
   update: () => void,
   formData: FormData
 ) => {
   // Organizar la data
-  const { name, level } = Object.fromEntries(formData);
+  const { name, relationship, phone } = Object.fromEntries(formData);
   const data = {
     name,
-    level: parseInt(level as string),
+    relationship,
+    phone,
   };
   console.log(data);
 
   try {
-    await editLanguage(id, data, handler, update);
+    await editPersonalReference(id, data, handler, update);
     return { success: true };
   } catch (error: any) {
     console.log(error.message);
@@ -54,13 +56,13 @@ export const updateLanguageAction = async (
   }
 };
 
-export const deleteLanguageAction = async (
+export const deletePersonalReferenceAction = async (
   id: string,
   handler: () => void,
   update: () => void
 ) => {
   try {
-    await deleteLanguage(id, handler, update);
+    await deletePersonalReference(id, handler, update);
     return { success: true };
   } catch (error: any) {
     console.log(error.message);

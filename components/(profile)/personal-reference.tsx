@@ -19,6 +19,8 @@ import {
   Tooltip,
   ChipProps,
   Pagination,
+  useDisclosure,
+  User,
 } from "@nextui-org/react";
 import { Icon } from "@iconify/react";
 import countries from "./countries";
@@ -29,56 +31,40 @@ import { EyeIcon } from "@/components/icons/eye-icon";
 import { EditIcon } from "@/components/icons/edit";
 import { DeleteIcon } from "@/components/icons/delete";
 import test from "node:test";
+import PersonalReferenceDialog from "./personal-reference/dialog";
+import PersonalReferenceCard from "./personal-reference/card";
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
   Si: "success",
   No: "danger",
 };
 
-export default function PersonalRefData({ id }: { id: string }) {
-  const { data, isLoading, refetch } = useUser(id);
-  const [refresh, setRefresh] = useState(false);
-  const [user, setUser] = useState<any>({});
+export default function PersonalRefData({
+  user,
+  update,
+}: {
+  user: any;
+  update: () => void;
+}) {
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const [personalReference, setPersonalReference] = useState<any>([]);
 
-  const handleRefresh = () => {
-    setRefresh((prev) => !prev);
-  };
-
-  const handleSubmit = async () => {
-    await editUser(data.id, user, refetch, refetch);
-  };
-
-  const testData = [
-    {
-      name: "Juan Perez",
-      relationship: "Padre",
-      phone: "1234567890",
-    },
-    {
-      name: "Juan Perez",
-      relationship: "Padre",
-      phone: "1234567890",
-    },
-    {
-      name: "Juan Perez",
-      relationship: "Padre",
-      phone: "1234567890",
-    },
-  ];
+  useEffect(() => {
+    setPersonalReference(user.personalReference);
+  }, [user]);
 
   // Pagination with testData
   const [currentPage, setCurrentPage] = useState(1);
   const [postsPerPage] = useState(5);
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
-  const currentPosts = testData.slice(indexOfFirstPost, indexOfLastPost);
-
-  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
+  const currentPosts = personalReference.slice(
+    indexOfFirstPost,
+    indexOfLastPost
+  );
 
   // Cantidad de paginas
-  const pageNumbers = testData.length / postsPerPage;
-
-  if (isLoading) return <UserDataSkeleton />;
+  const pageNumbers = personalReference.length / postsPerPage;
 
   return (
     <Card className="w-full p-2">
@@ -95,13 +81,23 @@ export default function PersonalRefData({ id }: { id: string }) {
             }
           />
           <Tooltip content="Agregar">
-            <span className="text-lg cursor-pointer text-default-400 active:opacity-50">
+            <span
+              onClick={onOpen}
+              className="text-lg cursor-pointer text-default-400 active:opacity-50"
+            >
               <Icon
                 icon="solar:add-circle-bold"
                 className="text-5xl text-blue-500 bg-clip-text bg-gradient-to-r from-blue-500 to-sky-500"
               />
             </span>
           </Tooltip>
+          <PersonalReferenceDialog
+            id={user.id}
+            isOpen={isOpen}
+            onOpenChange={onOpenChange}
+            update={update}
+            key={"create-personalReference"}
+          />
         </div>
       </CardHeader>
       <CardBody className="flex flex-col gap-2">
@@ -111,33 +107,12 @@ export default function PersonalRefData({ id }: { id: string }) {
           <div>Teléfono</div>
           <div>Acciones</div>
         </div>
-        {currentPosts.map((item, index) => (
-          <div
-            key={index}
-            className="grid w-full grid-cols-2 py-3 text-sm text-center rounded-lg bg-gray-50 md:grid-cols-3 lg:grid-cols-4"
-          >
-            <div className="flex items-center justify-center w-full">
-              {item.name}
-            </div>
-            <div className="flex items-center justify-center w-full">
-              {item.relationship}
-            </div>
-            <div className="flex items-center justify-center w-full">
-              {item.phone}
-            </div>
-            <div className="relative flex items-center justify-center gap-2">
-              <Tooltip content="Editar">
-                <span className="text-lg cursor-pointer text-default-400 active:opacity-50">
-                  <EditIcon />
-                </span>
-              </Tooltip>
-              <Tooltip color="danger" content="Eliminar">
-                <span className="text-lg cursor-pointer text-danger active:opacity-50">
-                  <DeleteIcon />
-                </span>
-              </Tooltip>
-            </div>
-          </div>
+        {currentPosts.map((item: any, index: number) => (
+          <PersonalReferenceCard
+            personalReference={item}
+            update={update}
+            key={item.id}
+          />
         ))}
       </CardBody>
 

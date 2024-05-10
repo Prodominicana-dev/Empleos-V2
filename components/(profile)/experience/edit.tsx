@@ -111,7 +111,7 @@ export default function EditExperienceDialog({
           {(onClose) => (
             <form action={createEducationWithId}>
               <ModalHeader className="flex flex-col gap-1">
-                Editar un regustro de experiencia laboral
+                Editar un registro de experiencia laboral
               </ModalHeader>
               <ModalBody>
                 <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">

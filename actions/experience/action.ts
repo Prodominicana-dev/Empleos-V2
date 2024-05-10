@@ -1,9 +1,4 @@
 import {
-  createEducation,
-  deleteEducation,
-  editEducation,
-} from "@/service/education/service";
-import {
   createExperience,
   deleteExperience,
   editExperience,

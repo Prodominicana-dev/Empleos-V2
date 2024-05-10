@@ -96,7 +96,11 @@ export default function Page({ params: { id } }: any) {
             />
           </Tab>
           <Tab key="rper" title="Referencia Personal">
-            <PersonalRefData id={id} key={"rper-data"} />
+            <PersonalRefData
+              user={user}
+              update={handleRefresh}
+              key={"rper-data"}
+            />
           </Tab>
           <Tab key="rpro" title="Referencia Profesional">
             <ProfessionalRefData id={id} key={"rpro-data"} />

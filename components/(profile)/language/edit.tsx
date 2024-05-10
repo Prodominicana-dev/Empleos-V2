@@ -62,7 +62,7 @@ export default function EditLanguageDialog({
           {(onClose) => (
             <form action={updateLanguageWithArgs}>
               <ModalHeader className="flex flex-col gap-1">
-                Añadir un idioma
+                Edita un idioma
               </ModalHeader>
               <ModalBody>
                 <Input
