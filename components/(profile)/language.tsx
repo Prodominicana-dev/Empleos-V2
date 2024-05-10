@@ -19,6 +19,7 @@ import {
   Tooltip,
   ChipProps,
   Pagination,
+  useDisclosure,
 } from "@nextui-org/react";
 import { Icon } from "@iconify/react";
 import countries from "./countries";
@@ -30,51 +31,39 @@ import { EditIcon } from "@/components/icons/edit";
 import { DeleteIcon } from "@/components/icons/delete";
 import test from "node:test";
 import LanguageCard from "./language/card";
+import LanguageDialog from "./language/dialog";
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
   Si: "success",
   No: "danger",
 };
 
-export default function LanguageData({ id }: { id: string }) {
-  const { data, isLoading, refetch } = useUser(id);
-  const [refresh, setRefresh] = useState(false);
-  const [user, setUser] = useState<any>({});
+export default function LanguageData({
+  user,
+  update,
+}: {
+  user: any;
+  update: () => void;
+}) {
+  const [languages, setLanguages] = useState<any>([]);
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
-  const handleRefresh = () => {
-    setRefresh((prev) => !prev);
-  };
-
-  const handleSubmit = async () => {
-    await editUser(data.id, user, refetch, refetch);
-  };
-
-  const testData = [
-    {
-      id: "1",
-      name: "Inglés",
-      level: "Intermedio",
-    },
-    {
-      id: "2",
-      name: "Español",
-      level: "Nativo",
-    },
-  ];
+  useEffect(() => {
+    console.log(user);
+    setLanguages(user.language);
+  }, [user]);
 
   // Pagination with testData
   const [currentPage, setCurrentPage] = useState(1);
   const [postsPerPage] = useState(5);
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
-  const currentPosts = testData.slice(indexOfFirstPost, indexOfLastPost);
+  const currentPosts = languages.slice(indexOfFirstPost, indexOfLastPost);
 
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
   // Cantidad de paginas
-  const pageNumbers = testData.length / postsPerPage;
-
-  if (isLoading) return <UserDataSkeleton />;
+  const pageNumbers = languages.length / postsPerPage;
 
   return (
     <Card className="w-full p-2">
@@ -91,13 +80,23 @@ export default function LanguageData({ id }: { id: string }) {
             }
           />
           <Tooltip content="Agregar">
-            <span className="text-lg cursor-pointer text-default-400 active:opacity-50">
+            <span
+              onClick={onOpen}
+              className="text-lg cursor-pointer text-default-400 active:opacity-50"
+            >
               <Icon
                 icon="solar:add-circle-bold"
                 className="text-5xl text-blue-500 bg-clip-text bg-gradient-to-r from-blue-500 to-sky-500"
               />
             </span>
           </Tooltip>
+          <LanguageDialog
+            id={user.id}
+            isOpen={isOpen}
+            onOpenChange={onOpenChange}
+            update={update}
+            key={"create-language"}
+          />
         </div>
       </CardHeader>
       <CardBody className="flex flex-col gap-2">
@@ -106,7 +105,7 @@ export default function LanguageData({ id }: { id: string }) {
           <div>Nivel</div>
           <div>Acciones</div>
         </div>
-        {currentPosts.map((item, index) => (
+        {currentPosts.map((item: any, index: number) => (
           <LanguageCard key={item.id} language={item} />
         ))}
       </CardBody>
