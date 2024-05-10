@@ -13,11 +13,7 @@ export function useRelationship(auth0Id: string) {
   });
 }
 
-export async function createRelationship(
-  relation: any,
-  update: () => void,
-  handler: () => void
-) {
+export async function createRelationship(relation: any) {
   try {
     const url = `${process.env.NEXT_PUBLIC_API_URL}/relationship/`;
     const response = await axios.post(url, relation);
@@ -26,8 +22,6 @@ export async function createRelationship(
         duration: 4000,
         position: "top-center",
       });
-      update();
-      handler();
     }
   } catch (e) {
     toast.error("Error al registrar esta relación. Inténtelo de nuevo.", {
@@ -37,14 +31,14 @@ export async function createRelationship(
   }
 }
 
-export async function editUser(
+export async function editRelationship(
   id: string,
   data: any,
   handler: () => void,
   update: () => void
 ) {
   try {
-    const url = `${process.env.NEXT_PUBLIC_API_URL}/user/${id}`;
+    const url = `${process.env.NEXT_PUBLIC_API_URL}/relationship/${id}`;
     const response = await axios.patch(url, data);
     if (response.status === 200) {
       toast.success("Perfíl actualizado correctamente", {
@@ -62,13 +56,13 @@ export async function editUser(
   }
 }
 
-export async function deleteQuestion(
+export async function deleteRelationship(
   id: string,
   handler: () => void,
   update: () => void
 ) {
   try {
-    const url = `${process.env.NEXT_PUBLIC_API_URL}/question/${id}`;
+    const url = `${process.env.NEXT_PUBLIC_API_URL}/relationship/${id}`;
     const response = await axios.delete(url);
     if (response.status === 200) {
       toast.success("Pregunta eliminada correctamente", {
@@ -79,7 +73,7 @@ export async function deleteQuestion(
       update();
     }
   } catch (error) {
-    toast.error("Error al eliminar la pregunta", {
+    toast.error("Error al eliminar el parentesco", {
       duration: 4000,
       position: "top-center",
     });

@@ -31,11 +31,7 @@ import { EditIcon } from "@/components/icons/edit";
 import { DeleteIcon } from "@/components/icons/delete";
 import test from "node:test";
 import RelationshipDialog from "./relationship/dialog";
-
-const statusColorMap: Record<string, ChipProps["color"]> = {
-  Si: "success",
-  No: "danger",
-};
+import RelationshipCard from "./relationship/card";
 
 export default function RelationshipData({
   user,
@@ -106,6 +102,7 @@ export default function RelationshipData({
         {currentPosts.map(
           (
             item: {
+              id: string;
               name: string;
               relationship: string;
               phone: string;
@@ -113,41 +110,7 @@ export default function RelationshipData({
             },
             index: number
           ) => (
-            <div
-              key={index}
-              className="grid w-full grid-cols-2 py-3 text-sm text-center rounded-lg bg-gray-50 md:grid-cols-3 lg:grid-cols-5"
-            >
-              <div className="flex items-center justify-center w-full">
-                {item.name}
-              </div>
-              <div className="flex items-center justify-center w-full capitalize">
-                {item.relationship}
-              </div>
-              <div className="flex items-center justify-center w-full">
-                {item.phone}
-              </div>
-              <div className="flex items-center justify-center w-full">
-                <Chip
-                  size="md"
-                  variant="flat"
-                  color={statusColorMap[item.isInTheCompany ? "Si" : "No"]}
-                >
-                  {item.isInTheCompany ? "Sí" : "No"}
-                </Chip>
-              </div>
-              <div className="relative flex items-center justify-center gap-2">
-                <Tooltip content="Editar">
-                  <span className="text-lg cursor-pointer text-default-400 active:opacity-50">
-                    <EditIcon />
-                  </span>
-                </Tooltip>
-                <Tooltip color="danger" content="Eliminar">
-                  <span className="text-lg cursor-pointer text-danger active:opacity-50">
-                    <DeleteIcon />
-                  </span>
-                </Tooltip>
-              </div>
-            </div>
+            <RelationshipCard relation={item} update={update} key={item.id} />
           )
         )}
       </CardBody>

@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Modal,
   ModalContent,
@@ -14,7 +14,7 @@ import {
   Autocomplete,
   AutocompleteItem,
 } from "@nextui-org/react";
-import { createRelationshipAction } from "@/actions/relationship/action";
+import { updateRelationshipAction } from "@/actions/relationship/action";
 import { useFormStatus } from "react-dom";
 
 const SubmitButton = () => {
@@ -26,19 +26,25 @@ const SubmitButton = () => {
   );
 };
 
-export default function RelationshipDialog({
-  id,
+export default function EditRelationshipDialog({
+  relation,
   update,
   isOpen,
   onOpenChange,
 }: {
-  id: string;
+  relation: any;
   update: () => void;
   isOpen: any;
   onOpenChange: any;
 }) {
   const [relationship, setRelationship] = useState<string>("");
   const [isInTheCompany, setIsInTheCompany] = useState(false);
+
+  useEffect(() => {
+    console.log(relation);
+    setIsInTheCompany(relation.isInTheCompany);
+    setRelationship(relation.relationship);
+  }, [relation]);
 
   const relationshipData = [
     { label: "Abuelo", value: "abuelo" },
@@ -61,9 +67,9 @@ export default function RelationshipDialog({
     { label: "Nieta", value: "nieta" },
   ];
 
-  const createRelationActionWithArgs = createRelationshipAction.bind(
+  const updateRelationActionWithArgs = updateRelationshipAction.bind(
     null,
-    id,
+    relation.id,
     update,
     onOpenChange
   );
@@ -73,7 +79,7 @@ export default function RelationshipDialog({
       <Modal isOpen={isOpen} onOpenChange={onOpenChange} placement="top-center">
         <ModalContent>
           {(onClose) => (
-            <form action={createRelationActionWithArgs}>
+            <form action={updateRelationActionWithArgs}>
               <ModalHeader className="flex flex-col gap-1">
                 Crear una relación
               </ModalHeader>
@@ -86,6 +92,7 @@ export default function RelationshipDialog({
                   errorMessage="Por favor, ingrese el nombre de la persona"
                   variant="bordered"
                   name="name"
+                  defaultValue={relation.name}
                 />
 
                 <Input
@@ -105,6 +112,7 @@ export default function RelationshipDialog({
                   label="Seleccione el parentesco"
                   placeholder="Seleccione el parentesco de la persona"
                   errorMessage="Por favor, seleccione el parentesco de la persona"
+                  defaultSelectedKey={relation.relationship}
                   onSelectionChange={(e: any) => setRelationship(e)}
                 >
                   {(item) => (
@@ -122,6 +130,7 @@ export default function RelationshipDialog({
                   variant="bordered"
                   errorMessage="Por favor, ingrese el teléfono de la persona"
                   name="phone"
+                  defaultValue={relation.phone}
                 />
                 <Input
                   isRequired
@@ -135,6 +144,7 @@ export default function RelationshipDialog({
                   value={`${isInTheCompany}`}
                 />
                 <Checkbox
+                  checked={isInTheCompany}
                   classNames={{ label: "text-small" }}
                   onChange={(e) => {
                     setIsInTheCompany(e.target.checked);
