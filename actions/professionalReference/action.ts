@@ -47,7 +47,6 @@ export const updateProfessionalReferenceAction = async (
   // Organizar la data
   const { name, company, position, phone } = Object.fromEntries(formData);
   const data = {
-    userId: id,
     name,
     company,
     position,

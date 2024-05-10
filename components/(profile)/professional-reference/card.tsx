@@ -8,6 +8,7 @@ import { deleteLanguageAction } from "@/actions/language/action";
 import Delete from "@/components/actions/delete";
 import { deletePersonalReferenceAction } from "@/actions/personalReference/action";
 import { deleteProfessionalReferenceAction } from "@/actions/professionalReference/action";
+import EditProfessionalReferenceDialog from "./edit";
 
 export default function ProfessionalReferenceCard({
   professionalReference,
@@ -52,15 +53,36 @@ export default function ProfessionalReferenceCard({
       </div>
       <div className="relative flex items-center justify-center gap-2">
         <Tooltip content="Editar">
-          <span className="text-lg cursor-pointer text-default-400 active:opacity-50">
+          <span
+            onClick={onEditOpen}
+            className="text-lg cursor-pointer text-default-400 active:opacity-50"
+          >
             <EditIcon />
           </span>
         </Tooltip>
+        <EditProfessionalReferenceDialog
+          isOpen={isEditOpen}
+          onOpenChange={onEditOpenChange}
+          professionalReference={professionalReference}
+          update={update}
+          key={"update-professionalReference"}
+        />
         <Tooltip color="danger" content="Eliminar">
-          <span className="text-lg cursor-pointer text-danger active:opacity-50">
+          <span
+            onClick={onDeleteOpen}
+            className="text-lg cursor-pointer text-danger active:opacity-50"
+          >
             <DeleteIcon />
           </span>
         </Tooltip>
+        <Delete
+          deleteAction={deleteProfessionalReferenceWithArgs}
+          id={professionalReference.id}
+          isOpen={isDeleteOpen}
+          onOpenChange={onDeleteOpenChange}
+          name={professionalReference.name}
+          key={"delete-professionalReference"}
+        />
       </div>
     </div>
   );
