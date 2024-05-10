@@ -10,18 +10,38 @@ import {
   ChipProps,
   CardFooter,
   Button,
+  useDisclosure,
 } from "@nextui-org/react";
 import { EditIcon } from "@/components/icons/edit";
 import { EyeIcon } from "@/components/icons/eye-icon";
 import { DeleteIcon } from "@/components/icons/delete";
 import Experience from "@/components/icons/experience";
+import EditExperienceDialog from "./edit";
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
   complete: "success",
   incomplete: "warning",
 };
 
-export default function ExperienceCard({ experience }: { experience: any }) {
+export default function ExperienceCard({
+  experience,
+  update,
+}: {
+  experience: any;
+  update: () => void;
+}) {
+  const {
+    isOpen: isEditOpen,
+    onOpen: onEditOpen,
+    onOpenChange: onEditOpenChange,
+  } = useDisclosure();
+
+  const {
+    isOpen: isDeleteOpen,
+    onOpen: onDeleteOpen,
+    onOpenChange: onDeleteOpenChange,
+  } = useDisclosure();
+
   // Convertir las fechas a un formato legible (1 Sept. 2019)
   const status = experience.endDate ? "complete" : "incomplete";
   const startDate = new Date(experience.startDate);
@@ -63,10 +83,20 @@ export default function ExperienceCard({ experience }: { experience: any }) {
           </span>
         </Tooltip>
         <Tooltip content="Editar">
-          <span className="text-lg cursor-pointer text-default-400 active:opacity-50">
+          <span
+            onClick={onEditOpen}
+            className="text-lg cursor-pointer text-default-400 active:opacity-50"
+          >
             <EditIcon />
           </span>
         </Tooltip>
+        <EditExperienceDialog
+          experience={experience}
+          isOpen={isEditOpen}
+          onOpenChange={onEditOpenChange}
+          update={update}
+          key={"update-experience"}
+        />
         <Tooltip color="danger" content="Eliminar">
           <span className="text-lg cursor-pointer text-danger active:opacity-50">
             <DeleteIcon />

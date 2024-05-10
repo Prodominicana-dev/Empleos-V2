@@ -82,7 +82,11 @@ export default function Page({ params: { id } }: any) {
             />
           </Tab>
           <Tab key="experience" title="Experiencia">
-            <ExperienceData id={id} key={"experience-data"} />
+            <ExperienceData
+              user={user}
+              update={handleRefresh}
+              key={"experience-data"}
+            />
           </Tab>
           <Tab key="language" title="Idiomas">
             <LanguageData id={id} key={"language-data"} />

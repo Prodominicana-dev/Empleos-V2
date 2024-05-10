@@ -9,6 +9,7 @@ import {
   Chip,
   Tooltip,
   ChipProps,
+  useDisclosure,
 } from "@nextui-org/react";
 import { Icon } from "@iconify/react";
 import countries from "./countries";
@@ -22,24 +23,27 @@ import test from "node:test";
 import Education from "../icons/education";
 import EducationCard from "./education/card";
 import ExperienceCard from "./experience/card";
+import ExperienceDialog from "./experience/dialog";
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
   Si: "success",
   No: "danger",
 };
 
-export default function ExperienceData({ id }: { id: string }) {
-  const { data, isLoading, refetch } = useUser(id);
-  const [refresh, setRefresh] = useState(false);
-  const [user, setUser] = useState<any>({});
+export default function ExperienceData({
+  user,
+  update,
+}: {
+  user: any;
+  update: () => void;
+}) {
+  const [experiences, setExperiences] = useState<any>([]);
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
-  const handleRefresh = () => {
-    setRefresh((prev) => !prev);
-  };
-
-  const handleSubmit = async () => {
-    await editUser(data.id, user, refetch, refetch);
-  };
+  useEffect(() => {
+    console.log(user);
+    setExperiences(user.workExperience);
+  }, [user]);
 
   const testData = [
     {
@@ -58,20 +62,6 @@ export default function ExperienceData({ id }: { id: string }) {
       endDate: "2022-09-01",
     },
   ];
-
-  // Pagination with testData
-  const [currentPage, setCurrentPage] = useState(1);
-  const [postsPerPage] = useState(5);
-  const indexOfLastPost = currentPage * postsPerPage;
-  const indexOfFirstPost = indexOfLastPost - postsPerPage;
-  const currentPosts = testData.slice(indexOfFirstPost, indexOfLastPost);
-
-  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
-
-  // Cantidad de paginas
-  const pageNumbers = testData.length / postsPerPage;
-
-  if (isLoading) return <UserDataSkeleton />;
 
   return (
     <div className="flex flex-col gap-5">
@@ -92,19 +82,33 @@ export default function ExperienceData({ id }: { id: string }) {
               }
             />
             <Tooltip content="Agregar">
-              <span className="text-lg cursor-pointer text-default-400 active:opacity-50">
+              <span
+                onClick={onOpen}
+                className="text-lg cursor-pointer text-default-400 active:opacity-50"
+              >
                 <Icon
                   icon="solar:add-circle-bold"
                   className="text-5xl text-blue-500 bg-clip-text bg-gradient-to-r from-blue-500 to-sky-500"
                 />
               </span>
             </Tooltip>
+            <ExperienceDialog
+              isOpen={isOpen}
+              onOpenChange={onOpenChange}
+              update={update}
+              key={"create-experience"}
+              id={user.id}
+            />
           </div>
         </CardHeader>
       </Card>
       <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
-        {testData.map((experience) => (
-          <ExperienceCard experience={experience} key={experience.id} />
+        {experiences.map((experience: any) => (
+          <ExperienceCard
+            experience={experience}
+            update={update}
+            key={experience.id}
+          />
         ))}
       </div>
     </div>
