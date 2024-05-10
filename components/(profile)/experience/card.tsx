@@ -17,6 +17,8 @@ import { EyeIcon } from "@/components/icons/eye-icon";
 import { DeleteIcon } from "@/components/icons/delete";
 import Experience from "@/components/icons/experience";
 import EditExperienceDialog from "./edit";
+import Delete from "@/components/actions/delete";
+import { deleteExperienceAction } from "@/actions/experience/action";
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
   complete: "success",
@@ -55,6 +57,13 @@ export default function ExperienceCard({
     year: "numeric",
   });
 
+  const deleteExperienceWithArgs = deleteExperienceAction.bind(
+    null,
+    experience.id,
+    onDeleteOpenChange,
+    update
+  );
+
   return (
     <Card className="w-full max-w-3xl p-2">
       <CardHeader className="flex justify-center px-4 pt-4 pb-5 text-black md:justify-start">
@@ -77,11 +86,11 @@ export default function ExperienceCard({
         </div>
       </CardBody>
       <CardFooter className="flex justify-end gap-4 mt-1">
-        <Tooltip content="Detalles">
+        {/* <Tooltip content="Detalles">
           <span className="text-lg cursor-pointer text-default-400 active:opacity-50">
             <EyeIcon />
           </span>
-        </Tooltip>
+        </Tooltip> */}
         <Tooltip content="Editar">
           <span
             onClick={onEditOpen}
@@ -98,10 +107,21 @@ export default function ExperienceCard({
           key={"update-experience"}
         />
         <Tooltip color="danger" content="Eliminar">
-          <span className="text-lg cursor-pointer text-danger active:opacity-50">
+          <span
+            onClick={onDeleteOpen}
+            className="text-lg cursor-pointer text-danger active:opacity-50"
+          >
             <DeleteIcon />
           </span>
         </Tooltip>
+        <Delete
+          isOpen={isDeleteOpen}
+          name={experience.position}
+          onOpenChange={onDeleteOpenChange}
+          key={experience.id}
+          id={experience.id}
+          deleteAction={deleteExperienceWithArgs}
+        />
       </CardFooter>
     </Card>
   );

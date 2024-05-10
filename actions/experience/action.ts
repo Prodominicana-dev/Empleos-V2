@@ -3,7 +3,11 @@ import {
   deleteEducation,
   editEducation,
 } from "@/service/education/service";
-import { createExperience, editExperience } from "@/service/experience/service";
+import {
+  createExperience,
+  deleteExperience,
+  editExperience,
+} from "@/service/experience/service";
 
 export const createExperienceAction = async (
   id: string,
@@ -103,7 +107,7 @@ export const deleteExperienceAction = async (
   update: () => void
 ) => {
   try {
-    await deleteEducation(id, handler, update);
+    await deleteExperience(id, handler, update);
     return { success: true };
   } catch (error: any) {
     console.log(error.message);
