@@ -17,6 +17,8 @@ import { EditIcon } from "@/components/icons/edit";
 import { EyeIcon } from "@/components/icons/eye-icon";
 import { DeleteIcon } from "@/components/icons/delete";
 import EditEducationDialog from "./edit";
+import Delete from "@/components/actions/delete";
+import { deleteEducationAction } from "@/actions/education/actions";
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
   complete: "success",
@@ -45,6 +47,13 @@ export default function EducationCard({
     onOpen: onEditOpen,
     onOpenChange: onEditOpenChange,
   } = useDisclosure();
+
+  const {
+    isOpen: isDeleteOpen,
+    onOpen: onDeleteOpen,
+    onOpenChange: onDeleteOpenChange,
+  } = useDisclosure();
+
   // Convertir las fechas a un formato legible (1 Sept. 2019)
   const status = education.endDate ? "complete" : "incomplete";
   const startDate = new Date(education.startDate);
@@ -57,6 +66,13 @@ export default function EducationCard({
     month: "short",
     year: "numeric",
   });
+
+  const deleteEducationWithArgs = deleteEducationAction.bind(
+    null,
+    education.id,
+    onDeleteOpenChange,
+    update
+  );
 
   return (
     <Card className="w-full max-w-3xl p-2">
@@ -94,10 +110,20 @@ export default function EducationCard({
           update={update}
         />
         <Tooltip color="danger" content="Eliminar">
-          <span className="text-lg cursor-pointer text-danger active:opacity-50">
+          <span
+            onClick={onDeleteOpen}
+            className="text-lg cursor-pointer text-danger active:opacity-50"
+          >
             <DeleteIcon />
           </span>
         </Tooltip>
+        <Delete
+          id={education.id}
+          deleteAction={deleteEducationWithArgs}
+          name={education.title}
+          isOpen={isDeleteOpen}
+          onOpenChange={onDeleteOpenChange}
+        />
       </CardFooter>
     </Card>
   );

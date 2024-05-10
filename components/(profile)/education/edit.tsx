@@ -17,12 +17,16 @@ import {
   DatePicker,
   DateRangePicker,
 } from "@nextui-org/react";
-import { updateEducationAction } from "@/actions/education/actions";
+import {
+  createEducationAction,
+  updateEducationAction,
+} from "@/actions/education/actions";
 import { getLocalTimeZone, parseDate, today } from "@internationalized/date";
 import { useFormStatus } from "react-dom";
 
 const SubmitButton = () => {
-  const { pending } = useFormStatus();
+  const { pending, action, method } = useFormStatus();
+  console.log(pending, action, method);
   return (
     <Button type="submit" color="primary" aria-disabled={pending}>
       {pending ? "Guardando..." : "Guardar"}
@@ -43,17 +47,22 @@ export default function EditEducationDialog({
 }) {
   const [isStudying, setIsStudying] = useState(false);
   const [degreeId, setDegreeId] = useState<string>("");
+  const [startDate, setStartDate] = useState<string>("");
+  const [endDate, setEndDate] = useState<string>("");
 
   useEffect(() => {
     console.log(education);
+    // Verificar si el usuario esta estudiando actualmente
     if (education.endDate === null) setIsStudying(true);
     // Convertir las fechas a yyyy-mm-dd
     const startDate = new Date(education.startDate);
     if (education.endDate) {
       const endDate = new Date(education.endDate);
-      education.endDate = endDate.toISOString().split("T")[0];
+      setEndDate(endDate.toISOString().split("T")[0]);
     }
-    education.startDate = startDate.toISOString().split("T")[0];
+    setStartDate(startDate.toISOString().split("T")[0]);
+    // Setear el grado academico
+    setDegreeId(education.degreeId);
   }, [education]);
 
   const updateEducationWithArgs = updateEducationAction.bind(
@@ -68,6 +77,8 @@ export default function EditEducationDialog({
     { label: "Basico", value: "bbb" },
     { label: "Universitario", value: "clvzeuwgy00009yfhhaytgvn4" },
   ];
+
+  if (!education) return null;
 
   return (
     <>
@@ -105,7 +116,7 @@ export default function EditEducationDialog({
                   label="Institución"
                   placeholder="Ingrese el nombre de la institución"
                   name="degreeId"
-                  defaultValue={degreeId}
+                  value={degreeId}
                   errorMessage="Por favor, ingrese el nombre de la institución"
                   variant="bordered"
                   className="hidden"
@@ -148,7 +159,7 @@ export default function EditEducationDialog({
                       isRequired
                       showMonthAndYearPickers
                       maxValue={today(getLocalTimeZone())}
-                      defaultValue={parseDate(education.startDate)}
+                      defaultValue={parseDate(startDate)}
                       variant="bordered"
                     />
                     <DatePicker
@@ -172,8 +183,8 @@ export default function EditEducationDialog({
                     variant="bordered"
                     startName="startDate"
                     defaultValue={{
-                      start: parseDate(education.startDate),
-                      end: parseDate(education.endDate),
+                      start: parseDate(startDate),
+                      end: parseDate(endDate),
                     }}
                     endName="endDate"
                   />

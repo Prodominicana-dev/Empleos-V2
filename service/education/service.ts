@@ -49,23 +49,23 @@ export async function editEducation(
       update();
     }
   } catch (error) {
-    toast.error("Error al actualizar el registro académico", {
+    toast.error("Error al actualizar este registro académico", {
       duration: 4000,
       position: "top-center",
     });
   }
 }
 
-export async function deleteQuestion(
+export async function deleteEducation(
   id: string,
   handler: () => void,
   update: () => void
 ) {
   try {
-    const url = `${process.env.NEXT_PUBLIC_API_URL}/question/${id}`;
+    const url = `${process.env.NEXT_PUBLIC_API_URL}/education/${id}`;
     const response = await axios.delete(url);
     if (response.status === 200) {
-      toast.success("Pregunta eliminada correctamente", {
+      toast.success("Registro académico eliminado correctamente", {
         duration: 4000,
         position: "top-center",
       });
@@ -73,7 +73,7 @@ export async function deleteQuestion(
       update();
     }
   } catch (error) {
-    toast.error("Error al eliminar la pregunta", {
+    toast.error("Error al eliminar este registro académico", {
       duration: 4000,
       position: "top-center",
     });

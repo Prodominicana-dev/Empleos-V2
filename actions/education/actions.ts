@@ -1,4 +1,8 @@
-import { createEducation, editEducation } from "@/service/education/service";
+import {
+  createEducation,
+  deleteEducation,
+  editEducation,
+} from "@/service/education/service";
 
 export const createEducationAction = async (
   id: string,
@@ -53,6 +57,21 @@ export const updateEducationAction = async (
     await editEducation(id, data, handler, update);
     return { success: true };
   } catch (error: any) {
+    console.log(error.message);
+    return { error: error.message };
+  }
+};
+
+export const deleteEducationAction = async (
+  id: string,
+  handler: () => void,
+  update: () => void
+) => {
+  try {
+    await deleteEducation(id, handler, update);
+    return { success: true };
+  } catch (error: any) {
+    console.log(error.message);
     return { error: error.message };
   }
 };
