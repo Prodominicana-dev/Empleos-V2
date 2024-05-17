@@ -36,15 +36,11 @@ export default function RootLayout({
       >
         <UserProvider>
           <Providers>
-            <div className="relative flex flex-col h-screen overflow-y-auto">
-              <ScrollShadow>
-                <NavbarComponent />
-                <main className="container flex-grow px-6 pt-16 mx-auto max-w-7xl">
-                  {children}
-                </main>
-              </ScrollShadow>
+            <div className="relative flex flex-col h-screen overflow-y-auto bg-white">
+              <NavbarComponent />
+              {/* <main className="container flex-grow px-6 pt-16 mx-auto max-w-7xl"> */}
+              <main>{children}</main>
             </div>
-            <Background />
           </Providers>
         </UserProvider>
       </body>
