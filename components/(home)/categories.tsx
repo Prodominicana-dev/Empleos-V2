@@ -5,50 +5,75 @@ import { HoverEffect } from "../card-hover/card-hover";
 export default function Categories() {
   const projects = [
     {
-      title: "Recursos Humanos",
-      description:
-        "A technology company that builds economic infrastructure for the internet.",
+      icon: "/icons/consultoriajuridica.svg",
+      title: "Consultoría Jurídica",
+      description: "10 vacantes disponibles.",
       link: "https://stripe.com",
     },
     {
-      title: "Marketing",
-      description:
-        "A streaming service that offers a wide variety of award-winning TV shows, movies, anime, documentaries, and more on thousands of internet-connected devices.",
-      link: "https://netflix.com",
+      icon: "/icons/ejecutiva.svg",
+      title: "Dirección Ejecutiva",
+      description: "5 vacantes disponibles.",
+      link: "https://stripe.com",
     },
     {
-      title: "Innovación",
-      description:
-        "A multinational technology company that specializes in Internet-related services and products.",
-      link: "https://google.com",
+      icon: "/icons/financiera.svg",
+      title: "Dirección Administrativa y Financiera",
+      description: "20 vacantes disponibles.",
+      link: "https://stripe.com",
     },
     {
-      title: "TI",
-      description:
-        "A technology company that focuses on building products that advance Facebook's mission of bringing the world closer together.",
-      link: "https://meta.com",
+      icon: "/icons/exportacion.svg",
+      title: "Dirección de Exportación",
+      description: "15 vacantes disponibles.",
+      link: "https://stripe.com",
     },
     {
-      title: "Categoría 5",
-      description:
-        "A multinational technology company focusing on e-commerce, cloud computing, digital streaming, and artificial intelligence.",
-      link: "https://amazon.com",
+      icon: "/icons/innovacion.svg",
+      title: "Dirección de Relaciones Internacionales",
+      description: "10 vacantes disponibles.",
+      link: "https://stripe.com",
     },
     {
-      title: "Categoría 6",
-      description:
-        "A multinational technology company that develops, manufactures, licenses, supports, and sells computer software, consumer electronics, personal computers, and related services.",
-      link: "https://microsoft.com",
+      icon: "/icons/inteligenciademercados.svg",
+      title: "Dirección de Inteligencia de Mercados",
+      description: "15 vacantes disponibles.",
+      link: "https://stripe.com",
+    },
+    {
+      icon: "/icons/inversion.svg",
+      title: "Dirección de Marketing y Comunicación",
+      description: "10 vacantes disponibles.",
+      link: "https://stripe.com",
+    },
+    {
+      icon: "/icons/marketing.svg",
+      title: "Dirección de Innovación Estratégica",
+      description: "5 vacantes disponibles.",
+      link: "https://stripe.com",
+    },
+    {
+      icon: "/icons/relacionesinternacionales.svg",
+      title: "Sistemas",
+      description: "20 vacantes disponibles.",
+      link: "https://stripe.com",
+    },
+    {
+      icon: "/icons/talentohumano.svg",
+      title: "Ventas",
+      description: "15 vacantes disponibles.",
+      link: "https://stripe.com",
     },
   ];
   return (
-    <div id="categories" className="flex flex-col w-full">
-      <h1 className="py-1 text-3xl font-bold text-transparent lg:text-6xl bg-clip-text bg-gradient-to-t from-blue-600 to-sky-500">
-        Categorías
-      </h1>
-      <div>
+    <div className="relative flex flex-col items-center justify-center w-full gap-8 text-black min-h-[60vh] bg-white mt-24">
+      <div className="text-4xl font-bold text-center lg:text-6xl">
+        <h1>¡Todas nuestras ofertas!</h1>
+      </div>
+      <div className="w-10/12">
         <HoverEffect items={projects} />
       </div>
+      <div className="absolute bottom-0 w-full h-[25vh] self-end bg-red-600"></div>
     </div>
   );
 }

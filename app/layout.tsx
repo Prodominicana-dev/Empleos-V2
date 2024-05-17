@@ -8,6 +8,7 @@ import clsx from "clsx";
 import Background from "@/components/background";
 import NavbarComponent from "@/components/navbar";
 import { UserProvider } from "@auth0/nextjs-auth0/client";
+import Footer from "@/components/footer/footer";
 
 export const metadata: Metadata = {
   title: {
@@ -39,7 +40,10 @@ export default function RootLayout({
             <div className="relative flex flex-col h-screen overflow-y-auto bg-white">
               <NavbarComponent />
               {/* <main className="container flex-grow px-6 pt-16 mx-auto max-w-7xl"> */}
-              <main>{children}</main>
+              <main>
+                {children}
+                <Footer />
+              </main>
             </div>
           </Providers>
         </UserProvider>
