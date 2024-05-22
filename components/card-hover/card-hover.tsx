@@ -3,17 +3,13 @@ import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import { Category } from "../(home)/categories";
 
 export const HoverEffect = ({
   items,
   className,
 }: {
-  items: {
-    title: string;
-    description: string;
-    link: string;
-    icon: string;
-  }[];
+  items: Category[];
   className?: string;
 }) => {
   let [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
@@ -27,9 +23,9 @@ export const HoverEffect = ({
     >
       {items.map((item, idx) => (
         <Link
-          href={item?.link}
-          key={item?.link}
-          className="relative block w-[28rem] h-[18rem] p-2 group"
+          href={`/vacancy?cat=${item.name.toLowerCase()}`}
+          key={item?.id}
+          className="relative block w-[28rem] p-2 group"
           onMouseEnter={() => setHoveredIndex(idx)}
           onMouseLeave={() => setHoveredIndex(null)}
         >
@@ -50,18 +46,22 @@ export const HoverEffect = ({
               />
             )}
           </AnimatePresence>
-          <Card>
+          <Card className="font-dm-sans">
             <div className="flex items-center justify-center">
-              <Image
-                src={item.icon}
-                alt={item.icon}
-                width={200}
-                height={200}
-                className="size-16 lg:size-24"
-              />
+              {item.icon && (
+                <Image
+                  src={`${process.env.NEXT_PUBLIC_API_URL}/category/cat/svg/${item?.icon}`}
+                  alt={item?.name}
+                  width={200}
+                  height={200}
+                  className="size-16 lg:size-24"
+                />
+              )}
             </div>
-            <CardTitle>{item.title}</CardTitle>
-            <CardDescription>{item.description}</CardDescription>
+            <CardTitle>{item.name}</CardTitle>
+            <CardDescription>
+              {item._count.vacancies} vacantes disponibles
+            </CardDescription>
           </Card>
         </Link>
       ))}

@@ -40,10 +40,7 @@ export default function RootLayout({
             <div className="relative flex flex-col h-screen overflow-y-auto bg-white">
               <NavbarComponent />
               {/* <main className="container flex-grow px-6 pt-16 mx-auto max-w-7xl"> */}
-              <main>
-                {children}
-                <Footer />
-              </main>
+              <main>{children}</main>
             </div>
           </Providers>
         </UserProvider>

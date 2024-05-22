@@ -6,11 +6,8 @@ import {
   NavbarContent,
   NavbarItem,
   NavbarMenuToggle,
-  NavbarMenu,
-  NavbarMenuItem,
   Button,
 } from "@nextui-org/react";
-import { LogoIcon } from "./icons";
 import Link from "next/link";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import {
@@ -22,10 +19,12 @@ import {
   User,
 } from "@nextui-org/react";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 
 export default function NavbarComponent() {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const { user, isLoading } = useUser();
+  const pathname = usePathname();
 
   type NavbarOptions = {
     name: string;
@@ -52,7 +51,7 @@ export default function NavbarComponent() {
     },
     {
       name: "Vacantes",
-      href: "/",
+      href: "/vacancy",
     },
   ];
 
@@ -88,7 +87,11 @@ export default function NavbarComponent() {
           <NavbarItem>
             <Link
               href={href}
-              className="transition duration-200 text-blue-950 hover:border-b-1 hover:border-red-600"
+              className={
+                pathname === href
+                  ? "transition duration-200 text-blue-950 border-b-1 border-red-600"
+                  : "transition duration-200 text-blue-950 hover:border-b-1 hover:border-red-600"
+              }
             >
               {name}
             </Link>

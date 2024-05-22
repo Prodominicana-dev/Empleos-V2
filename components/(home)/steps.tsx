@@ -6,7 +6,7 @@ export default function Steps() {
   return (
     <div className="flex justify-center w-full bg-red-600 py-28">
       <div className="flex flex-col items-center justify-center h-full gap-28 max-w-7xl">
-        <h1 className="text-3xl font-bold text-white lg:text-6xl">
+        <h1 className="text-3xl font-bold text-white lg:text-6xl ">
           ¡ÚNETE A NOSOTROS!
         </h1>
         <div className="flex flex-row w-full gap-5 lg:flex-col">
@@ -42,7 +42,7 @@ export default function Steps() {
               className="size-full"
             />
           </div>
-          <div className="grid w-1/2 grid-cols-1 mt-5 lg:w-full lg:grid-cols-5 place-items-center">
+          <div className="grid w-1/2 grid-cols-1 mt-5 lg:w-full lg:grid-cols-5 place-items-center font-dm-sans">
             <h1 className="text-xl font-bold text-center lg:text-3xl">
               Buscar trabajo
             </h1>
