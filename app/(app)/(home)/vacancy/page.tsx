@@ -5,6 +5,7 @@ import React, { useEffect, useState } from "react";
 import { CheckboxGroup, Checkbox, Pagination } from "@nextui-org/react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import Link from "next/link";
+import { useVacancy } from "@/service/vacancy/service";
 
 const vacancy = [
   {
@@ -81,6 +82,7 @@ export default function Page() {
   const { replace } = router;
   const searchParameters = useSearchParams();
   const pathname = usePathname();
+  const { data: vacancies, isLoading: loadingVacancies } = useVacancy();
 
   const filterVacancy = (vacancy: any[], selected: string[]) => {
     if (selected.length === 0) return vacancy;
@@ -89,18 +91,19 @@ export default function Page() {
     );
   };
 
-  const vacancyFilter = filterVacancy(vacancy, selected) || vacancy;
+  // const vacancyFilter = filterVacancy(vacancies, selected) || vacancies;
 
-  // Paginacion de vacantes de 4 en 4
-  // Pagination with testData
-  const [currentPage, setCurrentPage] = useState(1);
-  const [postsPerPage] = useState(4);
-  const indexOfLastPost = currentPage * postsPerPage;
-  const indexOfFirstPost = indexOfLastPost - postsPerPage;
-  const currentVacancy = vacancyFilter.slice(indexOfFirstPost, indexOfLastPost);
+  // // Paginacion de vacantes de 4 en 4
+  // // Pagination with testData
+  // const [currentPage, setCurrentPage] = useState(1);
+  // const [postsPerPage] = useState(4);
 
-  // Cantidad de paginas
-  const pageNumbers = vacancyFilter.length / postsPerPage;
+  // const indexOfLastPost = currentPage * postsPerPage;
+  // const indexOfFirstPost = indexOfLastPost - postsPerPage;
+  // const currentVacancy = vacancyFilter.slice(indexOfFirstPost, indexOfLastPost);
+
+  // // Cantidad de paginas
+  // const pageNumbers = vacancyFilter.length / postsPerPage;
 
   const handleCategories = () => {
     const parameters = new URLSearchParams(searchParameters);
@@ -134,6 +137,9 @@ export default function Page() {
     }
   }, [data, isLoading]);
 
+  if (loadingVacancies) return <div>Cargando...</div>;
+  console.log(vacancies);
+
   return (
     <div className="w-full min-h-[90vh] flex justify-center">
       <div className="flex flex-col w-full gap-5 p-10 lg:p-10 max-w-7xl">
@@ -163,38 +169,51 @@ export default function Page() {
             </CheckboxGroup>
           </div>
           <div className="grid w-full h-full grid-cols-1 gap-5 md:grid-cols-2">
-            {currentVacancy.map((item, index) => (
-              <Link
-                key={index}
-                href={"/vacancy"}
-                className="flex flex-col w-full gap-4 p-4 border border-gray-300 shadow rounded-xl h-[30vh] justify-center hover:bg-gray-100 duration-200 hover:cursor-pointer"
-              >
-                <h2 className="text-2xl font-semibold text-black font-dm-sans line-clamp-1">
-                  {item.name}
-                </h2>
-                <div className="w-full h-[1px] bg-gray-100"></div>
-                <p className="text-sm text-gray-500 font-dm-sans">
-                  {item.category}
-                </p>
+            {vacancies.map((item: any, index: number) => {
+              const date = new Date(item?.createdAt);
+              // Formatear la fecha con toLocaleDateString
+              console.log(date);
 
-                <div className="w-full h-[1px] bg-gray-100"></div>
-                <p className="text-sm text-gray-500 font-dm-sans line-clamp-2">
-                  {item.description}
-                </p>
-                <div className="w-full h-[1px] bg-gray-100"></div>
-                <div className="flex flex-row justify-between">
+              const fechaFormateada = date.toLocaleDateString("es-ES", {
+                day: "numeric",
+                month: "long",
+                year: "numeric",
+              });
+              console.log(fechaFormateada);
+
+              return (
+                <Link
+                  key={index}
+                  href={`/vacancy/${item.id}`}
+                  className="flex flex-col w-full gap-4 p-4 border border-gray-300 shadow rounded-xl h-[30vh] justify-center hover:bg-gray-100 duration-200 hover:cursor-pointer"
+                >
+                  <h2 className="text-2xl font-semibold text-black font-dm-sans line-clamp-1">
+                    {item.title}
+                  </h2>
+                  <div className="w-full h-[1px] bg-gray-100"></div>
                   <p className="text-sm text-gray-500 font-dm-sans">
-                    CV enviados: {item.cv}
+                    {item?.category.name}
                   </p>
-                  <p className="text-sm text-gray-500 font-dm-sans">
-                    {item.date}
+
+                  <div className="w-full h-[1px] bg-gray-100"></div>
+                  <p className="text-sm text-gray-500 font-dm-sans line-clamp-2">
+                    {item.description}
                   </p>
-                </div>
-              </Link>
-            ))}
+                  <div className="w-full h-[1px] bg-gray-100"></div>
+                  <div className="flex flex-row justify-between">
+                    <p className="text-sm text-gray-500 font-dm-sans">
+                      CV enviados: {item?._count.applications}
+                    </p>
+                    <p className="text-sm text-gray-500 font-dm-sans">
+                      {fechaFormateada}
+                    </p>
+                  </div>
+                </Link>
+              );
+            })}
           </div>
         </div>
-        {pageNumbers > 1 && (
+        {/* {pageNumbers > 1 && (
           <div className="flex justify-end w-full gap-2 mt-4">
             <Pagination
               loop
@@ -207,7 +226,7 @@ export default function Page() {
               onChange={(page) => setCurrentPage(page)}
             />
           </div>
-        )}
+        )} */}
       </div>
     </div>
   );
