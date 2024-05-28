@@ -80,7 +80,7 @@ export default function Page({ params }: { params: { id: string } }) {
       setExperienceRequired(parseInt(experience[1]));
       setLicenseRequired(data?.hasLicense);
       setVehiculeRequired(data?.hasVehicule);
-      setCareerIdRequired(data?.careerId);
+      setCareerIdRequired(data.careerId !== null ? data.careerId : "");
       setLanguage(data?.language);
       setValidationLoading(false);
     }
@@ -142,6 +142,17 @@ export default function Page({ params }: { params: { id: string } }) {
       const birthDate = new Date(userAPI.birthdate);
       const age = new Date().getFullYear() - birthDate.getFullYear();
       setHasMinimunAge(age >= ageRequired ? true : false);
+
+      // Validar si la carrera universitaria requerida es la misma que la del usuario
+      setHasCareer(
+        careerRequiredId === ""
+          ? true
+          : userAPI.education.find(
+              (education: any) => education.careerId === careerRequiredId
+            )
+          ? true
+          : false
+      );
     }
   }, [userAPI, userLoadingAPI, validationLoading]);
 
@@ -170,7 +181,8 @@ export default function Page({ params }: { params: { id: string } }) {
       hasProvince,
       hasLanguages,
       hasLicense,
-      hasVehicule
+      hasVehicule,
+      hasCareer
     );
     return !(
       hasMinimunDegree &&
@@ -178,7 +190,8 @@ export default function Page({ params }: { params: { id: string } }) {
       hasProvince &&
       hasLanguages &&
       hasLicense &&
-      hasVehicule
+      hasVehicule &&
+      hasCareer
     );
   };
 

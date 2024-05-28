@@ -335,6 +335,7 @@ export default function UserData({
             users.telephone !== user.telephone ||
             users.phone !== user.phone ||
             users.country !== user.country ||
+            users.province !== user.province ||
             users.birthdate !== user.birthdate ||
             users.documentType !== user.documentType ||
             users.documentNumber !== user.documentNumber ||
