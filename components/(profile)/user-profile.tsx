@@ -1,6 +1,6 @@
 "use client";
 
-import type { CardProps } from "@nextui-org/react";
+import type { CalendarDate, CardProps } from "@nextui-org/react";
 
 import React, { useEffect, useState } from "react";
 import {
@@ -22,6 +22,7 @@ import { Icon } from "@iconify/react";
 import countries from "./countries";
 import { editUser, useUser } from "@/service/user/service";
 import UserDataSkeleton from "./skeleton/user-profile";
+import { parseDate } from "@internationalized/date";
 
 export default function UserData({
   user,
@@ -32,9 +33,23 @@ export default function UserData({
 }) {
   const [users, setUser] = useState<any>({});
   const [refresh, setRefresh] = useState(false);
+  const [birthdate, setBirthdate] = useState<any>(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    setUser(user);
+    setLoading(true);
+    if (user) {
+      console.log(user);
+      setUser(user);
+      const date = new Date(user?.birthdate);
+      console.log(date);
+      // Convertir date en CalendarDate usando el parseDate
+      //const parsedDate = parseDate(date?.toISOString().split("T")[0]);
+      //console.log(parsedDate);
+      //setBirthdate(parsedDate);
+      //setBirthdate(parseDate(date.toISOString().split("T")[0]));
+    }
+    setLoading(false);
   }, [user]);
 
   const handleSubmit = async () => {
@@ -63,7 +78,7 @@ export default function UserData({
     );
   };
 
-  // if (isLoading) return <UserDataSkeleton />;
+  if (loading) return <UserDataSkeleton />;
 
   return (
     <Card className="w-full p-2">
@@ -240,7 +255,7 @@ export default function UserData({
             labelPlacement="outside"
             value={user.documentNumber}
             onChange={(e) =>
-              setUser({ ...users, documentNumbers: e.target.value })
+              setUser({ ...users, documentNumber: e.target.value })
             }
             placeholder="Ingrese el número de documento"
           />
@@ -266,7 +281,19 @@ export default function UserData({
             )}
           </Autocomplete>
           {/* Celular */}
-          <DatePicker label="Fecha de nacimiento" labelPlacement="outside" />
+          <DatePicker
+            label="Fecha de nacimiento"
+            labelPlacement="outside"
+            onChange={(e: any) => {
+              setUser({
+                ...users,
+                birthdate: new Date(e as string).toISOString(),
+              });
+              setBirthdate(e);
+            }}
+            showMonthAndYearPickers
+            value={birthdate}
+          />
         </div>
         <Divider />
         <div className="flex flex-col gap-5 lg:flex-row">

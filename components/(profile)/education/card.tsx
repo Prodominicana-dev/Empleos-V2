@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { use, useEffect } from "react";
 import {
   Card,
   CardHeader,
@@ -31,6 +31,8 @@ interface Education {
   institution: string;
   degreeId: string;
   degrees: { name: string; id: string };
+  careerId: string;
+  careers: { name: string; id: string };
   startDate: string;
   endDate?: string;
 }
@@ -81,8 +83,18 @@ export default function EducationCard({
       </CardHeader>
       <CardBody className="flex flex-col items-center gap-2 md:flex-row md:justify-between">
         <div>
-          <h1 className="font-bold text-large">{education.title}</h1>
-          <p className="text-small">{education.institution}</p>
+          <h1 className="font-bold text-large">
+            {education.title === null || education.title === ""
+              ? education.careerId !== null
+                ? education.careers.name
+                : education.institution
+              : education.title}
+          </h1>
+          {education.careerId !== null &&
+            (education.title === null || education.title === "") && (
+              <p className="text-small">{education.institution}</p>
+            )}
+
           <p className="text-small">{education.degrees.name}</p>
           <p className="capitalize text-small">
             {startDateString} - {education.endDate ? endDateString : "presente"}

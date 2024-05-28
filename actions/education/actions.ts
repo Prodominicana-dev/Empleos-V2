@@ -11,7 +11,7 @@ export const createEducationAction = async (
   formData: FormData
 ) => {
   // Organizar la data
-  const { title, institution, degreeId, startDate, endDate, area } =
+  const { title, institution, degreeId, startDate, endDate, area, careerId } =
     Object.fromEntries(formData);
   const data = {
     userId: id,
@@ -19,6 +19,7 @@ export const createEducationAction = async (
     institution,
     area,
     degreeId,
+    careerId,
     startDate: new Date(startDate as string).toISOString(),
     endDate: endDate ? new Date(endDate as string).toISOString() : null,
   };
@@ -41,13 +42,14 @@ export const updateEducationAction = async (
   formData: FormData
 ) => {
   // Organizar la data
-  const { title, institution, degreeId, startDate, endDate, area } =
+  const { title, institution, degreeId, startDate, endDate, area, careerId } =
     Object.fromEntries(formData);
   const data = {
     title,
     institution,
     area,
     degreeId,
+    careerId,
     startDate: new Date(startDate as string).toISOString(),
     endDate: endDate ? new Date(endDate as string).toISOString() : null,
   };
