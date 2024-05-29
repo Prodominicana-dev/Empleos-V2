@@ -8,6 +8,7 @@ import clsx from "clsx";
 import Background from "@/components/background";
 import NavbarComponent from "@/components/navbar";
 import { UserProvider } from "@auth0/nextjs-auth0/client";
+import Footer from "@/components/footer/footer";
 
 export const metadata: Metadata = {
   title: {
@@ -28,23 +29,14 @@ export default function RootLayout({
   return (
     <html lang="es" suppressHydrationWarning className="scroll-smooth">
       <head />
-      <body
-        className={clsx(
-          "min-h-screen font-sans antialiased",
-          fontSans.variable
-        )}
-      >
+      <body className={clsx("min-h-screen font-sans antialiased")}>
         <UserProvider>
           <Providers>
-            <div className="relative flex flex-col h-screen overflow-y-auto">
-              <ScrollShadow>
-                <NavbarComponent />
-                <main className="container flex-grow px-6 pt-16 mx-auto max-w-7xl">
-                  {children}
-                </main>
-              </ScrollShadow>
+            <div className="relative flex flex-col h-screen overflow-y-auto bg-white">
+              <NavbarComponent />
+              {/* <main className="container flex-grow px-6 pt-16 mx-auto max-w-7xl"> */}
+              <main>{children}</main>
             </div>
-            <Background />
           </Providers>
         </UserProvider>
       </body>

@@ -8,7 +8,12 @@ module.exports = {
     "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        "dm-sans": ["DMSans", "sans-serif"],
+        jetbrains: ["JetBrainsMono", "sans-serif"],
+      },
+    },
   },
   plugins: [
     nextui({

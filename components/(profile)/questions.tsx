@@ -6,156 +6,32 @@ import {
   CardHeader,
   CardBody,
   Button,
-  Avatar,
-  Badge,
-  Input,
+  CardFooter,
+  ChipProps,
+  Textarea,
   Autocomplete,
   AutocompleteItem,
-  CardFooter,
-  DatePicker,
-  Checkbox,
-  Divider,
-  Chip,
-  Tooltip,
-  ChipProps,
-  Pagination,
-  Textarea,
+  Input,
 } from "@nextui-org/react";
-import { Icon } from "@iconify/react";
-import countries from "./countries";
 import { editUser, useUser } from "@/service/user/service";
 import UserDataSkeleton from "./skeleton/user-profile";
+import { useQuestion } from "@/service/question/service";
+import { createEducationAction } from "@/actions/education/actions";
+import { createAnswerAction } from "@/actions/question/action";
 
-import { EyeIcon } from "@/components/icons/eye-icon";
-import { EditIcon } from "@/components/icons/edit";
-import { DeleteIcon } from "@/components/icons/delete";
-import test from "node:test";
-
-const statusColorMap: Record<string, ChipProps["color"]> = {
-  Si: "success",
-  No: "danger",
-};
-
-export default function QuestionData({ id }: { id: string }) {
-  const { data, isLoading, refetch } = useUser(id);
-  const [refresh, setRefresh] = useState(false);
-  const [user, setUser] = useState<any>({});
-
-  const handleRefresh = () => {
-    setRefresh((prev) => !prev);
-  };
-
-  const handleSubmit = async () => {
-    await editUser(data.id, user, refetch, refetch);
-  };
-
-  const testData = [
-    {
-      name: "Juan Perez",
-      relation: "Padre",
-      phone: "1234567890",
-      works: "Si",
-    },
-    {
-      name: "Maria Perez",
-      relation: "Madre",
-      phone: "1234567890",
-      works: "Si",
-    },
-    {
-      name: "Pedro Perez",
-      relation: "Hermano",
-      phone: "1234567890",
-      works: "No",
-    },
-    {
-      name: "Luis Perez",
-      relation: "Hermano",
-      phone: "1234567890",
-      works: "No",
-    },
-    {
-      name: "Ana Perez",
-      relation: "Hermana",
-      phone: "1234567890",
-      works: "No",
-    },
-    {
-      name: "Juan asdasda Perez",
-      relation: "Padre",
-      phone: "1234567890",
-      works: "Si",
-    },
-    {
-      name: "Maria ffghhPerez",
-      relation: "Madre",
-      phone: "1234567890",
-      works: "Si",
-    },
-    {
-      name: "hjkhjkh Perez",
-      relation: "Hermano",
-      phone: "1234567890",
-      works: "No",
-    },
-    {
-      name: "Luis Pjkljrez",
-      relation: "Hermano",
-      phone: "1234567890",
-      works: "No",
-    },
-    {
-      name: "Ana Perez",
-      relation: "Hermana",
-      phone: "1234567890",
-      works: "No",
-    },
-    {
-      name: "Juan jkljkPerez",
-      relation: "Padre",
-      phone: "1234567890",
-      works: "Si",
-    },
-    {
-      name: "Maria ewre23Perez",
-      relation: "Madre",
-      phone: "1234567890",
-      works: "Si",
-    },
-    {
-      name: "Pedro 345345Perez",
-      relation: "Hermano",
-      phone: "1234567890",
-      works: "No",
-    },
-    {
-      name: "Luis Perez",
-      relation: "Hermano",
-      phone: "1234567890",
-      works: "No",
-    },
-    {
-      name: "Ana Perez",
-      relation: "Hermana",
-      phone: "1234567890",
-      works: "No",
-    },
-  ];
-
-  // Pagination with testData
-  const [currentPage, setCurrentPage] = useState(1);
-  const [postsPerPage] = useState(5);
-  const indexOfLastPost = currentPage * postsPerPage;
-  const indexOfFirstPost = indexOfLastPost - postsPerPage;
-  const currentPosts = testData.slice(indexOfFirstPost, indexOfLastPost);
-
-  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
-
-  // Cantidad de paginas
-  const pageNumbers = testData.length / postsPerPage;
-
-  if (isLoading) return <UserDataSkeleton />;
-
+export default function QuestionData({
+  user,
+  update,
+}: {
+  user: any;
+  update: () => void;
+}) {
+  const { data: answers, isLoading } = useQuestion();
+  useEffect(() => {
+    if (answers && !isLoading) {
+      console.log(answers);
+    }
+  }, [answers, isLoading]);
   return (
     <div className="flex flex-col gap-5">
       <Card className="w-full p-2">
@@ -164,50 +40,93 @@ export default function QuestionData({ id }: { id: string }) {
         </CardHeader>
       </Card>
       <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
-        <Card className="w-full p-2">
-          <CardHeader className="flex flex-col items-center px-4 pt-4 pb-5 md:flex-row md:justify-between">
-            <p className="text-large">¿Cuántos corazones tiene un pulpo?</p>
-          </CardHeader>
-          <CardBody className="flex flex-col gap-2">
-            <Textarea minRows={2} placeholder="Escribe tu respuesta" />
-          </CardBody>
+        {answers?.map((question: any) => {
+          let options: {
+            label: string;
+            value: string;
+          }[] = [];
 
-          {/* Validar si algo del cuerpo user cambio con relacion a la data, en caso de cambiar mostrar el Button de Save Changes */}
+          // Convertir, en caso que exista options, a un array de objetos: {label: string, value: string}
+          if (question.options && question.options.length > 0) {
+            options = question.options.map((option: any) => ({
+              label: option.option,
+              value: option.id,
+            }));
+          }
+          const userIdLogged = localStorage.getItem("userId");
+          const createAnswerWithId = createAnswerAction.bind(
+            null,
+            userIdLogged as string,
+            update,
+            () => {}
+          );
 
-          <CardFooter className="justify-end gap-2 mt-4">
-            <Button
-              variant="flat"
-              onClick={handleSubmit}
-              disabled={false}
-              radius="full"
-              className="text-white bg-gradient-to-r from-blue-600 to-sky-500"
-            >
-              Guardar Respuesta
-            </Button>
-          </CardFooter>
-        </Card>
-        <Card className="w-full p-2">
-          <CardHeader className="flex flex-col items-center px-4 pt-4 pb-5 md:flex-row md:justify-between">
-            <p className="text-large">¿Cuántos corazones tiene un pulpo?</p>
-          </CardHeader>
-          <CardBody className="flex flex-col gap-2">
-            <Textarea minRows={2} placeholder="Escribe tu respuesta" />
-          </CardBody>
+          return (
+            <Card key={question.id} className="w-full p-2">
+              <CardHeader className="flex flex-col items-center px-4 pt-4 pb-5 md:flex-row md:justify-between">
+                <p className="font-bold text-large font-dm-sans">
+                  {question.question}
+                </p>
+              </CardHeader>
+              <form action={createAnswerWithId}>
+                <CardBody className="flex flex-col gap-2">
+                  <Input
+                    className="hidden"
+                    name="questionId"
+                    value={question.id}
+                  />
+                  {question.type === "text" && (
+                    <Textarea
+                      minRows={2}
+                      name="answer"
+                      placeholder="Escribe tu respuesta"
+                    />
+                  )}
+                  {question.type === "select" && (
+                    <>
+                      {/* <Input className="hidden" value={answer} />
+                      <Input className="hidden" value={answerId} />
+                      <Autocomplete
+                        defaultItems={options}
+                        label="Respuesta"
+                        placeholder="Elija su respuesta"
+                        className="w-full"
+                        onSelectionChange={(e: any) => {
+                          setAnswerId(e);
+                          setAnswer(
+                            options.find((option) => option.value === e)
+                              ?.label || ""
+                          );
+                        }}
+                      >
+                        {(option) => (
+                          <AutocompleteItem key={option.value}>
+                            {option.label}
+                          </AutocompleteItem>
+                        )}
+                      </Autocomplete> */}
+                    </>
+                  )}
+                </CardBody>
 
-          {/* Validar si algo del cuerpo user cambio con relacion a la data, en caso de cambiar mostrar el Button de Save Changes */}
+                {/* Validar si algo del cuerpo user cambio con relacion a la data, en caso de cambiar mostrar el Button de Save Changes */}
 
-          <CardFooter className="justify-end gap-2 mt-4">
-            <Button
-              variant="flat"
-              onClick={handleSubmit}
-              disabled={false}
-              radius="full"
-              className="text-white bg-gradient-to-r from-blue-600 to-sky-500"
-            >
-              Guardar Respuesta
-            </Button>
-          </CardFooter>
-        </Card>
+                <CardFooter className="justify-end gap-2 mt-4">
+                  <Button
+                    variant="flat"
+                    onClick={() => {}}
+                    disabled={false}
+                    radius="full"
+                    type="submit"
+                    className="text-white bg-gradient-to-r from-blue-600 to-sky-500"
+                  >
+                    Guardar Respuesta
+                  </Button>
+                </CardFooter>
+              </form>
+            </Card>
+          );
+        })}
       </div>
     </div>
   );

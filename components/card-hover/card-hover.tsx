@@ -1,17 +1,15 @@
 import { cn } from "@/utils/cn";
 import { AnimatePresence, motion } from "framer-motion";
+import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import { Category } from "../(home)/categories";
 
 export const HoverEffect = ({
   items,
   className,
 }: {
-  items: {
-    title: string;
-    description: string;
-    link: string;
-  }[];
+  items: Category[];
   className?: string;
 }) => {
   let [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
@@ -19,22 +17,22 @@ export const HoverEffect = ({
   return (
     <div
       className={cn(
-        "grid grid-cols-1 md:grid-cols-2  lg:grid-cols-3  py-10",
+        "flex flex-row flex-wrap justify-center gap-5  py-10",
         className
       )}
     >
       {items.map((item, idx) => (
         <Link
-          href={item?.link}
-          key={item?.link}
-          className="relative block w-full h-full p-2 group"
+          href={`/vacancy?cat=${item.name.toLowerCase()}`}
+          key={item?.id}
+          className="relative block w-[28rem] p-2 group"
           onMouseEnter={() => setHoveredIndex(idx)}
           onMouseLeave={() => setHoveredIndex(null)}
         >
           <AnimatePresence>
             {hoveredIndex === idx && (
               <motion.span
-                className="absolute inset-0 h-full w-full bg-neutral-200 dark:bg-slate-200/[0.8] block  rounded-3xl"
+                className="absolute inset-0 z-20 block w-full h-full bg-neutral-50 dark:bg-slate-50/70 rounded-3xl"
                 layoutId="hoverBackground"
                 initial={{ opacity: 0 }}
                 animate={{
@@ -48,9 +46,22 @@ export const HoverEffect = ({
               />
             )}
           </AnimatePresence>
-          <Card>
-            <CardTitle>{item.title}</CardTitle>
-            <CardDescription>{item.description}</CardDescription>
+          <Card className="font-dm-sans">
+            <div className="flex items-center justify-center">
+              {item.icon && (
+                <Image
+                  src={`${process.env.NEXT_PUBLIC_API_URL}/category/cat/svg/${item?.icon}`}
+                  alt={item?.name}
+                  width={200}
+                  height={200}
+                  className="size-16 lg:size-24"
+                />
+              )}
+            </div>
+            <CardTitle>{item.name}</CardTitle>
+            <CardDescription>
+              {item._count.vacancies} vacantes disponibles
+            </CardDescription>
           </Card>
         </Link>
       ))}
@@ -68,7 +79,7 @@ export const Card = ({
   return (
     <div
       className={cn(
-        "rounded-2xl h-full w-full p-4 overflow-hidden bg-gradient-to-tr from-blue-600 to-sky-500 border border-transparent group-hover:border-sky-600 relative z-20",
+        "rounded-2xl h-full w-full p-4 overflow-hidden bg-white shadow-xl relative z-30 flex flex-col gap-2 items-center",
         className
       )}
     >
@@ -88,7 +99,7 @@ export const CardTitle = ({
   return (
     <h4
       className={cn(
-        "text-zinc-white text-3xl font-bold tracking-wide mt-4",
+        "text-black text-lg lg:text-xl font-bold tracking-wide mt-4 text-center",
         className
       )}
     >
@@ -106,7 +117,7 @@ export const CardDescription = ({
   return (
     <p
       className={cn(
-        "mt-8 text-white tracking-wide leading-relaxed text-sm",
+        "mt-4 text-gray-500 tracking-wide leading-relaxed text-xs lg:text-sm text-center",
         className
       )}
     >

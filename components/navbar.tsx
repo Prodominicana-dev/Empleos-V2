@@ -6,11 +6,8 @@ import {
   NavbarContent,
   NavbarItem,
   NavbarMenuToggle,
-  NavbarMenu,
-  NavbarMenuItem,
   Button,
 } from "@nextui-org/react";
-import { LogoIcon } from "./icons";
 import Link from "next/link";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import {
@@ -21,10 +18,18 @@ import {
   Avatar,
   User,
 } from "@nextui-org/react";
+import Image from "next/image";
+import { usePathname } from "next/navigation";
 
 export default function NavbarComponent() {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const { user, isLoading } = useUser();
+  const pathname = usePathname();
+
+  type NavbarOptions = {
+    name: string;
+    href: string;
+  };
 
   const menuItems = [
     "Profile",
@@ -39,30 +44,61 @@ export default function NavbarComponent() {
     "Log Out",
   ];
 
+  const NAVBAR_OPTIONS = [
+    {
+      name: "Inicio",
+      href: "/",
+    },
+    {
+      name: "Vacantes",
+      href: "/vacancy",
+    },
+  ];
+
   return (
     <Navbar
       disableScrollHandler={true}
-      height={"5rem"}
-      isBlurred={true}
+      height={"8rem"}
+      isBlurred={false}
       onMenuOpenChange={setIsMenuOpen}
-      className="bg-white/40"
-      maxWidth="lg"
+      className="bg-white"
+      maxWidth="2xl"
     >
       <NavbarContent>
         <NavbarMenuToggle
           aria-label={isMenuOpen ? "Close menu" : "Open menu"}
           className="sm:hidden"
         />
-        <LogoIcon size={48} />
         <NavbarBrand>
-          <h1 className="font-bold text-[#00A9E0] text-xl">
-            Pro<span className="text-blue-950">Dominicana</span>
-          </h1>
+          <Link href={"/"}>
+            <Image
+              src={"/empleate.svg"}
+              alt="logo"
+              width={1000}
+              height={1000}
+              className="w-64"
+            />
+          </Link>
         </NavbarBrand>
       </NavbarContent>
 
-      {!isLoading && user && (
-        <NavbarContent justify="end">
+      <NavbarContent justify="end" className="flex items-center gap-10">
+        {NAVBAR_OPTIONS.map(({ name, href }: NavbarOptions, index: number) => (
+          <NavbarItem key={index}>
+            <Link
+              href={href}
+              className={
+                pathname === href
+                  ? "transition duration-200 text-blue-950 border-b-1 border-red-600"
+                  : "transition duration-200 text-blue-950 hover:border-b-1 hover:border-red-600"
+              }
+            >
+              {name}
+            </Link>
+          </NavbarItem>
+        ))}
+
+        {!isLoading && user && (
           <NavbarItem>
             <Dropdown placement="bottom-start">
               <DropdownTrigger>
@@ -79,7 +115,7 @@ export default function NavbarComponent() {
               </DropdownTrigger>
               <DropdownMenu aria-label="User Actions" variant="flat">
                 <DropdownItem key="profile" className="gap-2 h-14">
-                  <p className="font-bold">Signed in as</p>
+                  <p className="font-bold">Logueado como</p>
                   <p className="font-bold">{user?.nickname}</p>
                 </DropdownItem>
                 <DropdownItem
@@ -89,43 +125,55 @@ export default function NavbarComponent() {
                 >
                   Mi Perfíl
                 </DropdownItem>
-                <DropdownItem key="profile"></DropdownItem>
-                <DropdownItem key="help_and_feedback">
-                  Help & Feedback
+                <DropdownItem
+                  key="applications"
+                  as={Link}
+                  href={`/applications/`}
+                >
+                  Mis aplicaciones
                 </DropdownItem>
                 <DropdownItem
                   key="logout"
                   as={Link}
+                  onClick={() => {
+                    // Eliminar localeStorage de la sesion
+                    localStorage.removeItem("user");
+                    localStorage.removeItem("userId");
+                  }}
                   href={`/api/auth/logout?returnTo=${process.env.NEXT_PUBLIC_BASE_URL}`}
                   color="danger"
                 >
-                  Log Out
+                  Cerrar sesión
                 </DropdownItem>
               </DropdownMenu>
             </Dropdown>
           </NavbarItem>
-        </NavbarContent>
-      )}
+        )}
 
-      {!isLoading && !user && (
-        <NavbarContent justify="end">
-          <NavbarItem className="hidden lg:flex">
-            <Link href="/api/auth/login" className="text-blue-950">
-              Inicia sesión
-            </Link>
-          </NavbarItem>
-          <NavbarItem>
-            <Button
-              as={Link}
-              className="bg-blue-100 text-blue-950"
-              href="/api/auth/login"
-              variant="flat"
-            >
-              Regístrate
-            </Button>
-          </NavbarItem>
-        </NavbarContent>
-      )}
+        {!isLoading && !user && (
+          <>
+            <NavbarItem className="hidden lg:flex">
+              <Link
+                href="/api/auth/login"
+                className="transition duration-200 text-blue-950 hover:border-b-1 hover:border-red-600"
+              >
+                Inicia sesión
+              </Link>
+            </NavbarItem>
+            <NavbarItem>
+              <Button
+                as={Link}
+                className="bg-blue-100 text-blue-950"
+                href="/api/auth/login"
+                variant="flat"
+              >
+                Regístrate
+              </Button>
+            </NavbarItem>
+          </>
+        )}
+      </NavbarContent>
+
       {/* <NavbarMenu>
         {menuItems.map((item, index) => (
           <NavbarMenuItem key={`${item}-${index}`}>

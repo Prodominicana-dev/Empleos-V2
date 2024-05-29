@@ -20,6 +20,12 @@ import {
 import { createEducationAction } from "@/actions/education/actions";
 import { getLocalTimeZone, parseDate, today } from "@internationalized/date";
 import { useFormStatus } from "react-dom";
+import { useCareers } from "@/service/education/careers/service";
+
+type Career = {
+  label: string;
+  value: string;
+};
 
 const SubmitButton = () => {
   const { pending } = useFormStatus();
@@ -45,6 +51,36 @@ export default function EducationDialog({
 }) {
   const [isStudying, setIsStudying] = useState(false);
   const [degreeId, setDegreeId] = useState<string>("");
+  const [careerId, setCareerId] = useState<string>("");
+
+  const [careersOptions, setCareersOptions] = useState<Career[]>([]);
+
+  const { data: careers, isLoading: isLoadingCareers } = useCareers();
+
+  useEffect(() => {
+    if (careers && !isLoadingCareers) {
+      setCareersOptions(
+        careers.map((career: any) => ({
+          label: career.name,
+          value: career.id,
+        }))
+      );
+    }
+  }, [careers, isLoadingCareers]);
+
+  useEffect(() => {
+    // Si el degreeId no es el universitario/grado, entonces se limpia el careerId
+    if (degreeId !== "") {
+      degrees.find(
+        (degree) =>
+          degree.value === degreeId &&
+          (degree.label.toLowerCase() === "universitario" ||
+            degree.label.toLowerCase() === "grado")
+      )
+        ? setCareerId(degreeId)
+        : setCareerId("");
+    }
+  }, [degreeId]);
 
   const createEducationWithId = createEducationAction.bind(
     null,
@@ -66,15 +102,6 @@ export default function EducationDialog({
                 <Input
                   isRequired
                   autoFocus
-                  label="Título"
-                  placeholder="Ingrese el título de la educación"
-                  name="title"
-                  errorMessage="Por favor, ingrese el nombre de la institución"
-                  variant="bordered"
-                />
-                <Input
-                  isRequired
-                  autoFocus
                   label="Institución"
                   placeholder="Ingrese el nombre de la institución"
                   name="institution"
@@ -83,7 +110,6 @@ export default function EducationDialog({
                 />
                 <Input
                   isRequired
-                  autoFocus
                   label="Institución"
                   placeholder="Ingrese el nombre de la institución"
                   name="degreeId"
@@ -109,8 +135,51 @@ export default function EducationDialog({
                   )}
                 </Autocomplete>
 
+                {degrees.find(
+                  (degree) =>
+                    degree.value === degreeId &&
+                    (degree.label.toLowerCase() === "universitario" ||
+                      degree.label.toLowerCase() === "grado")
+                ) && (
+                  <>
+                    <Input
+                      isRequired
+                      label="Institución"
+                      placeholder="Ingrese el nombre de la institución"
+                      name="careerId"
+                      errorMessage="Por favor, ingrese el nombre de la institución"
+                      variant="bordered"
+                      value={careerId}
+                      className="hidden"
+                    />
+
+                    <Autocomplete
+                      isRequired
+                      variant="bordered"
+                      defaultItems={careersOptions}
+                      label="Licenciatura / Carrera Universitaria"
+                      onSelectionChange={(e: any) => setCareerId(e)}
+                      placeholder="Seleccione la carrera universitaria"
+                      errorMessage="Por favor, seleccione la carrera universitaria"
+                    >
+                      {(item) => (
+                        <AutocompleteItem key={item.value} value={item.value}>
+                          {item.label}
+                        </AutocompleteItem>
+                      )}
+                    </Autocomplete>
+                  </>
+                )}
+
                 <Input
-                  isRequired
+                  label="Título"
+                  placeholder="Ingrese el título de la educación"
+                  name="title"
+                  variant="bordered"
+                  errorMessage="Por favor, ingrese el area de estudio"
+                />
+
+                <Input
                   label="Area de estudio"
                   placeholder="Ingrese el area de estudio"
                   type="text"
@@ -145,12 +214,12 @@ export default function EducationDialog({
                   <DateRangePicker
                     isRequired
                     label="Fecha de inicio y fin de estudios"
-                    visibleMonths={2}
                     maxValue={today(getLocalTimeZone())}
                     pageBehavior="single"
                     variant="bordered"
                     startName="startDate"
                     endName="endDate"
+                    showMonthAndYearPickers
                   />
                 )}
                 <Checkbox

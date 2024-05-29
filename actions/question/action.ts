@@ -3,39 +3,39 @@ import {
   deleteEducation,
   editEducation,
 } from "@/service/education/service";
+import { createAnswer } from "@/service/question/service";
 
-export const createEducationAction = async (
+export const createAnswerAction = async (
   id: string,
   handler: () => void,
   update: () => void,
   formData: FormData
 ) => {
   // Organizar la data
-  const { title, institution, degreeId, startDate, endDate, area, careerId } =
-    Object.fromEntries(formData);
-  const data = {
+  const { questionId, answer, answerId } = Object.fromEntries(formData);
+  const data: any = {
     userId: id,
-    title,
-    institution,
-    area,
-    degreeId,
-    careerId,
-    startDate: new Date(startDate as string).toISOString(),
-    endDate: endDate ? new Date(endDate as string).toISOString() : null,
+    questionId,
+    answer: {
+      answer,
+    },
   };
+  if (answerId) {
+    data.answer.answerId = answerId;
+  }
   console.log(data);
 
-  try {
-    await createEducation(data);
-    update();
-    handler();
-    return { success: true };
-  } catch (error: any) {
-    return { error: error.message };
-  }
+  //   try {
+  //     await createAnswer(data);
+  //     update();
+  //     handler();
+  //     return { success: true };
+  //   } catch (error: any) {
+  //     return { error: error.message };
+  //   }
 };
 
-export const updateEducationAction = async (
+export const updateQuestionAction = async (
   id: string,
   handler: () => void,
   update: () => void,
@@ -56,7 +56,7 @@ export const updateEducationAction = async (
   console.log(data);
 
   try {
-    await editEducation(id, data, handler, update);
+    //await editQuestion(id, data, handler, update);
     return { success: true };
   } catch (error: any) {
     console.log(error.message);
@@ -64,7 +64,7 @@ export const updateEducationAction = async (
   }
 };
 
-export const deleteEducationAction = async (
+export const deleteQuestionAction = async (
   id: string,
   handler: () => void,
   update: () => void

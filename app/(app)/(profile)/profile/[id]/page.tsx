@@ -11,6 +11,7 @@ import ExperienceData from "@/components/(profile)/experience";
 import LanguageData from "@/components/(profile)/language";
 import PersonalRefData from "@/components/(profile)/personal-reference";
 import ProfessionalRefData from "@/components/(profile)/professional-reference";
+import { Route, Routes, useLocation } from "react-router-dom";
 
 export default function Page({ params: { id } }: any) {
   const { data, isLoading, refetch } = useUser(id);
@@ -35,81 +36,116 @@ export default function Page({ params: { id } }: any) {
   }, [refresh]);
 
   return (
-    <div className="w-full min-h-[80vh] text-black flex flex-col gap-5">
-      <div className="flex flex-col gap-2">
-        <h1 className="text-4xl font-bold text-black">Configuración</h1>
-        <p className="text-sm">Configura el perfíl a tu medida</p>
-      </div>
-      <div className="w-full text-black">
-        <Tabs
-          key={`bordered`}
-          variant={`bordered`}
-          aria-label="Tabs variants"
-          fullWidth
-          classNames={{
-            tabList: "gap-6 w-full relative border-2 border-sky-500",
-            cursor: "w-full bg-gradient-to-r from-blue-600 to-sky-500 ",
-            tabContent:
-              "group-data-[selected=true]:text-white group-data-[selected=true]:font-semibold text-black/80",
-          }}
-        >
-          <Tab key="profile" title="Perfíl">
-            {isLoading ? (
-              <UserDataSkeleton />
-            ) : (
-              <UserData
-                user={user}
-                update={handleRefresh}
-                key={"profile-data"}
-              />
-            )}
-          </Tab>
-          <Tab key="relationship" title="Parentesco">
-            <RelationshipData
-              user={user}
-              update={handleRefresh}
-              key={"relationship-data"}
-            />
-          </Tab>
-          <Tab key="questions" title="Preguntas">
-            <QuestionData id={id} key={"question-data"} />
-          </Tab>
-          <Tab key="education" title="Educación">
-            <EducationData
-              user={user}
-              update={handleRefresh}
-              key={"education-data"}
-            />
-          </Tab>
-          <Tab key="experience" title="Experiencia">
-            <ExperienceData
-              user={user}
-              update={handleRefresh}
-              key={"experience-data"}
-            />
-          </Tab>
-          <Tab key="language" title="Idiomas">
-            <LanguageData
-              user={user}
-              update={handleRefresh}
-              key={"language-data"}
-            />
-          </Tab>
-          <Tab key="rper" title="Referencia Personal">
-            <PersonalRefData
-              user={user}
-              update={handleRefresh}
-              key={"rper-data"}
-            />
-          </Tab>
-          <Tab key="rpro" title="Referencia Profesional">
-            <ProfessionalRefData
-              user={user}
-              update={handleRefresh}
-              key={"rpro-data"}
-            />
-          </Tab>
-        </Tabs>
+    <div className="flex justify-center w-full">
+      <div className="max-w-7xl w-full min-h-[80vh] text-black flex flex-col gap-5">
+        <div className="flex flex-col gap-2">
+          <h1 className="text-4xl font-bold text-black">Configuración</h1>
+          <p className="text-sm">Configura el perfíl a tu medida</p>
+        </div>
+        <div className="w-full text-black">
+          <Tabs
+            key={`bordered`}
+            variant={`bordered`}
+            aria-label="Tabs variants"
+            fullWidth
+            isDisabled={isLoading}
+            classNames={{
+              tabList: "gap-6 w-full relative border-2 border-sky-500",
+              cursor: "w-full bg-gradient-to-r from-blue-600 to-sky-500 ",
+              tabContent:
+                "group-data-[selected=true]:text-white group-data-[selected=true]:font-semibold text-black/80",
+            }}
+          >
+            <Tab key="profile" title="Perfíl">
+              {isLoading ? (
+                <UserDataSkeleton />
+              ) : (
+                <UserData
+                  user={user}
+                  update={handleRefresh}
+                  key={"profile-data"}
+                />
+              )}
+            </Tab>
+            <Tab key="relationship" title="Parentesco">
+              {isLoading ? (
+                <UserDataSkeleton />
+              ) : (
+                <RelationshipData
+                  user={user}
+                  update={handleRefresh}
+                  key={"relationship-data"}
+                />
+              )}
+            </Tab>
+            {/* <Tab key="questions" title="Preguntas">
+              {isLoading ? (
+                <UserDataSkeleton />
+              ) : (
+                <QuestionData
+                  user={user}
+                  update={handleRefresh}
+                  key={"question-data"}
+                />
+              )}
+            </Tab> */}
+            <Tab key="education" title="Educación">
+              {isLoading ? (
+                <UserDataSkeleton />
+              ) : (
+                <EducationData
+                  user={user}
+                  update={handleRefresh}
+                  key={"education-data"}
+                />
+              )}
+            </Tab>
+            <Tab key="experience" title="Experiencia">
+              {isLoading ? (
+                <UserDataSkeleton />
+              ) : (
+                <ExperienceData
+                  user={user}
+                  update={handleRefresh}
+                  key={"experience-data"}
+                />
+              )}
+            </Tab>
+            <Tab key="language" title="Idiomas">
+              {isLoading ? (
+                <UserDataSkeleton />
+              ) : (
+                <LanguageData
+                  user={user}
+                  update={handleRefresh}
+                  key={"language-data"}
+                />
+              )}
+            </Tab>
+            <Tab key="rper" title="Referencia Personal">
+              {isLoading ? (
+                <UserDataSkeleton />
+              ) : (
+                <PersonalRefData
+                  user={user}
+                  update={handleRefresh}
+                  key={"rper-data"}
+                />
+              )}
+            </Tab>
+            <Tab key="rpro" title="Referencia Profesional">
+              {isLoading ? (
+                <UserDataSkeleton />
+              ) : (
+                <ProfessionalRefData
+                  user={user}
+                  update={handleRefresh}
+                  key={"rpro-data"}
+                />
+              )}
+            </Tab>
+          </Tabs>
+        </div>
       </div>
     </div>
   );

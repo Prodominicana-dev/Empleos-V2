@@ -13,6 +13,16 @@ export function useUser(auth0Id: string) {
   });
 }
 
+export async function userExist(auth0Id: string) {
+  try {
+    const url = `${process.env.NEXT_PUBLIC_API_URL}/user/a/${auth0Id}`;
+    const response = await axios.get(url);
+    return response;
+  } catch (error) {
+    return error;
+  }
+}
+
 export async function createUser(user: any) {
   try {
     const url = `${process.env.NEXT_PUBLIC_API_URL}/user/`;
@@ -24,10 +34,10 @@ export async function createUser(user: any) {
       });
     }
   } catch (e) {
-    toast.error("Error al registrar el usuario", {
-      duration: 4000,
-      position: "top-center",
-    });
+    // toast.error("Error al registrar el usuario", {
+    //   duration: 4000,
+    //   position: "top-center",
+    // });
   }
 }
 
