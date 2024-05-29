@@ -6,6 +6,7 @@ import { CheckboxGroup, Checkbox, Pagination } from "@nextui-org/react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { useVacancy } from "@/service/vacancy/service";
+import Loading from "@/components/loading";
 
 const vacancy = [
   {
@@ -117,7 +118,6 @@ export default function Page() {
   };
 
   useEffect(() => {
-    console.log(selected);
     handleCategories();
   }, [selected]);
 
@@ -137,9 +137,9 @@ export default function Page() {
     }
   }, [data, isLoading]);
 
-  if (loadingVacancies) return <div>Cargando...</div>;
-  console.log(vacancies);
-
+  if (loadingVacancies) {
+    return <Loading />;
+  }
   return (
     <div className="w-full min-h-[90vh] flex justify-center">
       <div className="flex flex-col w-full gap-5 p-10 lg:p-10 max-w-7xl">

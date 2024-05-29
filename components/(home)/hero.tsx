@@ -32,8 +32,8 @@ export default function Hero() {
           />
         </div>
         <div className="absolute inset-0 z-20 flex flex-col items-center justify-center w-full h-full gap-5 lg:flex-row">
-          <div className="flex flex-col w-6/12 gap-5">
-            <div className="text-5xl font-bold text-center">
+          <div className="flex flex-col w-full gap-5 lg:w-6/12">
+            <div className="text-3xl font-bold text-center md:text-5xl">
               <h1>Encuentra Oportunidades,</h1>
               <h1>Desarrolla tu Potencial</h1>
               <h1>en ProDominicana</h1>
@@ -41,7 +41,7 @@ export default function Hero() {
             <p className="text-center">
               Descubre nuevas oportunidades laborales
             </p>
-            <div className="flex items-center justify-center w-full gap-5">
+            <div className="flex flex-col items-center justify-center w-full gap-5 md:flex-row">
               <Button
                 variant={"flat"}
                 size="lg"
@@ -68,27 +68,27 @@ export default function Hero() {
             alt="icon"
             width={1000}
             height={1000}
-            className="object-cover w-[32rem] "
+            className="object-cover w-[32rem] hidden lg:block"
           />
         </div>
       </div>
-      <div className="w-full h-[20vh] bg-red-600 flex">
-        <div className="flex flex-row justify-center w-6/12 h-full rounded-br-full gap-44 bg-blue-950">
-          <div className="flex flex-col items-center justify-center text-4xl text-center">
+      <div className="w-full min-h-[20vh] md:h-[20vh] bg-red-600 flex md:flex-row flex-col items-center justify-center gap-5 py-5 md:py-0">
+        <div className="flex flex-col justify-center w-full h-full gap-5 md:flex-row md:rounded-br-full md:w-6/12 md:gap-20 lg:gap-44 md:bg-blue-950">
+          <div className="flex flex-col items-center justify-center text-2xl text-center md:text-4xl">
             <h2 className="font-bold text-white">+400</h2>
             <p className="text-xl text-white">Empleados</p>
           </div>
-          <div className="flex flex-col items-center justify-center text-4xl text-center">
+          <div className="flex flex-col items-center justify-center text-2xl text-center md:text-4xl">
             <h2 className="font-bold text-white">+100</h2>
             <p className="text-xl text-white">Posiciones</p>
           </div>
         </div>
-        <div className="flex flex-row justify-center w-6/12 h-full gap-44">
-          <div className="flex flex-col items-center justify-center text-4xl text-center">
+        <div className="flex flex-col justify-center w-full h-full gap-5 md:flex-row md:w-6/12 md:gap-20 lg:gap-44">
+          <div className="flex flex-col items-center justify-center text-2xl text-center md:text-4xl">
             <h2 className="font-bold text-white">+200</h2>
             <p className="text-xl text-white">Pasantías Anuales</p>
           </div>
-          <div className="flex flex-col items-center justify-center text-4xl text-center">
+          <div className="flex flex-col items-center justify-center text-2xl text-center md:text-4xl">
             <h2 className="font-bold text-white">+10</h2>
             <p className="text-xl text-white">Departamentos</p>
           </div>
