@@ -253,7 +253,7 @@ export default function UserData({
           <Input
             label="Documento"
             labelPlacement="outside"
-            value={user.documentNumber}
+            defaultValue={user.documentNumber}
             onChange={(e) =>
               setUser({ ...users, documentNumber: e.target.value })
             }
