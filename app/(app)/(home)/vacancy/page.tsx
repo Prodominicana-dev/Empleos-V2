@@ -1,79 +1,18 @@
 "use client";
 import { Category } from "@/components/(home)/categories";
 import { useCategories } from "@/service/vacancy/category/service";
-import React, { useEffect, useState } from "react";
-import { CheckboxGroup, Checkbox, Pagination } from "@nextui-org/react";
+import React, { useEffect, useState, Suspense } from "react";
+import {
+  CheckboxGroup,
+  Checkbox,
+  Pagination,
+  Accordion,
+  AccordionItem,
+} from "@nextui-org/react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { useVacancy } from "@/service/vacancy/service";
 import Loading from "@/components/loading";
-
-const vacancy = [
-  {
-    name: "Programador TI",
-    category: "Consultoría Jurídica",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec eget risus in sapien.",
-    date: "12 Junio 2024",
-    cv: 5,
-  },
-  {
-    name: "Programador TI",
-    category: "Consultoría Jurídica",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec eget risus in sapien.",
-    date: "12 Junio 2024",
-    cv: 5,
-  },
-  {
-    name: "Programador TI",
-    category: "Consultoría Jurídica",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec eget risus in sapien.",
-    date: "12 Junio 2024",
-    cv: 5,
-  },
-  {
-    name: "Programador TI",
-    category: "Consultoría Jurídica",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec eget risus in sapien.",
-    date: "12 Junio 2024",
-    cv: 5,
-  },
-  {
-    name: "Encargado TI",
-    category: "Dirección Ejecutiva",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec eget risus in sapien.",
-    date: "18 Junio 2024",
-    cv: 2,
-  },
-  {
-    name: "Encargado TI",
-    category: "Dirección Ejecutiva",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec eget risus in sapien.",
-    date: "18 Junio 2024",
-    cv: 2,
-  },
-  {
-    name: "Encargado TI",
-    category: "Dirección Ejecutiva",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec eget risus in sapien.",
-    date: "18 Junio 2024",
-    cv: 2,
-  },
-  {
-    name: "Encargado TI",
-    category: "Dirección Ejecutiva",
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec eget risus in sapien.",
-    date: "18 Junio 2024",
-    cv: 2,
-  },
-];
 
 export default function Page() {
   const { data, isLoading } = useCategories();
@@ -141,79 +80,111 @@ export default function Page() {
     return <Loading />;
   }
   return (
-    <div className="w-full min-h-[90vh] flex justify-center">
-      <div className="flex flex-col w-full gap-5 p-10 lg:p-10 max-w-7xl">
-        <div className="w-full p-4 border border-gray-300 shadow rounded-xl">
-          <h1 className="text-5xl font-bold leading-tight text-black font-dm-sans">
-            Vacantes disponibles
-          </h1>
-        </div>
-        <div className="flex flex-col w-full gap-5 lg:flex-row">
-          <div className="flex flex-col w-5/12 px-4 py-8 rounded-xl bg-blue-950">
-            <h1 className="text-2xl font-bold text-white font-dm-sans">
-              Categorías
+    <Suspense>
+      <div className="w-full min-h-[90vh] flex justify-center">
+        <div className="flex flex-col w-full gap-5 p-10 lg:p-10 max-w-7xl">
+          <div className="w-full p-4 border border-gray-300 shadow rounded-xl">
+            <h1 className="text-3xl font-bold leading-tight text-black md:text-4xl lg:text-5xl font-dm-sans">
+              Vacantes disponibles
             </h1>
-            <div className="w-full h-[1px] bg-gray-100/40 my-4"></div>
-            <CheckboxGroup value={selected} onValueChange={setSelected}>
-              {categories.map((category) => (
-                <Checkbox
+          </div>
+          <div className="flex flex-col w-full gap-5 lg:flex-row">
+            <div className="flex-col hidden w-5/12 px-4 py-8 lg:flex rounded-xl bg-blue-950">
+              <h1 className="text-2xl font-bold text-white font-dm-sans">
+                Categorías
+              </h1>
+              <div className="w-full h-[1px] bg-gray-100/40 my-4"></div>
+              <CheckboxGroup value={selected} onValueChange={setSelected}>
+                {categories.map((category) => (
+                  <Checkbox
+                    classNames={{
+                      label: "text-white font-dm-sans font-medium",
+                    }}
+                    key={category.id}
+                    value={category.name.toLowerCase()}
+                  >
+                    {category.name}
+                  </Checkbox>
+                ))}
+              </CheckboxGroup>
+            </div>
+            <div className="w-full lg:hidden">
+              <Accordion>
+                <AccordionItem
+                  key="1"
+                  aria-label="Categorías"
+                  title="Categorías"
+                  className="px-5 font-semibold text-white bg-blue-950 font-dm-sans rounded-xl"
                   classNames={{
-                    label: "text-white font-dm-sans font-medium",
+                    title: "text-white font-dm-sans font-semibold",
                   }}
-                  key={category.id}
-                  value={category.name.toLowerCase()}
                 >
-                  {category.name}
-                </Checkbox>
-              ))}
-            </CheckboxGroup>
-          </div>
-          <div className="grid w-full h-full grid-cols-1 gap-5 md:grid-cols-2">
-            {vacancies.map((item: any, index: number) => {
-              const date = new Date(item?.createdAt);
-              // Formatear la fecha con toLocaleDateString
-              console.log(date);
+                  <CheckboxGroup
+                    value={selected}
+                    onValueChange={setSelected}
+                    className="overflow-hidden"
+                  >
+                    {categories.map((category) => (
+                      <Checkbox
+                        classNames={{
+                          label: "text-white text-xs font-dm-sans font-medium",
+                        }}
+                        key={category.id}
+                        value={category.name.toLowerCase()}
+                      >
+                        {category.name}
+                      </Checkbox>
+                    ))}
+                  </CheckboxGroup>
+                </AccordionItem>
+              </Accordion>
+            </div>
+            <div className="grid w-full h-full grid-cols-1 gap-5 md:grid-cols-2">
+              {vacancies.map((item: any, index: number) => {
+                const date = new Date(item?.createdAt);
+                // Formatear la fecha con toLocaleDateString
+                console.log(date);
 
-              const fechaFormateada = date.toLocaleDateString("es-ES", {
-                day: "numeric",
-                month: "long",
-                year: "numeric",
-              });
-              console.log(fechaFormateada);
+                const fechaFormateada = date.toLocaleDateString("es-ES", {
+                  day: "numeric",
+                  month: "long",
+                  year: "numeric",
+                });
+                console.log(fechaFormateada);
 
-              return (
-                <Link
-                  key={index}
-                  href={`/vacancy/${item.id}`}
-                  className="flex flex-col w-full gap-4 p-4 border border-gray-300 shadow rounded-xl h-[30vh] justify-center hover:bg-gray-100 duration-200 hover:cursor-pointer"
-                >
-                  <h2 className="text-2xl font-semibold text-black font-dm-sans line-clamp-1">
-                    {item.title}
-                  </h2>
-                  <div className="w-full h-[1px] bg-gray-100"></div>
-                  <p className="text-sm text-gray-500 font-dm-sans">
-                    {item?.category.name}
-                  </p>
-
-                  <div className="w-full h-[1px] bg-gray-100"></div>
-                  <p className="text-sm text-gray-500 font-dm-sans line-clamp-2">
-                    {item.description}
-                  </p>
-                  <div className="w-full h-[1px] bg-gray-100"></div>
-                  <div className="flex flex-row justify-between">
+                return (
+                  <Link
+                    key={index}
+                    href={`/vacancy/${item.id}`}
+                    className="flex flex-col w-full gap-4 p-4 border border-gray-300 shadow rounded-xl h-[30vh] justify-center hover:bg-gray-100 duration-200 hover:cursor-pointer"
+                  >
+                    <h2 className="text-2xl font-semibold text-black font-dm-sans line-clamp-1">
+                      {item.title}
+                    </h2>
+                    <div className="w-full h-[1px] bg-gray-100"></div>
                     <p className="text-sm text-gray-500 font-dm-sans">
-                      CV enviados: {item?._count.applications}
+                      {item?.category.name}
                     </p>
-                    <p className="text-sm text-gray-500 font-dm-sans">
-                      {fechaFormateada}
+
+                    <div className="w-full h-[1px] bg-gray-100"></div>
+                    <p className="text-sm text-gray-500 font-dm-sans line-clamp-2">
+                      {item.description}
                     </p>
-                  </div>
-                </Link>
-              );
-            })}
+                    <div className="w-full h-[1px] bg-gray-100"></div>
+                    <div className="flex flex-row justify-between">
+                      <p className="text-sm text-gray-500 font-dm-sans">
+                        CV enviados: {item?._count.applications}
+                      </p>
+                      <p className="text-sm text-gray-500 font-dm-sans">
+                        {fechaFormateada}
+                      </p>
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
           </div>
-        </div>
-        {/* {pageNumbers > 1 && (
+          {/* {pageNumbers > 1 && (
           <div className="flex justify-end w-full gap-2 mt-4">
             <Pagination
               loop
@@ -227,7 +198,8 @@ export default function Page() {
             />
           </div>
         )} */}
+        </div>
       </div>
-    </div>
+    </Suspense>
   );
 }

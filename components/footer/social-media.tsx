@@ -18,7 +18,7 @@ export default function SocialMedia({
         src={image}
         width={25}
         height={25}
-        className="w-40 lg:w-25"
+        className="w-40 lg:w-8"
       />
     </Link>
   );

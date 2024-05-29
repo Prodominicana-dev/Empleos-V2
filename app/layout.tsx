@@ -29,12 +29,7 @@ export default function RootLayout({
   return (
     <html lang="es" suppressHydrationWarning className="scroll-smooth">
       <head />
-      <body
-        className={clsx(
-          "min-h-screen font-sans antialiased",
-          fontSans.variable
-        )}
-      >
+      <body className={clsx("min-h-screen font-sans antialiased")}>
         <UserProvider>
           <Providers>
             <div className="relative flex flex-col h-screen overflow-y-auto bg-white">

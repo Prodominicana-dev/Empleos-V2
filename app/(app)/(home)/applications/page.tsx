@@ -5,10 +5,18 @@ import { BreadcrumbItem, Breadcrumbs, Input, Tooltip } from "@nextui-org/react";
 import React, { useEffect } from "react";
 
 export default function Page() {
-  const userIdLogged = localStorage.getItem("userId");
-  const { data, isLoading } = useApplicationsByUserId(userIdLogged as string);
+  // const userIdLogged = window.localStorage.getItem("userId");
+  const [userIdLogged, setUserIdLogged] = React.useState("");
+
   const [search, setSearch] = React.useState("");
   const [applications, setApplications] = React.useState([]);
+
+  useEffect(() => {
+    const userIdLogged = window.localStorage.getItem("userId");
+    setUserIdLogged(userIdLogged as string);
+  }, []);
+
+  const { data, isLoading } = useApplicationsByUserId(userIdLogged as string);
 
   useEffect(() => {
     if (data) {

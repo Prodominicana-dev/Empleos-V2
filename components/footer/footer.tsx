@@ -32,18 +32,18 @@ const year = new Date().getFullYear();
 export default function Footer() {
   return (
     <>
-      <div className="w-full bg-blue-950 h-[40vh] flex justify-center">
-        <div className="flex flex-col gap-10 max-w-7xl lg:flex-row">
-          <div className="flex items-center justify-center w-full lg:w-6/12 ">
+      <div className="w-full bg-blue-950 py-5 lg:h-[40vh] flex justify-center">
+        <div className="flex flex-col gap-10 max-w-7xl sm:flex-row">
+          <div className="flex items-center justify-center w-full sm:w-6/12 ">
             <Image
               src={"/svg/talento-humano-logo.svg"}
               alt="talentohumano"
               width={1000}
               height={1000}
-              className="size-10/12 lg:size-6/12"
+              className="size-10/12 sm:size-6/12"
             />
           </div>
-          <div className="grid w-10/12 grid-cols-2 lg:grid-cols-3 lg:w-6/12 place-content-center place-self-center">
+          <div className="grid w-10/12 grid-cols-2 sm:grid-cols-3 sm:w-6/12 place-content-center place-self-center">
             <div className="flex flex-col w-full gap-2 text-white">
               <h1 className="text-2xl font-bold h-2/6">Sitios</h1>
               <div className="flex flex-col gap-2 h-4/6">

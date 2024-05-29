@@ -22,3 +22,14 @@ export function useVacancyById(id: string) {
     },
   });
 }
+
+export function userApplyVacancy(id: string, userId: string) {
+  return useQuery({
+    queryKey: ["userApplyVacancy"],
+    queryFn: async () => {
+      const url = `${process.env.NEXT_PUBLIC_API_URL}/vacancy/${id}/apply/${userId}`;
+      const { data } = await axios.get(url);
+      return data;
+    },
+  });
+}

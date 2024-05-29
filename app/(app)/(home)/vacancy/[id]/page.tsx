@@ -1,5 +1,5 @@
 "use client";
-import { useVacancyById } from "@/service/vacancy/service";
+import { useVacancyById, userApplyVacancy } from "@/service/vacancy/service";
 import { Button } from "@nextui-org/button";
 import {
   CheckIcon,
@@ -14,6 +14,7 @@ import { useUser as useUserData } from "@/service/user/service";
 import { useRouter } from "next/navigation";
 import { createApplication } from "@/service/application/service";
 import Loading from "@/components/loading";
+import toast from "react-hot-toast";
 
 const ApplyButton = ({
   apply,
@@ -42,7 +43,11 @@ export default function Page({ params }: { params: { id: string } }) {
   const { user } = AuthUser();
   const { data, isLoading } = useVacancyById(params.id);
 
-  const userIdLogged = localStorage.getItem("userId");
+  // const userIdLogged = localStorage.getItem("userId");
+  // const userLogged = localStorage.getItem("user");
+
+  const [userIdLogged, setUserLogged] = React.useState<string>("");
+  const [userLogged, setUser] = React.useState<any>({});
 
   // Parametros a validar
   const [minimunDegreeId, setMinimunDegreeId] = React.useState<string>("");
@@ -75,10 +80,24 @@ export default function Page({ params }: { params: { id: string } }) {
     user?.sub as string
   );
 
+  const { data: hasApplied, isLoading: applyLoading } = userApplyVacancy(
+    params.id,
+    userIdLogged as string
+  );
+
   // Ruta actual para redirigir
   const router = useRouter();
   const actualRoute = `${process.env.NEXT_PUBLIC_URL}/vacancy/${params.id}`;
   const loginRoute = `${process.env.NEXT_PUBLIC_URL}/api/login?returnTo=${actualRoute}`;
+
+  useEffect(() => {
+    const userId = window.localStorage.getItem("userId");
+    const user = window.localStorage.getItem("user");
+    if (userId && user) {
+      setUserLogged(userId);
+      setUser(JSON.parse(user));
+    }
+  }, []);
 
   useEffect(() => {
     if (!isLoading && data) {
@@ -213,6 +232,12 @@ export default function Page({ params }: { params: { id: string } }) {
       // Redirigir a la página de login
       return router.push(loginRoute);
     }
+    // Revisar que el usuario no tenga esta vacante aplicada
+    // Si ya la tiene aplicada, no se puede aplicar de nuevo
+
+    if (!applyLoading && hasApplied) {
+      return toast.error("Ya has aplicado a esta vacante.");
+    }
     // Aplicar a la vacante
     const data = {
       userId: userIdLogged,
@@ -230,7 +255,7 @@ export default function Page({ params }: { params: { id: string } }) {
     { label: vacancy.title },
   ];
 
-  if (isLoading) return <Loading />;
+  if (isLoading || applyLoading) return <Loading />;
 
   return (
     <div className="flex flex-col items-center w-full">
@@ -254,16 +279,20 @@ export default function Page({ params }: { params: { id: string } }) {
             <h1 className="text-6xl font-bold text-white font-dm-sans">
               {vacancy.title}
             </h1>
-            <ApplyButton
-              apply={handleApply}
-              disabled={validateButtonDisabled()}
-            />
+            {hasApplied && (
+              <div className="hidden lg:block">
+                <ApplyButton
+                  apply={handleApply}
+                  disabled={validateButtonDisabled()}
+                />
+              </div>
+            )}
           </div>
         </div>
       </div>
       <div className="flex flex-col w-full max-w-5xl gap-10 px-10 py-10 lg:px-5">
         <div className="flex flex-col gap-5">
-          <h1 className="text-3xl font-semibold text-black font-dm-sans">
+          <h1 className="text-2xl font-semibold text-black md:text-3xl font-dm-sans">
             Descripción de la vacante
           </h1>
           <div
@@ -272,7 +301,7 @@ export default function Page({ params }: { params: { id: string } }) {
           ></div>
         </div>
         <div className="flex flex-col gap-5">
-          <h1 className="text-3xl font-semibold text-black font-dm-sans">
+          <h1 className="text-2xl font-semibold text-black md:text-3xl font-dm-sans">
             Requisitos obligatorios
           </h1>
           <div className="grid w-full grid-cols-1 gap-5 md:grid-cols-2">
@@ -282,18 +311,18 @@ export default function Page({ params }: { params: { id: string } }) {
               }`}
             >
               <div className="flex flex-col items-center justify-center w-full h-full gap-3 px-3 py-2 duration-300 bg-white rounded-[8px] lg:flex-row">
-                <h3 className="text-lg font-bold text-black font-dm-sans text-balance">
+                <h3 className="text-base font-bold text-center text-black lg:text-lg font-dm-sans lg:text-balance">
                   ¿Necesitas tener licencia de conducir?
                 </h3>
                 <div
-                  className={`flex items-center justify-center duration-300 rounded-full size-16 ${
+                  className={`flex items-center justify-center duration-300 rounded-full size-10 lg:size-16 ${
                     vacancy.hasLicense ? gradientYes : gradientNo
                   }`}
                 >
                   {vacancy.hasLicense ? (
-                    <CheckIcon className="text-white size-10" />
+                    <CheckIcon className="text-white size-5 lg:size-10" />
                   ) : (
-                    <XMarkIcon className="text-white size-10" />
+                    <XMarkIcon className="text-white size-5 lg:size-10" />
                   )}
                 </div>
               </div>
@@ -304,29 +333,29 @@ export default function Page({ params }: { params: { id: string } }) {
               }`}
             >
               <div className="flex flex-col items-center justify-center w-full h-full gap-3 px-3 py-2 duration-300 bg-white rounded-[8px] lg:flex-row">
-                <h3 className="text-lg font-bold text-black font-dm-sans text-balance">
+                <h3 className="text-base font-bold text-center text-black lg:text-lg font-dm-sans lg:text-balance">
                   ¿Necesitas tener vehiculo?
                 </h3>
                 <div
-                  className={`flex items-center justify-center duration-300 rounded-full size-16 ${
+                  className={`flex items-center justify-center duration-300 rounded-full size-10 lg:size-16 ${
                     vacancy.hasVehicule ? gradientYes : gradientNo
                   }`}
                 >
                   {vacancy.hasVehicule ? (
-                    <CheckIcon className="text-white size-10" />
+                    <CheckIcon className="text-white size-5 lg:size-10" />
                   ) : (
-                    <XMarkIcon className="text-white size-10" />
+                    <XMarkIcon className="text-white size-5 lg:size-10" />
                   )}
                 </div>
               </div>
             </div>
           </div>
 
-          <label className="text-lg text-black font-dm-sans">
+          <label className="text-base text-black lg:text-lg font-dm-sans">
             <span className="font-bold">Edad mínima requerida:</span>{" "}
             {vacancy.age === null ? "ninguna" : vacancy.age}.
           </label>
-          <label className="text-lg text-black font-dm-sans">
+          <label className="text-base text-black lg:text-lg font-dm-sans">
             <span className="font-bold">
               Experiencia laboral mínima requerida {"("}en años{")"}:
             </span>{" "}
@@ -335,17 +364,17 @@ export default function Page({ params }: { params: { id: string } }) {
               : `${vacancy.experience} años`}
             .
           </label>
-          <label className="text-lg text-black font-dm-sans">
+          <label className="text-base text-black lg:text-lg font-dm-sans">
             <span className="font-bold">Provincia requerida:</span>{" "}
             {vacancy.province === null ? "cualquiera" : `${vacancy.province}`}.
           </label>
-          <label className="text-lg text-black font-dm-sans">
+          <label className="text-base text-black lg:text-lg font-dm-sans">
             <span className="font-bold">Nivel académico mínimo requerido:</span>{" "}
             {vacancy.degree?.name === null ? "ninguna" : vacancy.degree?.name}.
           </label>
           {vacancy.degree?.name === "Universitario" &&
             vacancy.career !== null && (
-              <label className="text-lg text-black font-dm-sans">
+              <label className="text-base text-black lg:text-lg font-dm-sans">
                 <span className="font-bold">Licenciatura requerida:</span>{" "}
                 {vacancy.career?.name === null
                   ? "ninguna"
@@ -355,7 +384,7 @@ export default function Page({ params }: { params: { id: string } }) {
             )}
 
           <div className="flex flex-col gap-1">
-            <label className="text-lg text-black font-dm-sans">
+            <label className="text-base text-black lg:text-lg font-dm-sans">
               <span className="font-bold">Idiomas requeridos:</span>
             </label>
             <div className="flex flex-row flex-wrap w-full gap-5">
@@ -386,39 +415,41 @@ export default function Page({ params }: { params: { id: string } }) {
         </div>
         <div className="flex flex-col w-full gap-2">
           {!hasMinimunDegree && (
-            <p className="text-lg text-red-600 font-dm-sans">
-              <InformationCircleIcon className="size-5" /> No cumples con el
-              grado académico mínimo para esta vacante.
-            </p>
+            <div className="flex flex-row items-center gap-1">
+              <InformationCircleIcon className="hidden w-1/12 text-red-600 size-5 md:block" />
+              <p className="text-base text-red-600 lg:text-lg font-dm-sans">
+                No cumples con el grado académico mínimo para esta vacante.
+              </p>
+            </div>
           )}
           {!hasMinimunExperience && (
             <div className="flex flex-row items-center gap-1">
-              <InformationCircleIcon className="text-red-600 size-5" />
-              <p className="text-lg text-red-600 font-dm-sans">
+              <InformationCircleIcon className="hidden w-1/12 text-red-600 size-5 md:block" />
+              <p className="text-base text-red-600 lg:text-lg font-dm-sans">
                 No cumples la experiencia laboral mínima para esta vacante.
               </p>
             </div>
           )}
           {!hasProvince && (
             <div className="flex flex-row items-center gap-1">
-              <InformationCircleIcon className="text-red-600 size-5" />
-              <p className="text-lg text-red-600 font-dm-sans">
+              <InformationCircleIcon className="hidden w-1/12 text-red-600 size-5 md:block" />
+              <p className="text-base text-red-600 lg:text-lg font-dm-sans">
                 No resides en la provincia solicitada en esta vacante.
               </p>
             </div>
           )}
           {!hasLanguages && (
             <div className="flex flex-row items-center gap-1">
-              <InformationCircleIcon className="text-red-600 size-5" />
-              <p className="text-lg text-red-600 font-dm-sans">
+              <InformationCircleIcon className="hidden w-1/12 text-red-600 size-5 md:block" />
+              <p className="text-base text-red-600 lg:text-lg font-dm-sans">
                 No cumples con los idiomas requeridos para esta vacante.
               </p>
             </div>
           )}
           {!hasLicense && (
             <div className="flex flex-row items-center gap-1">
-              <InformationCircleIcon className="text-red-600 size-5" />
-              <p className="text-lg text-red-600 font-dm-sans">
+              <InformationCircleIcon className="hidden w-1/12 text-red-600 size-5 md:block" />
+              <p className="text-base text-red-600 lg:text-lg font-dm-sans">
                 Para esta vacante es necesario tener licencia de conducir y no
                 cumples con este requisito.
               </p>
@@ -426,8 +457,8 @@ export default function Page({ params }: { params: { id: string } }) {
           )}
           {!hasVehicule && (
             <div className="flex flex-row items-center gap-1">
-              <InformationCircleIcon className="text-red-600 size-5" />
-              <p className="text-lg text-red-600 font-dm-sans">
+              <InformationCircleIcon className="hidden w-1/12 text-red-600 size-5 md:block" />
+              <p className="text-base text-red-600 lg:text-lg font-dm-sans">
                 Para esta vacante es necesario tener un vehiculo y no cumples
                 con este requisito.
               </p>
@@ -435,16 +466,16 @@ export default function Page({ params }: { params: { id: string } }) {
           )}
           {!hasMinimunAge && (
             <div className="flex flex-row items-center gap-1">
-              <InformationCircleIcon className="text-red-600 size-5" />
-              <p className="text-lg text-red-600 font-dm-sans">
+              <InformationCircleIcon className="hidden w-1/12 text-red-600 size-5 md:block" />
+              <p className="text-base text-red-600 lg:text-lg font-dm-sans">
                 No cumples con la edad mínima para esta vacante.
               </p>
             </div>
           )}
           {!hasCareer && (
             <div className="flex flex-row items-center gap-1">
-              <InformationCircleIcon className="text-red-600 size-5" />
-              <p className="text-lg text-red-600 font-dm-sans">
+              <InformationCircleIcon className="hidden w-1/12 text-red-600 size-5 md:block" />
+              <p className="text-base text-red-600 lg:text-lg font-dm-sans">
                 No cumples con la carrera universitaria requerida para esta
                 vacante.
               </p>

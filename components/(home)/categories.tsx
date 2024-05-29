@@ -26,7 +26,7 @@ export default function Categories() {
       id="categories"
       className="relative flex flex-col items-center justify-center w-full gap-8 text-black min-h-[60vh] bg-white mt-24"
     >
-      <div className="text-4xl font-bold text-center lg:text-6xl">
+      <div className="px-5 text-4xl font-bold text-center lg:text-6xl">
         <h1>¡Todas nuestras ofertas!</h1>
       </div>
       <div className="w-10/12">
