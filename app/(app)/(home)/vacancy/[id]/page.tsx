@@ -13,6 +13,7 @@ import { useUser as AuthUser } from "@auth0/nextjs-auth0/client";
 import { useUser as useUserData } from "@/service/user/service";
 import { useRouter } from "next/navigation";
 import { createApplication } from "@/service/application/service";
+import Loading from "@/components/loading";
 
 const ApplyButton = ({
   apply,
@@ -229,12 +230,7 @@ export default function Page({ params }: { params: { id: string } }) {
     { label: vacancy.title },
   ];
 
-  if (isLoading)
-    return (
-      <div className="min-h-[85vh] flex justify-center items-center">
-        <Spinner />
-      </div>
-    );
+  if (isLoading) return <Loading />;
 
   return (
     <div className="flex flex-col items-center w-full">

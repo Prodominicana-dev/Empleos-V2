@@ -3,8 +3,21 @@
 import { Button } from "@nextui-org/button";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function Hero() {
+  const router = useRouter();
+
+  const handleCVButton = () => {
+    const userId = localStorage.getItem("userId");
+    const user = localStorage.getItem("user");
+    const userObject = JSON.parse(user as string);
+    if (userId && user) {
+      return router.push(`/profile/${userObject.auth0Id}`);
+    } else {
+      return router.push("/api/auth/login");
+    }
+  };
   return (
     <div className="flex flex-col gap-8">
       <div className="relative h-[60vh]">
@@ -43,6 +56,7 @@ export default function Hero() {
                 variant={"bordered"}
                 size="lg"
                 radius="md"
+                onClick={handleCVButton}
                 className="font-bold text-white duration-300 bg-transparent border-blue-300 group hover:bg-gradient-to-t hover:from-blue-600 hover:to-sky-500 hover:border-sky-500"
               >
                 <span className="text-white">Crea tu CV</span>

@@ -115,7 +115,7 @@ export default function NavbarComponent() {
               </DropdownTrigger>
               <DropdownMenu aria-label="User Actions" variant="flat">
                 <DropdownItem key="profile" className="gap-2 h-14">
-                  <p className="font-bold">Signed in as</p>
+                  <p className="font-bold">Logueado como</p>
                   <p className="font-bold">{user?.nickname}</p>
                 </DropdownItem>
                 <DropdownItem
@@ -125,17 +125,25 @@ export default function NavbarComponent() {
                 >
                   Mi Perfíl
                 </DropdownItem>
-                <DropdownItem key="profile"></DropdownItem>
-                <DropdownItem key="help_and_feedback">
-                  Help & Feedback
+                <DropdownItem
+                  key="applications"
+                  as={Link}
+                  href={`/applications/`}
+                >
+                  Mis aplicaciones
                 </DropdownItem>
                 <DropdownItem
                   key="logout"
                   as={Link}
+                  onClick={() => {
+                    // Eliminar localeStorage de la sesion
+                    localStorage.removeItem("user");
+                    localStorage.removeItem("userId");
+                  }}
                   href={`/api/auth/logout?returnTo=${process.env.NEXT_PUBLIC_BASE_URL}`}
                   color="danger"
                 >
-                  Log Out
+                  Cerrar sesión
                 </DropdownItem>
               </DropdownMenu>
             </Dropdown>

@@ -2,29 +2,40 @@ import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 
-export function useApplicationsByUserId(id: string) {
+export function useAnswerByUserId(id: string) {
   return useQuery({
-    queryKey: ["application-by-userId", id],
+    queryKey: ["answer-by-userId", id],
     queryFn: async () => {
-      const url = `${process.env.NEXT_PUBLIC_API_URL}/application/user/${id}`;
+      const url = `${process.env.NEXT_PUBLIC_API_URL}/answer/${id}`;
       const { data } = await axios.get(url);
       return data;
     },
   });
 }
 
-export async function createApplication(application: any) {
+export function useQuestion() {
+  return useQuery({
+    queryKey: ["question"],
+    queryFn: async () => {
+      const url = `${process.env.NEXT_PUBLIC_API_URL}/question`;
+      const { data } = await axios.get(url);
+      return data;
+    },
+  });
+}
+
+export async function createAnswer(answer: any) {
   try {
-    const url = `${process.env.NEXT_PUBLIC_API_URL}/application/`;
-    const response = await axios.post(url, application);
+    const url = `${process.env.NEXT_PUBLIC_API_URL}/answer/`;
+    const response = await axios.post(url, answer);
     if (response.status === 201) {
-      toast.success("¡Has aplicado con éxito a esta vacante!", {
+      toast.success("Respuesta registrada correctamente", {
         duration: 4000,
         position: "top-center",
       });
     }
   } catch (e) {
-    toast.error("Error al aplicar a esta vacante.", {
+    toast.error("Error al registrar tu respuesta", {
       duration: 4000,
       position: "top-center",
     });
