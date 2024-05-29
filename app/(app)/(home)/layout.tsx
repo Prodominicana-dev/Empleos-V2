@@ -19,19 +19,29 @@ export default function RootLayout({
 
   const handleUser = async () => {
     if (!isLoading && user) {
-      const userExists = (await useUserExist(
-        user.sub as string
-      )) as UserResponse;
-      if (userExists.data !== null) {
-        return console.log("existe el usuario");
+      const userLogged = localStorage.getItem("user");
+      const userIdLogged = localStorage.getItem("userId");
+      if (userLogged && userIdLogged) {
+        return;
+      } else {
+        const userExists = (await useUserExist(
+          user.sub as string
+        )) as UserResponse;
+        if (userExists.data !== null) {
+          console.log(userExists);
+          // Si existe crear en localStorage el usuario y almacenar el id
+          localStorage.setItem("user", JSON.stringify(userExists.data));
+          localStorage.setItem("userId", userExists.data.id);
+          return console.log("existe el usuario");
+        }
+        return await createUser({
+          auth0Id: user.sub,
+          username: user.nickname,
+          email: user.email,
+          name: user.name,
+          image: user.picture,
+        });
       }
-      return await createUser({
-        auth0Id: user.sub,
-        username: user.nickname,
-        email: user.email,
-        name: user.name,
-        image: user.picture,
-      });
     }
   };
 

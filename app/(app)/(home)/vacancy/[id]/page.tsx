@@ -1,12 +1,18 @@
 "use client";
 import { useVacancyById } from "@/service/vacancy/service";
 import { Button } from "@nextui-org/button";
-import { CheckIcon, XMarkIcon } from "@heroicons/react/24/solid";
+import {
+  CheckIcon,
+  InformationCircleIcon,
+  XMarkIcon,
+} from "@heroicons/react/24/outline";
 import React, { useEffect } from "react";
 import { LanguageLevels, Languages } from "@/data/data";
 import { Breadcrumbs, BreadcrumbItem, Spinner } from "@nextui-org/react";
 import { useUser as AuthUser } from "@auth0/nextjs-auth0/client";
 import { useUser as useUserData } from "@/service/user/service";
+import { useRouter } from "next/navigation";
+import { createApplication } from "@/service/application/service";
 
 const ApplyButton = ({
   apply,
@@ -32,9 +38,10 @@ const ApplyButton = ({
 };
 
 export default function Page({ params }: { params: { id: string } }) {
-  const { user, isLoading: userLoading } = AuthUser();
-  const [userData, setUserData] = React.useState<any>({});
+  const { user } = AuthUser();
   const { data, isLoading } = useVacancyById(params.id);
+
+  const userIdLogged = localStorage.getItem("userId");
 
   // Parametros a validar
   const [minimunDegreeId, setMinimunDegreeId] = React.useState<string>("");
@@ -67,6 +74,11 @@ export default function Page({ params }: { params: { id: string } }) {
     user?.sub as string
   );
 
+  // Ruta actual para redirigir
+  const router = useRouter();
+  const actualRoute = `${process.env.NEXT_PUBLIC_URL}/vacancy/${params.id}`;
+  const loginRoute = `${process.env.NEXT_PUBLIC_URL}/api/login?returnTo=${actualRoute}`;
+
   useEffect(() => {
     if (!isLoading && data) {
       setVacancy(data);
@@ -88,8 +100,6 @@ export default function Page({ params }: { params: { id: string } }) {
 
   useEffect(() => {
     if (!userLoadingAPI && userAPI && !validationLoading) {
-      console.log(userAPI);
-      setUserData(userAPI);
       // Validar si el usuario cumple con los requisitos de la vacante
       // Validar si el usuario tiene la misma provincia que la vacante, si la vacante es 'cualquiera' se considera que cumple
       setHasProvince(
@@ -195,6 +205,21 @@ export default function Page({ params }: { params: { id: string } }) {
     );
   };
 
+  const handleApply = async () => {
+    // Si no esta logueado, redirigir a la página de login con returnTo a este link
+    // Si el usuario cumple con los requisitos, aplicar a la vacante
+    if (!user) {
+      // Redirigir a la página de login
+      return router.push(loginRoute);
+    }
+    // Aplicar a la vacante
+    const data = {
+      userId: userIdLogged,
+      vacancyId: params.id,
+    };
+    return await createApplication(data);
+  };
+
   const gradientYes = "bg-gradient-to-br from-green-500 to-lime-400";
   const gradientNo = "bg-gradient-to-br from-red-500 to-red-400";
 
@@ -233,7 +258,10 @@ export default function Page({ params }: { params: { id: string } }) {
             <h1 className="text-6xl font-bold text-white font-dm-sans">
               {vacancy.title}
             </h1>
-            <ApplyButton apply={() => {}} disabled={validateButtonDisabled()} />
+            <ApplyButton
+              apply={handleApply}
+              disabled={validateButtonDisabled()}
+            />
           </div>
         </div>
       </div>
@@ -360,11 +388,76 @@ export default function Page({ params }: { params: { id: string } }) {
             </div>
           </div>
         </div>
+        <div className="flex flex-col w-full gap-2">
+          {!hasMinimunDegree && (
+            <p className="text-lg text-red-600 font-dm-sans">
+              <InformationCircleIcon className="size-5" /> No cumples con el
+              grado académico mínimo para esta vacante.
+            </p>
+          )}
+          {!hasMinimunExperience && (
+            <div className="flex flex-row items-center gap-1">
+              <InformationCircleIcon className="text-red-600 size-5" />
+              <p className="text-lg text-red-600 font-dm-sans">
+                No cumples la experiencia laboral mínima para esta vacante.
+              </p>
+            </div>
+          )}
+          {!hasProvince && (
+            <div className="flex flex-row items-center gap-1">
+              <InformationCircleIcon className="text-red-600 size-5" />
+              <p className="text-lg text-red-600 font-dm-sans">
+                No resides en la provincia solicitada en esta vacante.
+              </p>
+            </div>
+          )}
+          {!hasLanguages && (
+            <div className="flex flex-row items-center gap-1">
+              <InformationCircleIcon className="text-red-600 size-5" />
+              <p className="text-lg text-red-600 font-dm-sans">
+                No cumples con los idiomas requeridos para esta vacante.
+              </p>
+            </div>
+          )}
+          {!hasLicense && (
+            <div className="flex flex-row items-center gap-1">
+              <InformationCircleIcon className="text-red-600 size-5" />
+              <p className="text-lg text-red-600 font-dm-sans">
+                Para esta vacante es necesario tener licencia de conducir y no
+                cumples con este requisito.
+              </p>
+            </div>
+          )}
+          {!hasVehicule && (
+            <div className="flex flex-row items-center gap-1">
+              <InformationCircleIcon className="text-red-600 size-5" />
+              <p className="text-lg text-red-600 font-dm-sans">
+                Para esta vacante es necesario tener un vehiculo y no cumples
+                con este requisito.
+              </p>
+            </div>
+          )}
+          {!hasMinimunAge && (
+            <div className="flex flex-row items-center gap-1">
+              <InformationCircleIcon className="text-red-600 size-5" />
+              <p className="text-lg text-red-600 font-dm-sans">
+                No cumples con la edad mínima para esta vacante.
+              </p>
+            </div>
+          )}
+          {!hasCareer && (
+            <div className="flex flex-row items-center gap-1">
+              <InformationCircleIcon className="text-red-600 size-5" />
+              <p className="text-lg text-red-600 font-dm-sans">
+                No cumples con la carrera universitaria requerida para esta
+                vacante.
+              </p>
+            </div>
+          )}
+        </div>
         <div className="flex items-center justify-center w-full">
           <ApplyButton
-            apply={() => {
-              console.log(validateButtonDisabled());
-            }}
+            apply={handleApply}
             disabled={validateButtonDisabled()}
           />
         </div>
