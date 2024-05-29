@@ -34,16 +34,16 @@ export default function Footer() {
     <>
       <div className="w-full bg-blue-950 h-[40vh] flex justify-center">
         <div className="flex flex-col gap-10 max-w-7xl lg:flex-row">
-          <div className="flex items-center justify-center w-6/12 ">
+          <div className="flex items-center justify-center w-full lg:w-6/12 ">
             <Image
               src={"/svg/talento-humano-logo.svg"}
               alt="talentohumano"
               width={1000}
               height={1000}
-              className="size-6/12"
+              className="size-10/12 lg:size-6/12"
             />
           </div>
-          <div className="grid w-6/12 grid-cols-3 place-content-center">
+          <div className="grid w-10/12 grid-cols-2 lg:grid-cols-3 lg:w-6/12 place-content-center place-self-center">
             <div className="flex flex-col w-full gap-2 text-white">
               <h1 className="text-2xl font-bold h-2/6">Sitios</h1>
               <div className="flex flex-col gap-2 h-4/6">
@@ -69,8 +69,8 @@ export default function Footer() {
         </div>
       </div>
       <div className="flex flex-col items-center justify-center w-full py-5 bg-white">
-        <div className="flex items-center w-11/12 h-2/6 text-blue-950">
-          <div className="flex items-center justify-start w-8/12 h-full space-x-2">
+        <div className="flex flex-col items-center w-11/12 lg:flex-row h-2/6 text-blue-950">
+          <div className="flex flex-col items-center justify-start w-full h-full space-x-2 lg:flex-row lg:w-8/12">
             <p className="text-center sm:text-left">
               © {year} Todos los derechos reservados. Desarrollado por
             </p>
@@ -79,14 +79,16 @@ export default function Footer() {
               src={"https://prodominicana.gob.do/prodominicana.svg"}
               width={150}
               height={150}
-              className="w-20"
+              className="w-44 lg:w-20"
             />
           </div>
-          <div className="flex items-center justify-center w-4/12 h-full space-x-4 sm:justify-end">
+          <div className="flex flex-col items-center justify-center w-4/12 h-full space-x-4 lg:flex-row lg:justify-end">
             <h1 className="flex text-lg font-bold">SÍGUENOS</h1>
-            {socialMedia.map(({ name, url, src }, index) => (
-              <SocialMedia url={url} image={src} alt={name} key={index} />
-            ))}
+            <div className="flex justify-center">
+              {socialMedia.map(({ name, url, src }, index) => (
+                <SocialMedia url={url} image={src} alt={name} key={index} />
+              ))}
+            </div>
           </div>
         </div>
       </div>

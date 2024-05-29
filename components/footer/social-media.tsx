@@ -13,7 +13,13 @@ export default function SocialMedia({
 }) {
   return (
     <Link href={url} target="_blank">
-      <Image alt={alt} src={image} width={25} height={25} />
+      <Image
+        alt={alt}
+        src={image}
+        width={25}
+        height={25}
+        className="w-40 lg:w-25"
+      />
     </Link>
   );
 }
