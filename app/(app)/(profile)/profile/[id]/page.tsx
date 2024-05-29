@@ -73,7 +73,11 @@ export default function Page({ params: { id } }: any) {
               />
             </Tab>
             <Tab key="questions" title="Preguntas">
-              <QuestionData id={id} key={"question-data"} />
+              <QuestionData
+                user={user}
+                update={handleRefresh}
+                key={"question-data"}
+              />
             </Tab>
             <Tab key="education" title="Educación">
               <EducationData

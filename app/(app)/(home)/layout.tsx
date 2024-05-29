@@ -2,7 +2,7 @@
 import { useUser } from "@auth0/nextjs-auth0/client";
 import React, { useEffect } from "react";
 import { Toaster } from "react-hot-toast";
-import { createUser, useUserExist } from "@/service/user/service";
+import { createUser, userExist } from "@/service/user/service";
 import { image } from "@nextui-org/react";
 import Footer from "@/components/footer/footer";
 
@@ -24,7 +24,7 @@ export default function RootLayout({
       if (userLogged && userIdLogged) {
         return;
       } else {
-        const userExists = (await useUserExist(
+        const userExists = (await userExist(
           user.sub as string
         )) as UserResponse;
         if (userExists.data !== null) {

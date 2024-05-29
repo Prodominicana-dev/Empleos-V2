@@ -85,7 +85,10 @@ export default function Page() {
               </div>
             </div>
             {applications?.map((application: any, index: number) => (
-              <div className="grid grid-cols-2 px-4 py-5 text-center lg:grid-cols-3 rounded-xl">
+              <div
+                key={index}
+                className="grid grid-cols-2 px-4 py-5 text-center lg:grid-cols-3 rounded-xl"
+              >
                 <div className="font-medium text-black font-dm-sans line-clamp-1">
                   <Tooltip content={application.vacancy.title}>
                     {application.vacancy.title}

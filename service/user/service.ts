@@ -13,7 +13,7 @@ export function useUser(auth0Id: string) {
   });
 }
 
-export async function useUserExist(auth0Id: string) {
+export async function userExist(auth0Id: string) {
   try {
     const url = `${process.env.NEXT_PUBLIC_API_URL}/user/a/${auth0Id}`;
     const response = await axios.get(url);

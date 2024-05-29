@@ -62,7 +62,7 @@ export default function QuestionData({
           );
 
           return (
-            <Card className="w-full p-2">
+            <Card key={question.id} className="w-full p-2">
               <CardHeader className="flex flex-col items-center px-4 pt-4 pb-5 md:flex-row md:justify-between">
                 <p className="font-bold text-large font-dm-sans">
                   {question.question}

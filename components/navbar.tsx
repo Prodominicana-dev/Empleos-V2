@@ -83,8 +83,8 @@ export default function NavbarComponent() {
       </NavbarContent>
 
       <NavbarContent justify="end" className="flex items-center gap-10">
-        {NAVBAR_OPTIONS.map(({ name, href }: NavbarOptions) => (
-          <NavbarItem>
+        {NAVBAR_OPTIONS.map(({ name, href }: NavbarOptions, index: number) => (
+          <NavbarItem key={index}>
             <Link
               href={href}
               className={
