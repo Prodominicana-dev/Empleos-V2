@@ -41,12 +41,7 @@ export async function createUser(user: any) {
   }
 }
 
-export async function editUser(
-  id: string,
-  data: any,
-  handler: () => void,
-  update: () => void
-) {
+export async function editUser(id: string, data: any, update: () => void) {
   try {
     const url = `${process.env.NEXT_PUBLIC_API_URL}/user/${id}`;
     const response = await axios.patch(url, data);
@@ -55,7 +50,6 @@ export async function editUser(
         duration: 4000,
         position: "top-center",
       });
-      handler();
       update();
     }
   } catch (error) {

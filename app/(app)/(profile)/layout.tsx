@@ -25,5 +25,5 @@ export default function RootLayout({ children }: Props) {
     }
   }, [user, isLoading]);
 
-  return <div>{children}</div>;
+  return <div className="font-dm-sans">{children}</div>;
 }

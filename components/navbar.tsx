@@ -101,6 +101,18 @@ export default function NavbarComponent() {
         {!isLoading && user && (
           <NavbarItem>
             <Dropdown placement="bottom-start">
+              {/* {users.image && users.image.startsWith("http") && !file && (
+                <Avatar className="h-14 w-14" src={users?.image} />
+              )}
+              {file && (
+                <Avatar className="h-14 w-14" src={URL.createObjectURL(file)} />
+              )}
+              {users.image && !users.image.startsWith("http") && !file && (
+                <Avatar
+                  className="h-14 w-14"
+                  src={`${process.env.NEXT_PUBLIC_API_URL}/user/${user.id}/img/${user.image}`}
+                />
+              )} */}
               <DropdownTrigger>
                 <User
                   as="button"

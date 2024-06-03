@@ -11,7 +11,7 @@ import ExperienceData from "@/components/(profile)/experience";
 import LanguageData from "@/components/(profile)/language";
 import PersonalRefData from "@/components/(profile)/personal-reference";
 import ProfessionalRefData from "@/components/(profile)/professional-reference";
-import { Route, Routes, useLocation } from "react-router-dom";
+import CVData from "@/components/(profile)/cv";
 
 export default function Page({ params: { id } }: any) {
   const { data, isLoading, refetch } = useUser(id);
@@ -65,6 +65,13 @@ export default function Page({ params: { id } }: any) {
                   update={handleRefresh}
                   key={"profile-data"}
                 />
+              )}
+            </Tab>
+            <Tab key="cv" title="CV">
+              {isLoading ? (
+                <UserDataSkeleton />
+              ) : (
+                <CVData user={user} update={handleRefresh} key={"profile-cv"} />
               )}
             </Tab>
             <Tab key="relationship" title="Parentesco">

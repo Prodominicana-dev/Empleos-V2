@@ -2,7 +2,7 @@
 
 import type { CalendarDate, CardProps } from "@nextui-org/react";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Card,
   CardHeader,
@@ -23,6 +23,7 @@ import countries from "./countries";
 import { editUser, useUser } from "@/service/user/service";
 import UserDataSkeleton from "./skeleton/user-profile";
 import { parseDate } from "@internationalized/date";
+import Image from "next/image";
 
 export default function UserData({
   user,
@@ -35,6 +36,13 @@ export default function UserData({
   const [refresh, setRefresh] = useState(false);
   const [birthdate, setBirthdate] = useState<any>(null);
   const [loading, setLoading] = useState(false);
+  const [file, setFile] = useState<File | null>(null);
+
+  const inputRef = useRef<HTMLInputElement>({} as HTMLInputElement);
+
+  const handleClick = () => {
+    inputRef.current.click();
+  };
 
   useEffect(() => {
     setLoading(true);
@@ -53,29 +61,28 @@ export default function UserData({
   }, [user]);
 
   const handleSubmit = async () => {
-    await editUser(
-      user.id,
-      {
-        username: users.username,
-        email: users.email,
-        name: users.name,
-        image: users.image,
-        telephone: users.telephone,
-        phone: users.phone,
-        country: users.country,
-        nationality: users.nationality,
-        province: users.province,
-        gender: users.gender,
-        birthdate: users.birthdate,
-        documentType: users.documentType,
-        documentNumber: users.documentNumber,
-        civilStatus: users.civilStatus,
-        hasLicense: users.hasLicense,
-        hasVehicule: users.hasVehicule,
-      },
-      update,
-      () => {}
-    );
+    const formData = new FormData();
+    formData.append("username", users.username);
+    formData.append("email", users.email);
+    formData.append("name", users.name);
+    formData.append("image", users.image);
+    formData.append("telephone", users.telephone);
+    formData.append("phone", users.phone);
+    formData.append("country", users.country);
+    formData.append("nationality", users.nationality);
+    formData.append("province", users.province);
+    //formData.append("gender", users.gender)
+    formData.append("birthdate", users.birthdate);
+    formData.append("documentType", users.documentType);
+    formData.append("documentNumber", users.documentNumber);
+    formData.append("civilStatus", users.civilStatus);
+    formData.append("hasLicense", users.hasLicense);
+    formData.append("hasVehicule", users.hasVehicule);
+    if (file) {
+      formData.append("images", file as File);
+    }
+    await editUser(user.id, formData, update);
+    setFile(null);
   };
 
   if (loading) return <UserDataSkeleton />;
@@ -93,6 +100,7 @@ export default function UserData({
             color="primary"
             content={
               <Button
+                onClick={handleClick}
                 isIconOnly
                 className="p-0 text-primary-foreground"
                 radius="full"
@@ -105,7 +113,18 @@ export default function UserData({
             placement="bottom-right"
             shape="circle"
           >
-            <Avatar className="h-14 w-14" src={users?.image} />
+            {users.image && users.image.startsWith("http") && !file && (
+              <Avatar className="h-14 w-14" src={users?.image} />
+            )}
+            {file && (
+              <Avatar className="h-14 w-14" src={URL.createObjectURL(file)} />
+            )}
+            {users.image && !users.image.startsWith("http") && !file && (
+              <Avatar
+                className="h-14 w-14"
+                src={`${process.env.NEXT_PUBLIC_API_URL}/user/${user.id}/img/${user.image}`}
+              />
+            )}
           </Badge>
           <div className="flex flex-col items-start justify-center">
             <p className="font-medium">{users.name}</p>
@@ -120,6 +139,18 @@ export default function UserData({
       </CardHeader>
       <CardBody className="flex flex-col gap-4">
         <div className="grid grid-cols-1 gap-4 md:grid-cols-3 lg:grid-cols-4">
+          <input
+            type="file"
+            accept="image/jpeg, image/png"
+            multiple={false}
+            className="hidden"
+            ref={inputRef}
+            onChange={(e) => {
+              if (e.target.files) {
+                setFile(e.target.files[0]);
+              }
+            }}
+          />
           {/* First Name */}
           <Input
             label="Nombre completo"
@@ -253,7 +284,7 @@ export default function UserData({
           <Input
             label="Documento"
             labelPlacement="outside"
-            defaultValue={user.documentNumber}
+            value={users.documentNumber}
             onChange={(e) =>
               setUser({ ...users, documentNumber: e.target.value })
             }
@@ -341,9 +372,10 @@ export default function UserData({
             users.documentNumber !== user.documentNumber ||
             users.civilStatus !== user.civilStatus ||
             users.hasLicense !== user.hasLicense ||
+            file === null || // Cambiado !file por file === null
             users.hasVehicule !== user.hasVehicule
-              ? false
-              : true
+              ? true // Cambiado false por true
+              : false // Cambiado true por false
           }
           onPress={handleSubmit}
           color="primary"

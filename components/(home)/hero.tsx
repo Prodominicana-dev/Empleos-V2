@@ -75,7 +75,7 @@ export default function Hero() {
       <div className="w-full min-h-[20vh] md:h-[20vh] bg-red-600 flex md:flex-row flex-col items-center justify-center gap-5 py-5 md:py-0">
         <div className="flex flex-col justify-center w-full h-full gap-5 md:flex-row md:rounded-br-full md:w-6/12 md:gap-20 lg:gap-44 md:bg-blue-950">
           <div className="flex flex-col items-center justify-center text-2xl text-center md:text-4xl">
-            <h2 className="font-bold text-white">+400</h2>
+            <h2 className="font-bold text-white">+200</h2>
             <p className="text-xl text-white">Empleados</p>
           </div>
           <div className="flex flex-col items-center justify-center text-2xl text-center md:text-4xl">
