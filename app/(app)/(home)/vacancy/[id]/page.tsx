@@ -75,6 +75,7 @@ export default function Page({ params }: { params: { id: string } }) {
   const [vacancy, setVacancy] = React.useState<any>({});
   const [validationLoading, setValidationLoading] =
     React.useState<boolean>(true);
+  const [filterLoading, setFilterLoading] = React.useState<boolean>(true);
 
   const { data: userAPI, isLoading: userLoadingAPI } = useUserData(
     user?.sub as string
@@ -120,6 +121,7 @@ export default function Page({ params }: { params: { id: string } }) {
 
   useEffect(() => {
     if (!userLoadingAPI && userAPI && !validationLoading) {
+      setFilterLoading(true);
       // Validar si el usuario cumple con los requisitos de la vacante
       // Validar si el usuario tiene la misma provincia que la vacante, si la vacante es 'cualquiera' se considera que cumple
       setHasProvince(
@@ -183,6 +185,7 @@ export default function Page({ params }: { params: { id: string } }) {
           ? true
           : false
       );
+      setFilterLoading(false);
     }
   }, [userAPI, userLoadingAPI, validationLoading]);
 
@@ -205,15 +208,6 @@ export default function Page({ params }: { params: { id: string } }) {
   };
 
   const validateButtonDisabled = () => {
-    console.log(
-      hasMinimunDegree,
-      hasMinimunExperience,
-      hasProvince,
-      hasLanguages,
-      hasLicense,
-      hasVehicule,
-      hasCareer
-    );
     return !(
       hasMinimunDegree &&
       hasMinimunExperience &&

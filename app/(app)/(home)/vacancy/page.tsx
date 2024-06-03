@@ -25,25 +25,29 @@ export default function Page() {
   const { data: vacancies, isLoading: loadingVacancies } = useVacancy();
 
   const filterVacancy = (vacancy: any[], selected: string[]) => {
+    console.log(selected);
     if (selected.length === 0) return vacancy;
-    return vacancy.filter((item) =>
-      selected.includes(item.category.toLowerCase())
-    );
+    return vacancy?.filter((item) => {
+      return selected.includes(item.category.name.toLowerCase());
+    });
   };
 
-  // const vacancyFilter = filterVacancy(vacancies, selected) || vacancies;
+  const vacancyFilter = filterVacancy(vacancies, selected) || vacancies;
 
-  // // Paginacion de vacantes de 4 en 4
-  // // Pagination with testData
-  // const [currentPage, setCurrentPage] = useState(1);
-  // const [postsPerPage] = useState(4);
+  // Paginacion de vacantes de 4 en 4
+  // Pagination with testData
+  const [currentPage, setCurrentPage] = useState(1);
+  const [postsPerPage] = useState(4);
 
-  // const indexOfLastPost = currentPage * postsPerPage;
-  // const indexOfFirstPost = indexOfLastPost - postsPerPage;
-  // const currentVacancy = vacancyFilter.slice(indexOfFirstPost, indexOfLastPost);
+  const indexOfLastPost = currentPage * postsPerPage;
+  const indexOfFirstPost = indexOfLastPost - postsPerPage;
+  const currentVacancy = vacancyFilter?.slice(
+    indexOfFirstPost,
+    indexOfLastPost
+  );
 
-  // // Cantidad de paginas
-  // const pageNumbers = vacancyFilter.length / postsPerPage;
+  // Cantidad de paginas
+  const pageNumbers = vacancyFilter?.length / postsPerPage;
 
   const handleCategories = () => {
     const parameters = new URLSearchParams(searchParameters);
@@ -140,7 +144,7 @@ export default function Page() {
               </Accordion>
             </div>
             <div className="grid w-full h-full grid-cols-1 gap-5 md:grid-cols-2">
-              {vacancies.map((item: any, index: number) => {
+              {currentVacancy.map((item: any, index: number) => {
                 const date = new Date(item?.createdAt);
                 // Formatear la fecha con toLocaleDateString
                 console.log(date);
@@ -184,20 +188,20 @@ export default function Page() {
               })}
             </div>
           </div>
-          {/* {pageNumbers > 1 && (
-          <div className="flex justify-end w-full gap-2 mt-4">
-            <Pagination
-              loop
-              showControls
-              total={pageNumbers}
-              initialPage={1}
-              classNames={{
-                cursor: "bg-blue-950 font-dm-sans text-white font-semibold",
-              }}
-              onChange={(page) => setCurrentPage(page)}
-            />
-          </div>
-        )} */}
+          {pageNumbers > 1 && (
+            <div className="flex justify-end w-full gap-2 mt-4">
+              <Pagination
+                loop
+                showControls
+                total={pageNumbers}
+                initialPage={1}
+                classNames={{
+                  cursor: "bg-blue-950 font-dm-sans text-white font-semibold",
+                }}
+                onChange={(page) => setCurrentPage(page)}
+              />
+            </div>
+          )}
         </div>
       </div>
     </Suspense>
