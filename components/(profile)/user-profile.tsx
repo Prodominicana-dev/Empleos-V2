@@ -60,6 +60,35 @@ export default function UserData({
     setLoading(false);
   }, [user]);
 
+  // Validar si el usuario cambio con respecto a la data que se obtuvo
+  const handleDisable = () => {
+    if (
+      users.name !== user.name ||
+      users.username !== user.username ||
+      users.email !== user.email ||
+      users.telephone !== user.telephone ||
+      users.phone !== user.phone ||
+      users.country !== user.country ||
+      users.name !== user.name ||
+      users.username !== user.username ||
+      users.email !== user.email ||
+      users.telephone !== user.telephone ||
+      users.phone !== user.phone ||
+      users.country !== user.country ||
+      users.province !== user.province ||
+      users.birthdate !== user.birthdate ||
+      users.documentType !== user.documentType ||
+      users.documentNumber !== user.documentNumber ||
+      users.civilStatus !== user.civilStatus ||
+      users.hasLicense !== user.hasLicense ||
+      users.hasVehicule !== user.hasVehicule ||
+      file !== null
+    ) {
+      return false;
+    }
+    return true;
+  };
+
   const handleSubmit = async () => {
     const formData = new FormData();
     formData.append("username", users.username);
@@ -359,24 +388,7 @@ export default function UserData({
 
       <CardFooter className="justify-end gap-2 mt-4">
         <Button
-          isDisabled={
-            users.name !== user.name ||
-            users.username !== user.username ||
-            users.email !== user.email ||
-            users.telephone !== user.telephone ||
-            users.phone !== user.phone ||
-            users.country !== user.country ||
-            users.province !== user.province ||
-            users.birthdate !== user.birthdate ||
-            users.documentType !== user.documentType ||
-            users.documentNumber !== user.documentNumber ||
-            users.civilStatus !== user.civilStatus ||
-            users.hasLicense !== user.hasLicense ||
-            file === null || // Cambiado !file por file === null
-            users.hasVehicule !== user.hasVehicule
-              ? true // Cambiado false por true
-              : false // Cambiado true por false
-          }
+          isDisabled={handleDisable()}
           onPress={handleSubmit}
           color="primary"
           radius="full"
