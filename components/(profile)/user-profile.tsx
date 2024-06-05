@@ -90,6 +90,7 @@ export default function UserData({
   };
 
   const handleSubmit = async () => {
+    console.log(users.hasLicense, users.hasVehicule);
     const formData = new FormData();
     formData.append("username", users.username);
     formData.append("email", users.email);
@@ -101,12 +102,14 @@ export default function UserData({
     formData.append("nationality", users.nationality);
     formData.append("province", users.province);
     //formData.append("gender", users.gender)
-    formData.append("birthdate", users.birthdate);
+    if (users.birthdate) formData.append("birthdate", users.birthdate);
     formData.append("documentType", users.documentType);
     formData.append("documentNumber", users.documentNumber);
     formData.append("civilStatus", users.civilStatus);
-    formData.append("hasLicense", users.hasLicense);
-    formData.append("hasVehicule", users.hasVehicule);
+    if (users.hasLicense !== null)
+      formData.append("hasLicense", users.hasLicense);
+    if (users.hasVehicule !== null)
+      formData.append("hasVehicule", users.hasVehicule);
     if (file) {
       formData.append("images", file as File);
     }
@@ -322,7 +325,6 @@ export default function UserData({
           {/* Nationality */}
           <Autocomplete
             defaultItems={[
-              { type: "Estudiante", value: "estudiante" },
               { type: "Soltero/a", value: "soltero/a" },
               { type: "Casado/a", value: "casado/a" },
             ]}
@@ -359,7 +361,10 @@ export default function UserData({
         <div className="flex flex-col gap-5 lg:flex-row">
           <Checkbox
             onChange={(e) =>
-              setUser({ ...users, hasLicense: e.target.checked })
+              setUser({
+                ...users,
+                hasLicense: e.target.checked === true ? true : null,
+              })
             }
             isSelected={users.hasLicense}
             size="md"
@@ -371,7 +376,10 @@ export default function UserData({
           </Checkbox>
           <Checkbox
             onChange={(e) =>
-              setUser({ ...users, hasVehicule: e.target.checked })
+              setUser({
+                ...users,
+                hasVehicule: e.target.checked === true ? true : null,
+              })
             }
             isSelected={users.hasVehicule}
             size="md"
