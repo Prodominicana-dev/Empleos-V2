@@ -166,7 +166,7 @@ export default function NavbarComponent() {
           <>
             <NavbarItem className="hidden lg:flex">
               <Link
-                href="/api/auth/login"
+                href={`/api/auth/login?returnTo=${process.env.NEXT_PUBLIC_BASE_URL}${pathname}`}
                 className="transition duration-200 text-blue-950 hover:border-b-1 hover:border-red-600"
               >
                 Inicia sesión
@@ -176,7 +176,7 @@ export default function NavbarComponent() {
               <Button
                 as={Link}
                 className="bg-blue-100 text-blue-950"
-                href="/api/auth/login"
+                href={`/api/auth/login?returnTo=${process.env.NEXT_PUBLIC_BASE_URL}${pathname}`}
                 variant="flat"
               >
                 Regístrate

@@ -94,8 +94,8 @@ export default function Page({ params }: { params: { id: string } }) {
 
   // Ruta actual para redirigir
   const router = useRouter();
-  const actualRoute = `${process.env.NEXT_PUBLIC_URL}/vacancy/${params.id}`;
-  const loginRoute = `/api/login?returnTo=${actualRoute}`;
+  const actualRoute = `${process.env.NEXT_PUBLIC_BASE_URL}/vacancy/${params.id}`;
+  const loginRoute = `/api/auth/login?returnTo=${actualRoute}`;
 
   useEffect(() => {
     const userId = window.localStorage.getItem("userId");
