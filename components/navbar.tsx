@@ -100,7 +100,7 @@ export default function NavbarComponent() {
 
         {!isLoading && user && (
           <NavbarItem>
-            <Dropdown placement="bottom-start">
+            <Dropdown placement="bottom-start" className="text-black bg-white">
               {/* {users.image && users.image.startsWith("http") && !file && (
                 <Avatar className="h-14 w-14" src={users?.image} />
               )}
@@ -144,18 +144,17 @@ export default function NavbarComponent() {
                 >
                   Mis aplicaciones
                 </DropdownItem>
-                <DropdownItem
-                  key="logout"
-                  as={Link}
-                  onClick={() => {
-                    // Eliminar localeStorage de la sesion
-                    localStorage.removeItem("user");
-                    localStorage.removeItem("userId");
-                  }}
-                  href={`/api/auth/logout?returnTo=${process.env.NEXT_PUBLIC_BASE_URL}`}
-                  color="danger"
-                >
-                  Cerrar sesión
+                <DropdownItem key="logout" color="danger">
+                  <a
+                    href={`/api/auth/logout?returnTo=${process.env.NEXT_PUBLIC_BASE_URL}`}
+                    onClick={() => {
+                      // Eliminar localeStorage de la sesion
+                      localStorage.removeItem("user");
+                      localStorage.removeItem("userId");
+                    }}
+                  >
+                    Cerrar sesión
+                  </a>
                 </DropdownItem>
               </DropdownMenu>
             </Dropdown>
