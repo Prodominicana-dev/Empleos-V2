@@ -1,4 +1,3 @@
-import { cn } from "@/utils/cn";
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
@@ -16,10 +15,7 @@ export const HoverEffect = ({
 
   return (
     <div
-      className={cn(
-        "flex flex-row flex-wrap justify-center gap-5  py-10",
-        className
-      )}
+      className={`flex flex-row flex-wrap justify-center gap-5 py-10 ${className}`}
     >
       {items.map((item, idx) => (
         <Link
@@ -78,10 +74,7 @@ export const Card = ({
 }) => {
   return (
     <div
-      className={cn(
-        "rounded-2xl h-full w-full p-4 overflow-hidden bg-white shadow-xl relative z-30 flex flex-col gap-2 items-center",
-        className
-      )}
+      className={`rounded-2xl h-full w-full p-4 overflow-hidden bg-white shadow-xl relative z-30 flex flex-col gap-2 items-center ${className}`}
     >
       <div className="relative z-50">
         <div className="p-4">{children}</div>
@@ -98,10 +91,7 @@ export const CardTitle = ({
 }) => {
   return (
     <h4
-      className={cn(
-        "text-black text-lg lg:text-xl font-bold tracking-wide mt-4 text-center",
-        className
-      )}
+      className={`text-black text-lg lg:text-xl font-bold tracking-wide mt-4 text-center ${className}`}
     >
       {children}
     </h4>
@@ -116,10 +106,7 @@ export const CardDescription = ({
 }) => {
   return (
     <p
-      className={cn(
-        "mt-4 text-gray-500 tracking-wide leading-relaxed text-xs lg:text-sm text-center",
-        className
-      )}
+      className={`mt-4 text-gray-500 tracking-wide leading-relaxed text-xs lg:text-sm text-center ${className}`}
     >
       {children}
     </p>

@@ -1,5 +1,5 @@
 "use client";
-import { useVacancyById, userApplyVacancy } from "@/service/vacancy/service";
+import { useVacancyById, useUserApplyVacancy } from "@/service/vacancy/service";
 import { Button } from "@nextui-org/button";
 import {
   CheckIcon,
@@ -90,7 +90,7 @@ export default function Page({ params }: { params: { id: string } }) {
     data: hasApplied,
     isLoading: applyLoading,
     refetch,
-  } = userApplyVacancy(params.id, userIdLogged as string);
+  } = useUserApplyVacancy(params.id, userIdLogged as string);
 
   // Ruta actual para redirigir
   const router = useRouter();

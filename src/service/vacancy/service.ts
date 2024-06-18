@@ -23,7 +23,7 @@ export function useVacancyById(id: string) {
   });
 }
 
-export function userApplyVacancy(id: string, userId: string) {
+export function useUserApplyVacancy(id: string, userId: string) {
   return useQuery({
     queryKey: ["userApplyVacancy"],
     queryFn: async () => {
