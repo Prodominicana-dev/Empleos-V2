@@ -160,7 +160,7 @@ export default function Page() {
                   <Link
                     key={index}
                     href={`/vacancy/${item.id}`}
-                    className="flex flex-col w-full gap-4 p-4 border border-gray-300 shadow rounded-xl h-[30vh] justify-center hover:bg-gray-100 duration-200 hover:cursor-pointer"
+                    className="flex flex-col w-full gap-4 p-4 duration-200 border border-gray-300 shadow rounded-xl hover:bg-gray-100 hover:cursor-pointer"
                   >
                     <h2 className="text-2xl font-semibold text-black font-dm-sans line-clamp-1">
                       {item.title}
