@@ -144,6 +144,7 @@ export default function ExperienceDialog({
                   </Autocomplete>
 
                   <Input
+                    isRequired
                     label="Salario al que aspiras"
                     placeholder="Ingrese el salario al que aspiras"
                     type="numeric"

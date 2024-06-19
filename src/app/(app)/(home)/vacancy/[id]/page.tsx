@@ -70,7 +70,6 @@ export default function Page({ params }: { params: { id: string } }) {
     React.useState<boolean>(false);
   const [hasMinimunDegree, setHasMinimunDegree] =
     React.useState<boolean>(false);
-  const [hasProvince, setHasProvince] = React.useState<boolean>(false);
   const [hasLanguages, setHasLanguages] = React.useState<boolean>(false);
   const [hasLicense, setHasLicense] = React.useState<boolean>(false);
   const [hasVehicule, setHasVehicule] = React.useState<boolean>(false);
@@ -128,13 +127,6 @@ export default function Page({ params }: { params: { id: string } }) {
   useEffect(() => {
     if (!userLoadingAPI && userAPI && !validationLoading) {
       setFilterLoading(true);
-      // Validar si el usuario cumple con los requisitos de la vacante
-      // Validar si el usuario tiene la misma provincia que la vacante, si la vacante es 'cualquiera' se considera que cumple
-      setHasProvince(
-        province === "cualquiera" || province === userAPI.province
-          ? true
-          : false
-      );
 
       // Validar si el usuario tiene el nivel académico mínimo requerido
       // Recorremos 'education' para validar si el usuario tiene el nivel académico mínimo requerido
@@ -218,7 +210,6 @@ export default function Page({ params }: { params: { id: string } }) {
       return !(
         hasMinimunDegree &&
         hasMinimunExperience &&
-        hasProvince &&
         hasLanguages &&
         hasLicense &&
         hasVehicule &&
@@ -442,14 +433,7 @@ export default function Page({ params }: { params: { id: string } }) {
                 </p>
               </div>
             )}
-            {!hasProvince && (
-              <div className="flex flex-row items-center gap-1">
-                <InformationCircleIcon className="hidden w-1/12 text-red-600 size-5 md:block" />
-                <p className="text-base text-red-600 lg:text-lg font-dm-sans">
-                  No resides en la provincia solicitada en esta vacante.
-                </p>
-              </div>
-            )}
+
             {!hasLanguages && (
               <div className="flex flex-row items-center gap-1">
                 <InformationCircleIcon className="hidden w-1/12 text-red-600 size-5 md:block" />
