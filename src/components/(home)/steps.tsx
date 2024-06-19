@@ -4,7 +4,7 @@ import Image from "next/image";
 
 export default function Steps() {
   return (
-    <div className="flex justify-center w-full bg-red-600 py-28">
+    <div className="flex justify-center w-full bg-red-600 py-28 text-white">
       <div className="flex flex-col items-center justify-center h-full gap-28 max-w-7xl">
         <h1 className="text-3xl font-bold text-white lg:text-6xl ">
           ¡ÚNETE A NOSOTROS!

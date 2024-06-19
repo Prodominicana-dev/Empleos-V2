@@ -312,50 +312,54 @@ export default function Page({ params }: { params: { id: string } }) {
             Requisitos obligatorios
           </h1>
           <div className="grid w-full grid-cols-1 gap-5 md:grid-cols-2">
-            <div
-              className={`flex items-center justify-center w-full p-[3px] rounded-xl ${
-                vacancy.hasLicense ? gradientYes : gradientNo
-              }`}
-            >
-              <div className="flex flex-col items-center justify-center w-full h-full gap-3 px-3 py-2 duration-300 bg-white rounded-[8px] lg:flex-row">
-                <h3 className="text-base font-bold text-center text-black lg:text-lg font-dm-sans lg:text-balance">
-                  ¿Necesitas tener licencia de conducir?
-                </h3>
-                <div
-                  className={`flex items-center justify-center duration-300 rounded-full size-10 lg:size-16 ${
-                    vacancy.hasLicense ? gradientYes : gradientNo
-                  }`}
-                >
-                  {vacancy.hasLicense ? (
-                    <CheckIcon className="text-white size-5 lg:size-10" />
-                  ) : (
-                    <XMarkIcon className="text-white size-5 lg:size-10" />
-                  )}
+            {vacancy.hasLicense && (
+              <div
+                className={`flex items-center justify-center w-full p-[3px] rounded-xl ${
+                  vacancy.hasLicense ? gradientYes : gradientNo
+                }`}
+              >
+                <div className="flex flex-col items-center justify-center w-full h-full gap-3 px-3 py-2 duration-300 bg-white rounded-[8px] lg:flex-row">
+                  <h3 className="text-base font-bold text-center text-black lg:text-lg font-dm-sans lg:text-balance">
+                    ¿Necesitas tener licencia de conducir?
+                  </h3>
+                  <div
+                    className={`flex items-center justify-center duration-300 rounded-full size-10 lg:size-16 ${
+                      vacancy.hasLicense ? gradientYes : gradientNo
+                    }`}
+                  >
+                    {vacancy.hasLicense ? (
+                      <CheckIcon className="text-white size-5 lg:size-10" />
+                    ) : (
+                      <XMarkIcon className="text-white size-5 lg:size-10" />
+                    )}
+                  </div>
                 </div>
               </div>
-            </div>
-            <div
-              className={`flex items-center justify-center w-full p-[3px] rounded-xl ${
-                vacancy.hasVehicule ? gradientYes : gradientNo
-              }`}
-            >
-              <div className="flex flex-col items-center justify-center w-full h-full gap-3 px-3 py-2 duration-300 bg-white rounded-[8px] lg:flex-row">
-                <h3 className="text-base font-bold text-center text-black lg:text-lg font-dm-sans lg:text-balance">
-                  ¿Necesitas tener vehiculo?
-                </h3>
-                <div
-                  className={`flex items-center justify-center duration-300 rounded-full size-10 lg:size-16 ${
-                    vacancy.hasVehicule ? gradientYes : gradientNo
-                  }`}
-                >
-                  {vacancy.hasVehicule ? (
-                    <CheckIcon className="text-white size-5 lg:size-10" />
-                  ) : (
-                    <XMarkIcon className="text-white size-5 lg:size-10" />
-                  )}
+            )}
+            {vacancy.hasVehicule && (
+              <div
+                className={`flex items-center justify-center w-full p-[3px] rounded-xl ${
+                  vacancy.hasVehicule ? gradientYes : gradientNo
+                }`}
+              >
+                <div className="flex flex-col items-center justify-center w-full h-full gap-3 px-3 py-2 duration-300 bg-white rounded-[8px] lg:flex-row">
+                  <h3 className="text-base font-bold text-center text-black lg:text-lg font-dm-sans lg:text-balance">
+                    ¿Necesitas tener vehiculo?
+                  </h3>
+                  <div
+                    className={`flex items-center justify-center duration-300 rounded-full size-10 lg:size-16 ${
+                      vacancy.hasVehicule ? gradientYes : gradientNo
+                    }`}
+                  >
+                    {vacancy.hasVehicule ? (
+                      <CheckIcon className="text-white size-5 lg:size-10" />
+                    ) : (
+                      <XMarkIcon className="text-white size-5 lg:size-10" />
+                    )}
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
           </div>
 
           <label className="text-base text-black lg:text-lg font-dm-sans">

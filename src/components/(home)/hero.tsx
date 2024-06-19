@@ -33,12 +33,12 @@ export default function Hero() {
         </div>
         <div className="absolute inset-0 z-20 flex flex-col items-center justify-center w-full h-full gap-5 lg:flex-row">
           <div className="flex flex-col w-full gap-5 lg:w-6/12">
-            <div className="text-3xl font-bold text-center md:text-5xl">
+            <div className="text-3xl font-bold text-center md:text-5xl text-white">
               <h1>Encuentra Oportunidades,</h1>
               <h1>Desarrolla tu Potencial</h1>
               <h1>en ProDominicana</h1>
             </div>
-            <p className="text-center">
+            <p className="text-center text-white">
               Descubre nuevas oportunidades laborales
             </p>
             <div className="flex flex-col items-center justify-center w-full gap-5 md:flex-row">
