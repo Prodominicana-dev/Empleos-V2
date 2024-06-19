@@ -1,6 +1,6 @@
 "use client";
 import { useUser } from "@auth0/nextjs-auth0/client";
-import React, { useEffect } from "react";
+import React, { Suspense, useEffect } from "react";
 import { Toaster } from "react-hot-toast";
 import { createUser, userExist } from "@/service/user/service";
 import { image } from "@nextui-org/react";
@@ -53,7 +53,7 @@ export default function RootLayout({
   return (
     <div>
       <Toaster />
-      {children}
+      <Suspense>{children}</Suspense>
       <Footer />
     </div>
   );
