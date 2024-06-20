@@ -56,6 +56,7 @@ export default function Page({ params }: { params: { id: string } }) {
 
   // Parametros a validar
   const [minimunDegreeId, setMinimunDegreeId] = React.useState<string>("");
+  const [degreePriority, setDegreePriority] = React.useState<number>(0);
   const [province, setProvince] = React.useState<string>("");
   const [language, setLanguage] = React.useState<any[]>([]);
   const [licenseRequired, setLicenseRequired] = React.useState<boolean>(false);
@@ -108,9 +109,10 @@ export default function Page({ params }: { params: { id: string } }) {
   useEffect(() => {
     if (!isLoading && data) {
       setVacancy(data);
-      console.log(data);
+      // console.log(data);
       setValidationLoading(true);
       setMinimunDegreeId(data.degreeId);
+      setDegreePriority(data.degree.priority);
       setProvince(data?.province);
       setAgeRequired(data.age === null ? 0 : data.age);
       // Extraer la experiencia laboral en formato (1-3) a un número
@@ -131,8 +133,8 @@ export default function Page({ params }: { params: { id: string } }) {
       // Validar si el usuario tiene el nivel académico mínimo requerido
       // Recorremos 'education' para validar si el usuario tiene el nivel académico mínimo requerido
       userAPI.education.map((education: any) => {
-        console.log(minimunDegreeId, education.degreeId);
-        if (education.degreeId === minimunDegreeId) {
+        console.log(education);
+        if (education.degree.priority <= minimunDegreeId) {
           return setHasMinimunDegree(true);
         }
       });
