@@ -28,11 +28,9 @@ export default function RootLayout({
           user.sub as string
         )) as UserResponse;
         if (userExists.data !== null) {
-          console.log(userExists);
           // Si existe crear en localStorage el usuario y almacenar el id
           localStorage.setItem("user", JSON.stringify(userExists.data));
           localStorage.setItem("userId", userExists.data.id);
-          return console.log("existe el usuario");
         }
         return await createUser({
           auth0Id: user.sub,

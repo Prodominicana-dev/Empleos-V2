@@ -38,16 +38,13 @@ export const createExperienceAction = async (
     startDate: new Date(startDate as string).toISOString(),
     endDate: endDate ? new Date(endDate as string).toISOString() : null,
   };
-  console.log(data);
 
   try {
     const response = await createExperience(data);
     update();
     handler();
-    console.log(response);
     return { success: true };
   } catch (error: any) {
-    console.log(error);
     return { error: error.message };
   }
 };
@@ -85,13 +82,10 @@ export const updateExperienceAction = async (
     startDate: new Date(startDate as string).toISOString(),
     endDate: endDate ? new Date(endDate as string).toISOString() : null,
   };
-  console.log(data);
-
   try {
     await editExperience(id, data, handler, update);
     return { success: true };
   } catch (error: any) {
-    console.log(error.message);
     return { error: error.message };
   }
 };
@@ -105,7 +99,6 @@ export const deleteExperienceAction = async (
     await deleteExperience(id, handler, update);
     return { success: true };
   } catch (error: any) {
-    console.log(error.message);
     return { error: error.message };
   }
 };

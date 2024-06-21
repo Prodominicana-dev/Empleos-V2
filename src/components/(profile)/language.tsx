@@ -49,7 +49,6 @@ export default function LanguageData({
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   useEffect(() => {
-    console.log(user);
     setLanguages(user.language);
   }, [user]);
 

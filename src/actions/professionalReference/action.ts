@@ -24,16 +24,12 @@ export const createProfessionalReferenceAction = async (
     position,
     phone,
   };
-  console.log(data);
-
   try {
     const response = await createProfessionalReference(data);
     update();
     handler();
-    console.log(response);
     return { success: true };
   } catch (error: any) {
-    console.log(error);
     return { error: error.message };
   }
 };
@@ -52,13 +48,10 @@ export const updateProfessionalReferenceAction = async (
     position,
     phone,
   };
-  console.log(data);
-
   try {
     await editProfessionalReference(id, data, handler, update);
     return { success: true };
   } catch (error: any) {
-    console.log(error.message);
     return { error: error.message };
   }
 };
@@ -72,7 +65,6 @@ export const deleteProfessionalReferenceAction = async (
     await deleteProfessionalReference(id, handler, update);
     return { success: true };
   } catch (error: any) {
-    console.log(error.message);
     return { error: error.message };
   }
 };

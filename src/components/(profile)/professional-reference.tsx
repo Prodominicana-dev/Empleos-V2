@@ -49,7 +49,6 @@ export default function ProfessionalRefData({
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   useEffect(() => {
-    console.log(user);
     setProfessionalRef(user.professionalReference);
   }, [user]);
 

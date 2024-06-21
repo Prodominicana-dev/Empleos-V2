@@ -34,7 +34,6 @@ export default function EducationData({
   }, [data, isLoading]);
 
   useEffect(() => {
-    console.log(user);
     setEducation(user.education);
   }, [user]);
 

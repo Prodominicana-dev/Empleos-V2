@@ -75,7 +75,6 @@ export default function Page() {
 
   useEffect(() => {
     if (data && !isLoading) {
-      console.log(data);
       setCategories(data);
     }
   }, [data, isLoading]);
@@ -147,8 +146,6 @@ export default function Page() {
               {currentVacancy.map((item: any, index: number) => {
                 const date = new Date(item?.createdAt);
                 // Formatear la fecha con toLocaleDateString
-                console.log(date);
-
                 const fechaFormateada = date.toLocaleDateString("es-ES", {
                   day: "numeric",
                   month: "long",

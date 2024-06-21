@@ -23,7 +23,6 @@ export const createAnswerAction = async (
   if (answerId) {
     data.answer.answerId = answerId;
   }
-  console.log(data);
 
   //   try {
   //     await createAnswer(data);
@@ -53,13 +52,10 @@ export const updateQuestionAction = async (
     startDate: new Date(startDate as string).toISOString(),
     endDate: endDate ? new Date(endDate as string).toISOString() : null,
   };
-  console.log(data);
-
   try {
     //await editQuestion(id, data, handler, update);
     return { success: true };
   } catch (error: any) {
-    console.log(error.message);
     return { error: error.message };
   }
 };
@@ -73,7 +69,6 @@ export const deleteQuestionAction = async (
     await deleteEducation(id, handler, update);
     return { success: true };
   } catch (error: any) {
-    console.log(error.message);
     return { error: error.message };
   }
 };

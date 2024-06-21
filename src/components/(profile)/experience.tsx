@@ -41,7 +41,6 @@ export default function ExperienceData({
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   useEffect(() => {
-    console.log(user);
     setExperiences(user.workExperience);
   }, [user]);
 

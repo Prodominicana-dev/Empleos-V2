@@ -18,16 +18,12 @@ export const createPersonalReferenceAction = async (
     relationship,
     phone,
   };
-  console.log(data);
-
   try {
     const response = await createPersonalReference(data);
     update();
     handler();
-    console.log(response);
     return { success: true };
   } catch (error: any) {
-    console.log(error);
     return { error: error.message };
   }
 };
@@ -45,13 +41,10 @@ export const updatePersonalReferenceAction = async (
     relationship,
     phone,
   };
-  console.log(data);
-
   try {
     await editPersonalReference(id, data, handler, update);
     return { success: true };
   } catch (error: any) {
-    console.log(error.message);
     return { error: error.message };
   }
 };
@@ -65,7 +58,6 @@ export const deletePersonalReferenceAction = async (
     await deletePersonalReference(id, handler, update);
     return { success: true };
   } catch (error: any) {
-    console.log(error.message);
     return { error: error.message };
   }
 };

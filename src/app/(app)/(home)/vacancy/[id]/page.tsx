@@ -109,7 +109,7 @@ export default function Page({ params }: { params: { id: string } }) {
   useEffect(() => {
     if (!isLoading && data) {
       setVacancy(data);
-      // console.log(data);
+      console.log("Vacancy");
       setValidationLoading(true);
       setMinimunDegreeId(data.degreeId);
       setDegreePriority(data.degree.priority);
@@ -133,8 +133,8 @@ export default function Page({ params }: { params: { id: string } }) {
       // Validar si el usuario tiene el nivel académico mínimo requerido
       // Recorremos 'education' para validar si el usuario tiene el nivel académico mínimo requerido
       userAPI.education.map((education: any) => {
-        console.log(education);
-        if (education.degree.priority <= minimunDegreeId) {
+        console.log(education.degrees.priority, degreePriority);
+        if (education.degrees.priority >= degreePriority) {
           return setHasMinimunDegree(true);
         }
       });
@@ -187,7 +187,7 @@ export default function Page({ params }: { params: { id: string } }) {
       );
       setFilterLoading(false);
     }
-  }, [userAPI, userLoadingAPI, validationLoading]);
+  }, [isLoading, userAPI, userLoadingAPI, validationLoading]);
 
   const validateLanguages = (
     userLanguages: { name: string; level: number }[]

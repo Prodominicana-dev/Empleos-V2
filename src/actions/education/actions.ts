@@ -23,7 +23,6 @@ export const createEducationAction = async (
     startDate: new Date(startDate as string).toISOString(),
     endDate: endDate ? new Date(endDate as string).toISOString() : null,
   };
-  console.log(data);
 
   try {
     await createEducation(data);
@@ -53,13 +52,11 @@ export const updateEducationAction = async (
     startDate: new Date(startDate as string).toISOString(),
     endDate: endDate ? new Date(endDate as string).toISOString() : null,
   };
-  console.log(data);
 
   try {
     await editEducation(id, data, handler, update);
     return { success: true };
   } catch (error: any) {
-    console.log(error.message);
     return { error: error.message };
   }
 };
@@ -73,7 +70,6 @@ export const deleteEducationAction = async (
     await deleteEducation(id, handler, update);
     return { success: true };
   } catch (error: any) {
-    console.log(error.message);
     return { error: error.message };
   }
 };

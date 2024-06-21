@@ -47,10 +47,8 @@ export default function UserData({
   useEffect(() => {
     setLoading(true);
     if (user) {
-      console.log(user);
       setUser(user);
       const date = new Date(user?.birthdate);
-      console.log(date);
       // Convertir date en CalendarDate usando el parseDate
       //const parsedDate = parseDate(date?.toISOString().split("T")[0]);
       //console.log(parsedDate);

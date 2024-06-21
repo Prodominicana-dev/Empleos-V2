@@ -17,16 +17,12 @@ export const createLanguageAction = async (
     name,
     level: parseInt(level as string),
   };
-  console.log(data);
-
   try {
     const response = await createLanguage(data);
     update();
     handler();
-    console.log(response);
     return { success: true };
   } catch (error: any) {
-    console.log(error);
     return { error: error.message };
   }
 };
@@ -43,13 +39,10 @@ export const updateLanguageAction = async (
     name,
     level: parseInt(level as string),
   };
-  console.log(data);
-
   try {
     await editLanguage(id, data, handler, update);
     return { success: true };
   } catch (error: any) {
-    console.log(error.message);
     return { error: error.message };
   }
 };
@@ -63,7 +56,6 @@ export const deleteLanguageAction = async (
     await deleteLanguage(id, handler, update);
     return { success: true };
   } catch (error: any) {
-    console.log(error.message);
     return { error: error.message };
   }
 };

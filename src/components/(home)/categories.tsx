@@ -16,7 +16,6 @@ export default function Categories() {
 
   useEffect(() => {
     if (data && !isLoading) {
-      console.log(data);
       setCategories(data);
     }
   }, [data, isLoading]);

@@ -20,8 +20,6 @@ export const createRelationshipAction = async (
     phone,
     isInTheCompany: isInTheCompany === "true",
   };
-  console.log(data);
-
   try {
     await createRelationship(data);
     update();
@@ -52,7 +50,6 @@ export const updateRelationshipAction = async (
     await editRelationship(id, data, handler, update);
     return { success: true };
   } catch (error: any) {
-    console.log(error.message);
     return { error: error.message };
   }
 };
@@ -66,7 +63,6 @@ export const deleteRelationshipAction = async (
     await deleteRelationship(id, handler, update);
     return { success: true };
   } catch (error: any) {
-    console.log(error.message);
     return { error: error.message };
   }
 };
