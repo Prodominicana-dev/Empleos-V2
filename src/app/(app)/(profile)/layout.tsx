@@ -18,7 +18,6 @@ export default function RootLayout({ children }: Props) {
     if (!isLoading && user) {
       const url = window.location.href;
       const id = decodeURIComponent(url.split("/").pop() || "");
-      console.log(id, user.sub);
       if (id !== user.sub) {
         window.location.href = "/";
       }

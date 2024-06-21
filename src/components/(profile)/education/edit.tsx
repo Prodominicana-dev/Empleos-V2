@@ -26,7 +26,6 @@ import { useFormStatus } from "react-dom";
 
 const SubmitButton = () => {
   const { pending, action, method } = useFormStatus();
-  console.log(pending, action, method);
   return (
     <Button type="submit" color="primary" aria-disabled={pending}>
       {pending ? "Guardando..." : "Guardar"}
@@ -51,7 +50,6 @@ export default function EditEducationDialog({
   const [endDate, setEndDate] = useState<string>("");
 
   useEffect(() => {
-    console.log(education);
     // Verificar si el usuario esta estudiando actualmente
     if (education.endDate === null) setIsStudying(true);
     // Convertir las fechas a yyyy-mm-dd

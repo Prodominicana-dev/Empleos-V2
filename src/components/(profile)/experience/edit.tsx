@@ -59,7 +59,6 @@ export default function EditExperienceDialog({
   );
 
   useEffect(() => {
-    console.log(experience);
     // Verificar si el usuario esta trabajando actualmente
     if (experience.endDate === null) setIsWorking(true);
     // Convertir las fechas a yyyy-mm-dd

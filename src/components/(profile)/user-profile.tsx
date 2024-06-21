@@ -88,7 +88,6 @@ export default function UserData({
   };
 
   const handleSubmit = async () => {
-    console.log(users.hasLicense, users.hasVehicule);
     const formData = new FormData();
     formData.append("username", users.username);
     formData.append("email", users.email);

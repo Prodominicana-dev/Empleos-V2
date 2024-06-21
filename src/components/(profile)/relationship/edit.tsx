@@ -41,7 +41,6 @@ export default function EditRelationshipDialog({
   const [isInTheCompany, setIsInTheCompany] = useState(false);
 
   useEffect(() => {
-    console.log(relation);
     setIsInTheCompany(relation.isInTheCompany);
     setRelationship(relation.relationship);
   }, [relation]);

@@ -29,7 +29,6 @@ export default function QuestionData({
   const { data: answers, isLoading } = useQuestion();
   useEffect(() => {
     if (answers && !isLoading) {
-      console.log(answers);
     }
   }, [answers, isLoading]);
   return (

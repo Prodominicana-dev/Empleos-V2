@@ -25,7 +25,6 @@ export default function Page() {
   const { data: vacancies, isLoading: loadingVacancies } = useVacancy();
 
   const filterVacancy = (vacancy: any[], selected: string[]) => {
-    console.log(selected);
     if (selected.length === 0) return vacancy;
     return vacancy?.filter((item) => {
       return selected.includes(item.category.name.toLowerCase());
@@ -151,7 +150,6 @@ export default function Page() {
                   month: "long",
                   year: "numeric",
                 });
-                console.log(fechaFormateada);
 
                 return (
                   <Link

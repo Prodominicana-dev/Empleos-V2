@@ -43,7 +43,6 @@ export default function EditLanguageDialog({
   const [level, setLevel] = useState<number>(0);
 
   useEffect(() => {
-    console.log(language);
     setName(language.name);
     setLevel(language.level);
   }, [language]);
