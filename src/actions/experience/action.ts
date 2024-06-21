@@ -81,7 +81,9 @@ export const updateExperienceAction = async (
     phone,
     industry,
     functions,
-    startDate: new Date(startDate as string).toISOString(),
+    startDate: startDate
+      ? new Date(startDate as string).toISOString()
+      : new Date().toISOString(),
     endDate: endDate ? new Date(endDate as string).toISOString() : null,
   };
   try {
