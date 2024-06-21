@@ -59,7 +59,7 @@ export default function Hero() {
                 onClick={handleCVButton}
                 className="font-bold text-white duration-300 bg-transparent border-blue-300 group hover:bg-gradient-to-t hover:from-blue-600 hover:to-sky-500 hover:border-sky-500"
               >
-                <span className="text-white">Crea tu CV</span>
+                <span className="text-white">Regístrate</span>
               </Button>
             </div>
           </div>
