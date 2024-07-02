@@ -170,10 +170,7 @@ export default function Page() {
                       {item.description}
                     </p>
                     <div className="w-full h-[1px] bg-gray-100"></div>
-                    <div className="flex flex-row justify-between">
-                      <p className="text-sm text-gray-500 font-dm-sans">
-                        CV enviados: {item?._count.applications}
-                      </p>
+                    <div className="flex flex-row justify-end">
                       <p className="text-sm text-gray-500 font-dm-sans">
                         {fechaFormateada}
                       </p>
