@@ -41,9 +41,11 @@ const statusColorMap: Record<string, ChipProps["color"]> = {
 export default function LanguageData({
   user,
   update,
+  onMount
 }: {
   user: any;
   update: () => void;
+  onMount: () => void;
 }) {
   const [languages, setLanguages] = useState<any>([]);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -52,6 +54,10 @@ export default function LanguageData({
     setLanguages(user.language);
   }, [user]);
 
+      useEffect(() => {
+      onMount?.();
+    }, []);
+  
   // Pagination with testData
   const [currentPage, setCurrentPage] = useState(1);
   const [postsPerPage] = useState(5);

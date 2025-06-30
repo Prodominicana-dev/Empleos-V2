@@ -16,9 +16,11 @@ import { useDegree } from "@/service/education/service";
 export default function EducationData({
   user,
   update,
+  onMount
 }: {
   user: any;
   update: () => void;
+  onMount: () => void;
 }) {
   const [education, setEducation] = useState<any>([]);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -36,6 +38,10 @@ export default function EducationData({
   useEffect(() => {
     setEducation(user.education);
   }, [user]);
+
+    useEffect(() => {
+    onMount?.();
+  }, []);
 
   return (
     <div className="flex flex-col gap-5">

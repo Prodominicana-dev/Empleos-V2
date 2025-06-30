@@ -1,7 +1,16 @@
 "use client";
 import { useUser } from "@/service/user/service";
 import React, { useEffect, useState } from "react";
-import { Tabs, Tab } from "@nextui-org/react";
+import {
+  Tabs,
+  Tab,
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Button,
+} from "@nextui-org/react";
 import UserData from "@/components/(profile)/user-profile";
 import UserDataSkeleton from "@/components/(profile)/skeleton/user-profile";
 import RelationshipData from "@/components/(profile)/relationship";
@@ -13,10 +22,48 @@ import PersonalRefData from "@/components/(profile)/personal-reference";
 import ProfessionalRefData from "@/components/(profile)/professional-reference";
 import CVData from "@/components/(profile)/cv";
 
+interface WorkExperience {
+  company: string;
+  position: string;
+  startDate: string;
+  [key: string]: any;
+}
+
+interface Education {
+  institution: string;
+  degree: string;
+  startDate: string;
+  [key: string]: any;
+}
+
+interface User {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  documentNumber: string;
+  birthdate: string;
+  cv?: Array<{ id: string }>;
+  relationship?: Array<{ name: string; phone: string; relationship: string }>;
+  education?: Education[];
+  workExperience?: WorkExperience[];
+  language?: any[];
+  personalReference?: any[];
+  professionalReference?: any[];
+  [key: string]: any;
+}
+
 export default function Page({ params: { id } }: any) {
   const { data, isLoading, refetch } = useUser(id);
   const [user, setUser] = useState<any>({});
   const [refresh, setRefresh] = useState(false);
+  const [activeTab, setActiveTab] = useState("profile");
+  const [requestedTab, setRequestedTab] = useState<string | null>(null);
+  const [validationModal, setValidationModal] = useState({
+    isOpen: false,
+    message: "",
+  });
+  console.log("user", user);
 
   useEffect(() => {
     if (!isLoading && data) setUser(data);
@@ -35,6 +82,119 @@ export default function Page({ params: { id } }: any) {
     }
   }, [refresh]);
 
+  const validateCurrentTab = (tab: string): boolean => {
+    switch (tab) {
+      case "profile":
+        return !!(
+          user.name &&
+          user.email &&
+          user.phone &&
+          user.documentNumber &&
+          user.birthdate
+        );
+
+      case "cv":
+        return !!(user.cv && user.cv.length > 0);
+
+      case "relationship":
+        return !!(
+          user.relationship &&
+          user.relationship.length > 0 &&
+          user.relationship.every(
+            (rel: any) => rel.name && rel.phone && rel.relationship
+          )
+        );
+      case "education":
+        return (
+          Array.isArray(user.education) &&
+          user.education.length > 0 &&
+          user.education.every(
+            (edu: Education) =>
+              !!edu.institution?.trim() && !!edu.startDate && !!edu.degreeId
+          )
+        );
+
+      case "experience":
+        return (
+          user.workExperience?.length > 0 &&
+          user.workExperience.every(
+            (exp: WorkExperience) =>
+              exp.company && exp.position && exp.startDate
+          )
+        );
+
+      case "language":
+        return !!(user.language && user.language.length > 0);
+      case "rper":
+        return (
+          Array.isArray(user.personalReference) &&
+          user.personalReference.length > 0 &&
+          user.personalReference.every(
+            (ref: any) =>
+              !!ref.name?.trim() &&
+              !!ref.phone?.trim() &&
+              !!ref.relationship?.trim() 
+          )
+        );
+
+      case "rpro":
+        return (
+          Array.isArray(user.professionalReference) &&
+          user.professionalReference.length > 0 &&
+          user.professionalReference.every(
+            (ref: any) =>
+              !!ref.name?.trim() &&
+              !!ref.phone?.trim() &&
+              !!ref.company?.trim() &&
+              !!ref.position?.trim()
+          )
+        );
+
+      default:
+        return true;
+    }
+  };
+
+  const getValidationMessage = (tab: string): string => {
+    switch (tab) {
+      case "profile":
+        return "Debe completar: nombre, email, teléfono, número de documento y fecha de nacimiento";
+      case "cv":
+        return "Debe subir al menos un archivo de CV";
+      case "relationship":
+        return "Debe agregar al menos un contacto de emergencia con nombre, teléfono y parentesco";
+      case "education":
+        return "Debe agregar al menos un registro de educación con institución, título y fecha de inicio";
+      case "experience":
+        return "Debe agregar al menos un registro de experiencia laboral con empresa, puesto y fecha de inicio";
+      case "language":
+        return "Debe agregar al menos un idioma";
+      case "rper":
+        return "Debe agregar al menos una referencia personal";
+      case "rpro":
+        return "Debe agregar al menos una referencia profesional";
+      default:
+        return "Debe completar todos los campos requeridos";
+    }
+  };
+  const handleTabChange = (nextTab: string) => {
+    if (nextTab === activeTab) return;
+
+    if (!validateCurrentTab(activeTab)) {
+      setValidationModal({
+        isOpen: true,
+        message: getValidationMessage(activeTab),
+      });
+      return; 
+    }
+
+    setActiveTab(nextTab);
+  };
+  useEffect(() => {
+    if (requestedTab && validateCurrentTab(activeTab)) {
+      setRequestedTab(null);
+    }
+  }, [user]);
   return (
     <div className="flex justify-center w-full">
       <div className="max-w-7xl w-full min-h-[80vh] text-black flex flex-col gap-5">
@@ -42,9 +202,33 @@ export default function Page({ params: { id } }: any) {
           <h1 className="text-4xl font-bold text-black">Configuración</h1>
           <p className="text-sm">Configura el perfíl a tu medida</p>
         </div>
+        <Modal
+          isOpen={validationModal.isOpen}
+          onOpenChange={() =>
+            setValidationModal((prev) => ({ ...prev, isOpen: false }))
+          }
+        >
+          <ModalContent>
+            <ModalHeader>Datos incompletos</ModalHeader>
+            <ModalBody>
+              <p>Debe completar al menos un registro para continuar.</p>
+            </ModalBody>
+            <ModalFooter>
+              <Button
+                color="primary"
+                onPress={() =>
+                  setValidationModal((prev) => ({ ...prev, isOpen: false }))
+                }
+              >
+                Entendido
+              </Button>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
         <div className="w-full text-black">
           <Tabs
-            key={`bordered`}
+            selectedKey={activeTab}
+            onSelectionChange={(key) => handleTabChange(key as string)}
             variant={`bordered`}
             aria-label="Tabs variants"
             fullWidth
@@ -104,6 +288,14 @@ export default function Page({ params: { id } }: any) {
                   user={user}
                   update={handleRefresh}
                   key={"education-data"}
+                  onMount={() => {
+                    if (!validateCurrentTab("education")) {
+                      setValidationModal({
+                        isOpen: true,
+                        message: getValidationMessage("education"),
+                      });
+                    }
+                  }}
                 />
               )}
             </Tab>
@@ -126,6 +318,14 @@ export default function Page({ params: { id } }: any) {
                   user={user}
                   update={handleRefresh}
                   key={"language-data"}
+                  onMount={() => {
+                    if (!validateCurrentTab("education")) {
+                      setValidationModal({
+                        isOpen: true,
+                        message: getValidationMessage("education"),
+                      });
+                    }
+                  }}
                 />
               )}
             </Tab>
