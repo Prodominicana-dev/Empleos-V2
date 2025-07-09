@@ -63,7 +63,7 @@ export default function Page({ params: { id } }: any) {
     isOpen: false,
     message: "",
   });
-  console.log("user", user);
+  // console.log("user", user);
 
   useEffect(() => {
     if (!isLoading && data) setUser(data);
@@ -77,6 +77,9 @@ export default function Page({ params: { id } }: any) {
     if (refresh) {
       refetch().then((e) => {
         if (e.data) setUser(e.data);
+        // console.log("DESPUÉS DE REFETCH");
+        // console.log("e.data.hasLicense:", e.data.hasLicense);
+        // console.log("e.data.hasVehicule:", e.data.hasVehicule);
       });
       setRefresh(false);
     }
@@ -133,7 +136,7 @@ export default function Page({ params: { id } }: any) {
             (ref: any) =>
               !!ref.name?.trim() &&
               !!ref.phone?.trim() &&
-              !!ref.relationship?.trim() 
+              !!ref.relationship?.trim()
           )
         );
 
@@ -185,7 +188,7 @@ export default function Page({ params: { id } }: any) {
         isOpen: true,
         message: getValidationMessage(activeTab),
       });
-      return; 
+      return;
     }
 
     setActiveTab(nextTab);

@@ -1,7 +1,7 @@
 "use client";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import React, { useEffect } from "react";
-
+import { Toaster } from "react-hot-toast";
 type Props = {
   children: React.ReactNode;
 };
@@ -24,5 +24,10 @@ export default function RootLayout({ children }: Props) {
     }
   }, [user, isLoading]);
 
-  return <div className="font-dm-sans">{children}</div>;
+  return (
+    <div className="font-dm-sans">
+      <Toaster position="top-center" />
+      {children}
+    </div>
+  );
 }

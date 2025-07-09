@@ -45,10 +45,12 @@ export async function editUser(id: string, data: any, update: () => void) {
   try {
     const url = `${process.env.NEXT_PUBLIC_API_URL}/user/${id}`;
     const response = await axios.patch(url, data);
+    // console.log("Response from editUser:", response);
+
     if (response.status === 200) {
       toast.success("Perfíl actualizado correctamente", {
         duration: 4000,
-        position: "top-center",
+        position: "bottom-right",
       });
       update();
     }
