@@ -31,6 +31,30 @@ export async function createApplication(application: any) {
   }
 }
 
+export async function SendEmail(
+  data: any,
+) {
+   console.log("Sending email with data api:", data);
+  
+  try {
+    const url = `${process.env.NEXT_PUBLIC_API_URL}/mail/ApplyNotify`;
+    const response = await axios.post(url, data);
+    if (response.status === 201) {
+      toast.success("Correo enviado", {
+        duration: 4000,
+        position: "top-center",
+      });
+
+    }
+  } catch (e) {
+    toast.error("Error al enviar correo", {
+      duration: 4000,
+      position: "top-center",
+    });
+  }
+}
+
+
 export async function editEducation(
   id: string,
   data: any,

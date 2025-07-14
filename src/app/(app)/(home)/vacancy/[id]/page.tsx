@@ -17,7 +17,7 @@ import {
 import { useUser as AuthUser } from "@auth0/nextjs-auth0/client";
 import { useUser as useUserData } from "@/service/user/service";
 import { useRouter } from "next/navigation";
-import { createApplication } from "@/service/application/service";
+import { createApplication,SendEmail } from "@/service/application/service";
 import Loading from "@/components/loading";
 import toast from "react-hot-toast";
 
@@ -85,6 +85,21 @@ export default function Page({ params }: { params: { id: string } }) {
   const { data: userAPI, isLoading: userLoadingAPI } = useUserData(
     user?.sub as string
   );
+
+  const dataAplly = {
+    UserName: userAPI?.name,
+    email: userAPI?.email,
+    telephone: userAPI?.telephone,
+    phone: userAPI?.phone,
+    VacancyName: vacancy.title,
+
+  };
+
+  // console.log( "vacancy:", vacancy.title);
+  // console.log( "user klk:", user);
+  // console.log( "user api:", userAPI);
+  // console.log( "dataaplly:", dataAplly);
+  
 
   const {
     data: hasApplied,
@@ -219,28 +234,55 @@ export default function Page({ params }: { params: { id: string } }) {
     return false;
   };
 
-  const handleApply = async () => {
-    // Si no esta logueado, redirigir a la página de login con returnTo a este link
-    // Si el usuario cumple con los requisitos, aplicar a la vacante
-    if (!user) {
-      // Redirigir a la página de login
-      return router.push(loginRoute);
-    }
-    // Revisar que el usuario no tenga esta vacante aplicada
-    // Si ya la tiene aplicada, no se puede aplicar de nuevo
+  // const handleApply = async () => {
+  //   // Si no esta logueado, redirigir a la página de login con returnTo a este link
+  //   // Si el usuario cumple con los requisitos, aplicar a la vacante
+  //   if (!user) {
+  //     // Redirigir a la página de login
+  //     return router.push(loginRoute);
+  //   }
+  //   // Revisar que el usuario no tenga esta vacante aplicada
+  //   // Si ya la tiene aplicada, no se puede aplicar de nuevo
 
-    if (!applyLoading && hasApplied) {
-      return toast.error("Ya has aplicado a esta vacante.");
-    }
-    // Aplicar a la vacante
-    const data = {
-      userId: userIdLogged,
-      vacancyId: params.id,
-    };
+  //   if (!applyLoading && hasApplied) {
+  //     return toast.error("Ya has aplicado a esta vacante.");
+  //   }
+  //   // Aplicar a la vacante
+  //   const data = {
+  //     userId: userIdLogged,
+  //     vacancyId: params.id,
+  //   };
+  //   await createApplication(data);
+  //   await refetch();
+  //   return;
+  // };
+
+  const handleApply = async () => {
+  if (!user) {
+    return router.push(loginRoute);
+  }
+
+  if (!applyLoading && hasApplied) {
+    return toast.error("Ya has aplicado a esta vacante.");
+  }
+
+  const data = {
+    userId: userIdLogged,
+    vacancyId: params.id,
+  };
+
+  try {
     await createApplication(data);
     await refetch();
-    return;
-  };
+
+    // Enviar correo luego de aplicar
+    await SendEmail(dataAplly);
+  } catch (error) {
+    console.error("Error al aplicar a la vacante:", error);
+  }
+
+  return;
+};
 
   const gradientYes = "bg-gradient-to-br from-green-500 to-lime-400";
   const gradientNo = "bg-gradient-to-br from-red-500 to-red-400";
