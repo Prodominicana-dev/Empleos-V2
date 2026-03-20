@@ -20,7 +20,7 @@ export default function Page() {
         <></>
       )}
       <Hero />
-      <Categories />
+      {/* <Categories /> */}
       <Steps />
     </section>
   );

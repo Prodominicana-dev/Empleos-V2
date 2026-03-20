@@ -51,7 +51,7 @@ export default function NavbarComponent() {
     },
     {
       name: "Vacantes",
-      href: "/vacancy",
+      href: "https://protalenthub.prodominicana.gob.do/vacantes",
     },
   ];
 
