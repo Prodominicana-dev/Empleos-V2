@@ -52,7 +52,7 @@ export default function Hero() {
               >
                 Categorías
               </Button>
-              <Button
+              {/* <Button
                 variant={"bordered"}
                 size="lg"
                 radius="md"
@@ -60,7 +60,7 @@ export default function Hero() {
                 className="font-bold text-white duration-300 bg-transparent border-blue-300 group hover:bg-gradient-to-t hover:from-blue-600 hover:to-sky-500 hover:border-sky-500"
               >
                 <span className="text-white">Regístrate</span>
-              </Button>
+              </Button> */}
             </div>
           </div>
           <Image

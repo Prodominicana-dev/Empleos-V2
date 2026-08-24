@@ -163,15 +163,15 @@ export default function NavbarComponent() {
 
         {!isLoading && !user && (
           <>
-            <NavbarItem className="hidden lg:flex">
+            {/* <NavbarItem className="hidden lg:flex">
               <Link
                 href={`/api/auth/login?returnTo=${process.env.NEXT_PUBLIC_BASE_URL}${pathname}`}
                 className="transition duration-200 text-blue-950 hover:border-b-1 hover:border-red-600"
               >
                 Inicia sesión
               </Link>
-            </NavbarItem>
-            <NavbarItem>
+            </NavbarItem> */}
+            {/* <NavbarItem>
               <Button
                 as={Link}
                 className="bg-blue-100 text-blue-950"
@@ -180,7 +180,7 @@ export default function NavbarComponent() {
               >
                 Regístrate
               </Button>
-            </NavbarItem>
+            </NavbarItem> */}
           </>
         )}
       </NavbarContent>
