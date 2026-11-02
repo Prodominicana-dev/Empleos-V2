@@ -53,7 +53,7 @@ export default function Footer() {
                 >
                   Direcciones
                 </Link>
-                <Link href={"/vacancy"}>Vacantes</Link>
+                {/* <Link href={"/vacancy"}>Vacantes</Link> */}
               </div>
             </div>
             <div className="flex flex-col w-full gap-2 text-white">
